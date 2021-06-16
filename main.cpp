@@ -11,6 +11,14 @@
 	using namespace ft;
 #endif
 
+template <typename T>
+std::ostream &operator<<(std::ostream &out, list<T> &l)
+{
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		out << *it << " ";
+	return (out);
+}
+
 void	list_test()
 {
 	list<int> l;
@@ -26,18 +34,12 @@ void	list_test()
 	// list<int> l_count(10, 0);
 
 	std::cout << "size: " << l.size() << " | " << l_ass.size() << " | "<< l_copy.size() << " | " << l_list.size() << std::endl;
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
 	l.reverse();
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
 	l.pop_back();
 	l.pop_front();
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
 	std::cout << "empty? " << l.empty() << std::endl;
 	std::cout << "back: " << l.back() << std::endl;
 	std::cout << "front: " << l.front() << std::endl;
@@ -47,49 +49,86 @@ void	list_test()
 	std::cout << "clearing.." << std::endl;
 	l.clear();
 	std::cout << "empty? " << l.empty() << std::endl;
-	for (list<int>::iterator it = l_ass.begin(); it != l_ass.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
-	for (list<int>::iterator it = l_copy.begin(); it != l_copy.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
-	for (list<int>::iterator it = l_list.begin(); it != l_list.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
+	std::cout << l_copy << std::endl;
+	std::cout << l_ass << std::endl;
+	std::cout << l_list << std::endl;
+
 	l.assign(5, 'a');
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
+
     const std::string extra(6, 'b');
     l.assign(extra.begin(), extra.end());
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
+
 	std::cout << "are l and l_copy the same???\t" << (bool)(l == l_ass) << std::endl;
 	std::cout << "are l_ass and l_copy the same???\t" << (bool)(l_ass == l_copy) << std::endl;
 	for (list<int>::reverse_iterator it = l_copy.rbegin(); it != l_copy.rend(); it++)
 		std::cout << *it << " ";
 	std::cout << "\n";
+
 	l.resize(10);
 	std::cout << "new size:" << l.size() << std::endl;
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
 	l.resize(2);
 	std::cout << "new size:" << l.size() << std::endl;
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
+
 	l.resize(0);
 	std::cout << "new size:" << l.size() << std::endl;
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
+	std::cout << l << std::endl;
+
 	l.swap(l_copy);
 	std::cout << "new size:" << l.size() << " | " << l_copy.size() << std::endl;
-	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";	
+	std::cout << l << std::endl;
+
+	l.push_back(22);
+	l.push_back(-10);
+	l.push_back(9);
+	l.push_back(22);
+	l.push_back(-10);
+	l.push_back(9);
+
+	l.sort();
+	std::cout << l << std::endl;
+	l.sort(std::greater<int>());
+	std::cout << l << std::endl;
+	l.unique();
+	std::cout << l << std::endl;
+	l.push_back(22);
+	l.push_back(-10);
+	l.push_back(9);
+	std::cout << l << std::endl;
+	l.unique(std::not_equal_to<int>());
+	std::cout << l << std::endl;
+	l.unique();
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
+	l.push_back(22);
+	l.push_back(-10);
+	l.push_back(9);
+	l.push_back(22);
+	l.push_back(10);
+	l.push_back(9);
+	l.push_back(8);
+	std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
+	list<int>::iterator it_tmp = l.begin();
+	it_tmp++;
+	it_tmp++;
+	it_tmp++;
+	it_tmp = l.erase(it_tmp);
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << " start: " << l.front() << " end: " << l.back() <<std::endl;
+	l.erase(l.begin(), it_tmp);
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
+
+	l.remove(22);
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
+	l.remove_if([](int n){return n > 8;});
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
 }
 
 void vector_test()

@@ -217,14 +217,96 @@ public:
 	}
 
 
+	void sort() {sort(std::less<T>());}	
+	template< class Compare >
+	void sort( Compare comp )
+	{
+		size_t changes = 0;
+		s_list_item *it = _begin;
+
+		do
+		{
+			changes = 0;
+			it = _begin;
+			while (it->next)
+			{
+				if (comp(it->next->data, it->data))
+				{
+					T tmp = it->data;
+					it->data = it->next->data;
+					it->next->data = tmp;
+					changes++;
+				}
+				it = it->next;
+			}
+		} while (changes != 0);
+	}
+
+	void unique() {unique(std::equal_to<T>());}
+	template< class BinaryPredicate >
+	void unique( BinaryPredicate p )
+	{
+		s_list_item *it = _begin;
+		s_list_item *tmp;
+		while (it)
+		{
+			if (it->next != 0 && p(it->next->data, it->data) == true)
+			{
+				tmp = it->next->next;
+				delete it->next;
+				it->next = tmp;
+				_size--;
+				if (it->next == 0)
+					_end = it;
+				else if (it->next->next == 0)
+					_end = it->next->next;
+			}
+			else
+				it = it->next;
+		}
+	}
+
+	void remove( const T& value ) {remove_if([&value](T n){return n == value;});};
+	template< class UnaryPredicate >
+	void remove_if( UnaryPredicate p )
+	{
+		s_list_item *it = _begin;
+		s_list_item *tmp;
+
+		while (it)
+		{
+			if (it->next != 0 && p(it->next->data))
+			{
+				tmp = it->next->next;
+				delete it->next;
+				it->next = tmp;
+				_size--;
+				if (it->next == 0)
+					_end = it;
+				else if (it->next->next == 0)
+					_end = it->next->next;
+			}
+			else
+				it = it->next;
+		}
+		
+	}
+
+
 	class iterator
 	{
 		protected:
-			s_list_item *_pos;
 		public:
+			s_list_item *_pos;
 			iterator(s_list_item *position): _pos(position)
 			{
 
+			}
+			iterator(const iterator &i) {*this = i;}
+			iterator &operator=(const iterator &i)
+			{
+				_pos = i._pos;
+				return *this;
 			}
 			iterator operator++(int)
 			{
@@ -270,7 +352,32 @@ public:
 	reverse_iterator rbegin() const	{return reverse_iterator(_end);}
 	reverse_iterator rend()			{return reverse_iterator(0);}
 	reverse_iterator rend() const	{return reverse_iterator(0);}
+	iterator erase( iterator pos )
+	{
+		s_list_item *deref = pos._pos;
+		if (deref == 0)
+			return (pos);
+		std::cerr << "deref: " << deref->data << std::endl;
+		if (deref->prev == 0)
+			_begin = deref->next;
+		if (deref->next == 0)
+			_end = deref->prev;
+		if (deref->prev != 0)
+			deref->prev->next = deref->next;
+		pos = iterator(deref->next);
+		delete deref;
+		_size--;
+		return (pos);
+	}
+	iterator erase( iterator first, iterator last )
+	{
+		do
+		{
+			first = erase(first);
+		} while (first != last);
 
+		return (first);
+	}
 };
 
 template< class T>

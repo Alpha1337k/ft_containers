@@ -34,8 +34,8 @@
 - [ ] splice
 - [ ] remove
 - [x] reverse
-- [ ] unique
-- [ ] sort 
+- [x] unique
+- [x] sort 
 
 ## non member functions
 
