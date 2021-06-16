@@ -50,21 +50,33 @@ private:
 		_size = 0;
 	}
 public:
-	list(): _begin(0), _end(0),_size(0) {}
 	~list() {delete_list();}
-	list( const list& other ) {*this = other;}
+	list(): _begin(0), _end(0),_size(0) {}
+	list( const list& other ): _begin(0), _end(0) {*this = other;}
 	list& operator=( const list& other )
 	{
 		delete_list();
 		s_list_item *tmp = other._begin;
-		this->_size = other._size;
+		this->_size = 0;
 		while (tmp)
 		{
 			push_back(tmp->data);
 			tmp = tmp->next;
 		}
 		return (*this);
+	}	
+	template< class InputIt >
+	list( InputIt first, InputIt last):_begin(0), _end(0), _size(0)
+	{
+		for (; first != last; first++)
+			push_back(*first);
 	}
+	// explicit list( size_t count, T& value = T()): _begin(0), _end(0), _size(0)
+	// {
+	// 	for (size_t i = 0; i < count; i++)
+	// 		push_back(value);
+	// }
+	
 	void assign(size_t count, const T& value )
 	{
 		delete_list();
@@ -154,6 +166,20 @@ public:
 				pop_back();
 		_size = count;
 	}
+	void swap( list& other )
+	{
+		s_list_item *tmp_begin = other._begin;
+		s_list_item *tmp_end = other._end;
+		size_t		tmp_size = other._size;
+
+		other._size = this->_size;
+		other._begin = this->_begin;
+		other._end = this->_end;
+		this->_end = tmp_end;
+		this->_begin = tmp_begin;
+		this->_size = tmp_size;
+
+	}
 	// iterator insert( iterator pos, const T& value )
 	// {
 
@@ -173,6 +199,23 @@ public:
 	T	&back() 	{return _end->data;}
 	T	&front()	{return _begin->data;}
 	void clear() { delete_list();}
+
+	void reverse()
+	{
+		s_list_item *i = _begin;
+		s_list_item *tmp;
+		while (i)
+		{
+			tmp = i->next;
+			i->next = i->prev;
+			i->prev = tmp;
+			i = i->prev;
+		}
+		tmp = _begin;
+		_begin = _end;
+		_end = tmp;
+	}
+
 
 	class iterator
 	{

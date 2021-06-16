@@ -22,16 +22,22 @@ void	list_test()
 	l.push_front(0);
 	list<int> l_ass = l;
 	list<int> l_copy(l);
+	list<int> l_list(l.begin(), l.end());
+	// list<int> l_count(10, 0);
 
-	std::cout << "size: " << l.size() << std::endl;
+	std::cout << "size: " << l.size() << " | " << l_ass.size() << " | "<< l_copy.size() << " | " << l_list.size() << std::endl;
 	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << std::endl;
-
+		std::cout << *it << " ";
+	std::cout << "\n";
+	l.reverse();
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
 	l.pop_back();
 	l.pop_front();
 	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
-		std::cout << *it << std::endl;
-
+		std::cout << *it << " ";
+	std::cout << "\n";
 	std::cout << "empty? " << l.empty() << std::endl;
 	std::cout << "back: " << l.back() << std::endl;
 	std::cout << "front: " << l.front() << std::endl;
@@ -45,6 +51,9 @@ void	list_test()
 		std::cout << *it << " ";
 	std::cout << "\n";
 	for (list<int>::iterator it = l_copy.begin(); it != l_copy.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	for (list<int>::iterator it = l_list.begin(); it != l_list.end(); it++)
 		std::cout << *it << " ";
 	std::cout << "\n";
 	l.assign(5, 'a');
@@ -62,14 +71,22 @@ void	list_test()
 		std::cout << *it << " ";
 	std::cout << "\n";
 	l.resize(10);
+	std::cout << "new size:" << l.size() << std::endl;
 	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
 		std::cout << *it << " ";
 	std::cout << "\n";
 	l.resize(2);
+	std::cout << "new size:" << l.size() << std::endl;
 	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
 		std::cout << *it << " ";
 	std::cout << "\n";
 	l.resize(0);
+	std::cout << "new size:" << l.size() << std::endl;
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	l.swap(l_copy);
+	std::cout << "new size:" << l.size() << " | " << l_copy.size() << std::endl;
 	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
 		std::cout << *it << " ";
 	std::cout << "\n";	

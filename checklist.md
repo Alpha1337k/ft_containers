@@ -2,7 +2,7 @@
 
 ## member functions
 
-- [ ] constructors
+- [3/5] constructors
 - [x] destructor
 - [x] operator=
 - [x] assign
@@ -28,11 +28,12 @@
 - [x] push_front
 - [x] pop_front
 - [x] resize
+- [x] swap
 ### operations
 - [ ] merge
 - [ ] splice
 - [ ] remove
-- [ ] reverse
+- [x] reverse
 - [ ] unique
 - [ ] sort 
 
