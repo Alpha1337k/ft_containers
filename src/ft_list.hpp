@@ -34,8 +34,8 @@ private:
 	};
 	s_list_item *_begin;
 	s_list_item *_end;
-
 	size_t _size;
+
 	void	delete_list()
 	{
 		s_list_item *tmp;
@@ -58,7 +58,7 @@ public:
 		delete_list();
 		s_list_item *tmp = other._begin;
 		this->_size = other._size;
-		while (tmp && tmp->next)
+		while (tmp)
 		{
 			push_back(tmp->data);
 			tmp = tmp->next;
@@ -85,13 +85,11 @@ public:
 		if (_begin == 0)
 		{
 			_begin = new s_list_item(0, 0, value);
-			_begin->next = new s_list_item(_begin, 0);
-			_end = _begin->next;
+			_end = _begin;
 		}
 		else
 		{
-			_end->data = value;
-			_end->next = new s_list_item(_end, 0);
+			_end->next = new s_list_item(_end, 0, value);
 			_end = _end->next;
 		}
 		_size++;
@@ -101,14 +99,12 @@ public:
 		if (_begin == 0)
 		{
 			_begin = new s_list_item(0, 0, value);
-			_begin->next = new s_list_item(_begin, 0);
-			_end = _begin->next;
+			_end = _begin;
 		}
 		else
 		{
-			s_list_item *tmp = new s_list_item(0, _begin, value);
-			_begin->prev = tmp;
-			_begin = tmp;				
+			_begin->prev = new s_list_item(0, _begin, value);
+			_begin = _begin->prev;
 		}
 		_size++;
 	}
@@ -119,8 +115,8 @@ public:
 		if (_end->prev == 0)
 		{
 			delete _end;
-			_begin = 0;
 			_end = 0;
+			_begin = 0;
 		}
 		else
 		{
@@ -151,13 +147,13 @@ public:
 
 	bool empty() const {return (!!!_size);}
 	size_t size() const {return _size;}
-	T	&back() 	{return _end->prev->data;}
+	T	&back() 	{return _end->data;}
 	T	&front()	{return _begin->data;}
 	void clear() { delete_list();}
 
 	class iterator
 	{
-		private:
+		protected:
 			s_list_item *_pos;
 		public:
 			iterator(s_list_item *position): _pos(position)
@@ -184,22 +180,31 @@ public:
 			}
 			friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
 	};
-	iterator begin()
+	iterator begin()		{return iterator(_begin);}
+	iterator end()			{return iterator(0);}
+	iterator begin() const	{return iterator(_begin);}
+	iterator end() const	{return iterator(0);}
+	class reverse_iterator : public iterator
 	{
-		return iterator(_begin);
-	}
-	iterator end()
-	{
-		return iterator(_end);
-	}
-	iterator begin() const
-	{
-		return iterator(_begin);
-	}
-	iterator end() const
-	{
-		return iterator(_end);
-	}
+		public:
+			reverse_iterator(s_list_item *position): iterator(position) {}
+			reverse_iterator operator++(int)
+			{
+				this->_pos = this->_pos->prev;
+				return (this->_pos);
+			}
+			reverse_iterator operator--(int)
+			{
+				this->_pos = this->_pos->next;
+				return (this->_pos);
+			}
+	};
+	
+	reverse_iterator rbegin()		{return reverse_iterator(_end);}
+	reverse_iterator rbegin() const	{return reverse_iterator(_end);}
+	reverse_iterator rend()			{return reverse_iterator(0);}
+	reverse_iterator rend() const	{return reverse_iterator(0);}
+
 };
 
 template< class T>
@@ -213,9 +218,7 @@ bool operator==( const list<T>& lhs, const list<T>& rhs )
 	while (li != lhs.end())
 	{
 		if (*li != *ri)
-		{
 			return (false);
-		}
 		li++;
 		ri++;
 	}

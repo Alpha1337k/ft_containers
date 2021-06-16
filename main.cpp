@@ -58,7 +58,10 @@ void	list_test()
 	std::cout << "\n";
 	std::cout << "are l and l_copy the same???\t" << (bool)(l == l_ass) << std::endl;
 	std::cout << "are l_ass and l_copy the same???\t" << (bool)(l_ass == l_copy) << std::endl;
-
+	for (list<int>::reverse_iterator it = l_copy.rbegin(); it != l_copy.rend(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	
 }
 
 void vector_test()
