@@ -16,7 +16,7 @@ private:
 	size_t _capacity;
 public:
 	vector(): _data(0), _size(0), _capacity(0) {}
-	~vector() {delete _data;}
+	~vector() {delete[] _data;}
 	vector (const vector &other) {*this = other;}
 	template< class InputIt >
 	// vector(InputIt first, InputIt last,	const std::Allocator& alloc = Allocator() ) {}
@@ -32,12 +32,11 @@ public:
 		resize(count, value);
 	}
 
-	template< class InputIt >
-	void assign( InputIt first, InputIt last )
-	{
-		delete[] _data;
-		_data = new T[]
-	}
+	// template< class InputIt >
+	// void assign( InputIt first, InputIt last )
+	// {
+
+	// }
 
 	bool empty() const {return !!!_size;}
 	size_t size() const {return _size;}
