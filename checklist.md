@@ -13,8 +13,8 @@
 ### iterators
 - [x] begin
 - [x] end
-- [ ] rbegin
-- [ ] rend
+- [x] rbegin
+- [x] rend
 ### capacity
 - [x] empty
 - [x] size
@@ -27,7 +27,7 @@
 - [x] pop_back
 - [x] push_front
 - [x] pop_front
-- [ ] resize
+- [x] resize
 ### operations
 - [ ] merge
 - [ ] splice

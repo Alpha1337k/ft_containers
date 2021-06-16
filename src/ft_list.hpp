@@ -144,6 +144,29 @@ public:
 		}
 		_size--;
 	}
+	void resize( size_t count, T value = T() )
+	{
+		if (count > _size)
+			for (size_t i = _size; i < count; i++)
+				push_back(value);
+		else if (count < _size)
+			for (size_t i = _size - count; i > 0; i--)
+				pop_back();
+		_size = count;
+	}
+	// iterator insert( iterator pos, const T& value )
+	// {
+
+	// }
+	// void insert( iterator pos, size_type count, const T& value )
+	// {
+
+	// }
+	// template< class InputIt >
+	// void insert( iterator pos, InputIt first, InputIt last)
+	// {
+		
+	// }
 
 	bool empty() const {return (!!!_size);}
 	size_t size() const {return _size;}

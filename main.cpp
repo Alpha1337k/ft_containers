@@ -61,7 +61,18 @@ void	list_test()
 	for (list<int>::reverse_iterator it = l_copy.rbegin(); it != l_copy.rend(); it++)
 		std::cout << *it << " ";
 	std::cout << "\n";
-	
+	l.resize(10);
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	l.resize(2);
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	l.resize(0);
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";	
 }
 
 void vector_test()
