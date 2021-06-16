@@ -3,9 +3,9 @@
 ## member functions
 
 - [ ] constructors
-- [ ] destructor
-- [ ] operator=
-- [ ] assign
+- [x] destructor
+- [x] operator=
+- [x] assign
 - [ ] get_allocator
 ### element_access
 - [x] front
@@ -20,15 +20,14 @@
 - [x] size
 - [ ] max_size
 ### modifiers
-- [ ] clear
+- [x] clear
 - [ ] insert
 - [ ] erase
-- [ ] push_back
-- [ ] pop_back
-- [ ] push_front
-- [ ] pop_front
+- [x] push_back
+- [x] pop_back
+- [x] push_front
+- [x] pop_front
 - [ ] resize
-- [ ] swap
 ### operations
 - [ ] merge
 - [ ] splice
@@ -39,7 +38,7 @@
 
 ## non member functions
 
-- [0 /  7] operators
+- [2 /  7] operators
 
 # VECTOR
 

@@ -20,6 +20,9 @@ void	list_test()
 	l.push_back(11);
 	l.push_back(12);
 	l.push_front(0);
+	list<int> l_ass = l;
+	list<int> l_copy(l);
+
 	std::cout << "size: " << l.size() << std::endl;
 	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
 		std::cout << *it << std::endl;
@@ -38,6 +41,23 @@ void	list_test()
 	std::cout << "clearing.." << std::endl;
 	l.clear();
 	std::cout << "empty? " << l.empty() << std::endl;
+	for (list<int>::iterator it = l_ass.begin(); it != l_ass.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	for (list<int>::iterator it = l_copy.begin(); it != l_copy.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	l.assign(5, 'a');
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+    const std::string extra(6, 'b');
+    l.assign(extra.begin(), extra.end());
+	for (list<int>::iterator it = l.begin(); it != l.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	std::cout << "are l and l_copy the same???\t" << (bool)(l == l_ass) << std::endl;
+	std::cout << "are l_ass and l_copy the same???\t" << (bool)(l_ass == l_copy) << std::endl;
 
 }
 
