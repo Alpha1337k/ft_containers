@@ -6,7 +6,7 @@
 #    By: alpha <alpha@student.codam.nl>               +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/06/15 00:20:06 by alpha         #+#    #+#                  #
-#    Updated: 2021/06/15 01:58:18 by alpha         ########   odam.nl          #
+#    Updated: 2021/06/15 23:06:31 by alpha         ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,13 +16,14 @@ CC=clang++
 FLAGS=-Wall -Werror -Wextra
 DEBUG_FLAGS=-g -fsanitize=address
 SRC=main.cpp
+HEADERS=src/*.hpp
 LIBS=-I src/
 OBJ=
 RM =rm -rf
 
 all: $(NAME)
 
-$(NAME): $(SRC)
+$(NAME): $(SRC) $(HEADERS)
 	$(CC) $(FLAGS) $(SRC) $(LIBS) -o $(NAME)
 
 clean:
