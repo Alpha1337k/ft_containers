@@ -57,8 +57,8 @@
 ### iterators
 - [x] begin
 - [x] end
-- [ ] rbegin
-- [ ] rend
+- [x] rbegin
+- [x] rend
 
 ### capacity
 - [x] empty

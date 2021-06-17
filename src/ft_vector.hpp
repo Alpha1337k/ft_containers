@@ -112,7 +112,7 @@ public:
 	}
 	class iterator
 	{
-	private:
+	protected:
 		T		*_data;
 	public:
 		iterator(T *d): _data(d) {}
@@ -137,14 +137,30 @@ public:
 			return (*_data);
 		}
 	};
-	iterator begin()
+	iterator begin()		{return iterator(_data);}
+	iterator end()			{return iterator(_data + _size);}	
+	iterator begin() const	{return iterator(_data);}
+	iterator end()	const	{return iterator(_data + _size);}
+	class reverse_iterator : public iterator
 	{
-		return iterator(_data);
-	}
-	iterator end()
-	{
-		return iterator(_data + _size);
-	}	
+	public:
+		reverse_iterator(T *d): iterator(d) {}
+		reverse_iterator operator++(int)
+		{
+			this->_data--;
+			return (*this);
+		}
+		reverse_iterator operator--(int)
+		{
+			this->_data++;
+			return (*this);
+		}
+	};
+	reverse_iterator rbegin()		{return reverse_iterator(_data + _size - 1);}
+	reverse_iterator rbegin() const	{return reverse_iterator(_data + _size - 1);}
+	reverse_iterator rend()			{return reverse_iterator(_data - 1);}
+	reverse_iterator rend() const	{return reverse_iterator(_data - 1);}
+
 };
 
 template<class T>

@@ -222,6 +222,10 @@ void vector_test()
 		std::cout << *it << " ";
 	std::cout << "\n";
 
+	for (vector<int>::reverse_iterator it = a1.rbegin(); it != a1.rend(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+
 	vector<int> compare_1;
 	vector<int> compare_2;
 	vector<int> compare_3;
