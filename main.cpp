@@ -111,24 +111,58 @@ void	list_test()
 	l.push_back(10);
 	l.push_back(9);
 	l.push_back(8);
-	std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
-	list<int>::iterator it_tmp = l.begin();
-	it_tmp++;
-	it_tmp++;
-	it_tmp++;
-	it_tmp = l.erase(it_tmp);
-	std::cout << l << std::endl;
-	std::cout << "new size:" << l.size() << " start: " << l.front() << " end: " << l.back() <<std::endl;
-	l.erase(l.begin(), it_tmp);
-	std::cout << l << std::endl;
-	std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
 
-	l.remove(22);
-	std::cout << l << std::endl;
-	std::cout << "new size:" << l.size() << std::endl;
-	l.remove_if([](int n){return n > 8;});
-	std::cout << l << std::endl;
-	std::cout << "new size:" << l.size() << std::endl;
+	list<int> compare_1;
+	list<int> compare_2;
+	list<int> compare_3;
+	list<int> compare_4;
+
+	compare_1.push_back(3);
+	compare_1.push_back(1);
+	compare_1.push_back(2);
+	compare_2.push_back(1);
+	compare_2.push_back(2);
+	compare_2.push_back(3);
+	compare_3.push_back(36);
+	compare_3.push_back(32);
+	compare_3.push_back(31);
+	compare_3.push_back(1);
+	compare_4.push_back(1);
+	compare_4.push_back(2);
+	compare_4.push_back(3);
+
+	std::cout << compare_1 << compare_2 << compare_3 << compare_4 << std::endl;
+
+	std::cout << (compare_1 == compare_2) << (compare_1 != compare_2) << (compare_1 >= compare_2) << (compare_1 <= compare_2)
+		<< (compare_1 > compare_2) << (compare_1 < compare_2) << std::endl;
+	std::cout << (compare_1 == compare_3) << (compare_1 != compare_3) << (compare_1 >= compare_3) << (compare_1 <= compare_3)
+		<< (compare_1 > compare_3) << (compare_1 < compare_3) << std::endl;
+	std::cout << (compare_1 == compare_4) << (compare_1 != compare_4) << (compare_1 >= compare_4) << (compare_1 <= compare_4)
+		<< (compare_1 > compare_4) << (compare_1 < compare_4) << std::endl;
+	std::cout << (compare_2 == compare_3) << (compare_2 != compare_3) << (compare_2 >= compare_3) << (compare_2 <= compare_3)
+		<< (compare_2 > compare_3) << (compare_2 < compare_3) << std::endl;
+	std::cout << (compare_2 == compare_4) << (compare_2 != compare_4) << (compare_2 >= compare_4) << (compare_2 <= compare_4)
+		<< (compare_2 > compare_4) << (compare_2 < compare_4) << std::endl;
+	std::cout << (compare_3 == compare_4) << (compare_3 != compare_4) << (compare_3 >= compare_4) << (compare_3 <= compare_4)
+		<< (compare_3 > compare_4) << (compare_3 < compare_4) << std::endl;
+	std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
+	// list<int>::iterator it_tmp = l.begin();
+	// it_tmp++;
+	// it_tmp++;
+	// it_tmp++;
+	// it_tmp = l.erase(it_tmp);
+	// std::cout << l << std::endl;
+	// std::cout << "new size:" << l.size() << " start: " << l.front() << " end: " << l.back() <<std::endl;
+	// l.erase(l.begin(), it_tmp);
+	// std::cout << l << std::endl;
+	// std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
+
+	// l.remove(22);
+	// std::cout << l << std::endl;
+	// std::cout << "new size:" << l.size() << std::endl;
+	// l.remove_if([](int n){return n > 8;});
+	// std::cout << l << std::endl;
+	// std::cout << "new size:" << l.size() << std::endl;
 }
 
 void vector_test()

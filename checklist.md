@@ -39,7 +39,7 @@
 
 ## non member functions
 
-- [2 /  7] operators
+- [7 / 7] operators
 
 # VECTOR
 

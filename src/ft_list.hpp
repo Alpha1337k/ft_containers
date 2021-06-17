@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <iostream>
+#include <algorithm>
 #include <string>
 
 namespace ft
@@ -50,6 +51,8 @@ private:
 		_size = 0;
 	}
 public:
+	typedef T value_type;
+	
 	~list() {delete_list();}
 	list(): _begin(0), _end(0),_size(0) {}
 	list( const list& other ): _begin(0), _end(0) {*this = other;}
@@ -297,12 +300,23 @@ public:
 	{
 		protected:
 		public:
+			typedef T value_type;
 			s_list_item *_pos;
 			iterator(s_list_item *position): _pos(position)
 			{
 
 			}
 			iterator(const iterator &i) {*this = i;}
+			iterator& operator++()
+			{
+				_pos = _pos->next;
+				return *this;
+			}
+			iterator& operator--()
+			{
+				_pos = _pos->prev;
+				return *this;
+			}
 			iterator &operator=(const iterator &i)
 			{
 				_pos = i._pos;
@@ -310,13 +324,15 @@ public:
 			}
 			iterator operator++(int)
 			{
-				_pos = _pos->next;
-				return (_pos);
+				iterator old = *this;
+				operator++();
+				return (old);
 			}
 			iterator operator--(int)
 			{
-				_pos = _pos->prev;
-				return (_pos);
+				iterator old = *this;
+				operator--();
+				return (old);
 			}
 			friend bool operator==(const iterator& lhs, const iterator& rhs)
 			{
@@ -400,6 +416,33 @@ bool operator==( const list<T>& lhs, const list<T>& rhs )
 
 template< class T>
 bool operator!=( const list<T>& lhs, const list<T>& rhs ) {return !(lhs == rhs);}
+
+template< class T>
+bool operator<(const list<T> &lhs, const list<T> &rhs)
+{
+	auto l1 = lhs.begin(), l2 = lhs.end(), r1 = rhs.begin(), r2 = rhs.end();
+	for ( ; (l1 != l2) && (r1 != r2); ++l1, (void) ++r1 ) {
+		if (*l1 < *r1) return true;
+        if (*r1 < *l1) return false;
+	}
+	return (l1 == l2) && (r1 != r2);
+}
+
+template< class T>
+bool operator>(const list<T> &lhs, const list<T> &rhs)
+{
+	auto l1 = lhs.begin(), l2 = lhs.end(), r1 = rhs.begin(), r2 = rhs.end();
+	for ( ; (l1 != l2) && (r1 != r2); ++l1, ++r1 ) {
+		// std::cerr << "comparing " << *l1 << " against " << *r1 << std::endl;
+		if (*l1 < *r1) return false;
+        if (*r1 < *l1) return true;
+	}
+	return (l1 != l2) && (r1 == r2);
+}
+template< class T>
+bool operator>=(const list<T> &lhs, const list<T> &rhs) {return !(lhs < rhs);}
+template< class T>
+bool operator<=(const list<T> &lhs, const list<T> &rhs) {return !(lhs > rhs);}
 
 }
 
