@@ -17,14 +17,23 @@ private:
 public:
 	vector(): _data(0), _size(0), _capacity(0) {}
 	~vector() {delete[] _data;}
-	vector (const vector &other) {*this = other;}
-	template< class InputIt >
-	// vector(InputIt first, InputIt last,	const std::Allocator& alloc = Allocator() ) {}
-	// explicit vector( const Allocator& alloc ): _data(0), _size(0), _capacity(0) {}
-	// explicit vector( size_t count, const T& value = T(), const std::allocator<T>& alloc = std::allocator()): _data(0), _size(0), _capacity(0)
+	vector (const vector &other): _data(0), _size(0), _capacity(0) {*this = other;}
+	explicit vector( size_t count, const T& value = T()): _data(0), _size(0), _capacity(0)
+	{
+		resize(count, value);
+	}
+	vector& operator=( const vector& other )
+	{
+		for (size_t i = 0; i < other._size; i++)
+			push_back(other._data[i]);
+
+		return *this;
+	}
+	// template< class InputIt >
+	// vector( InputIt first, InputIt last): _data(0), _size(0), _capacity(0)
 	// {
-	// 	(void)alloc;
-	// 	resize(count, value);
+	// 	for (; first != last; first++)
+	// 		push_back(*first);
 	// }
 
 	void assign( size_t count, const T& value )
@@ -54,14 +63,6 @@ public:
 	T& operator[](size_t idx)
 	{
 		return _data[idx];
-	}
-	vector& operator=( const vector& other )
-	{
-		_size = other._size;
-		_capacity = other._capacity;
-		_data = other._data;
-
-		return *this;
 	}
 	const T &operator[]( size_t idx ) const
 	{
@@ -206,6 +207,11 @@ bool operator>=(const vector<T> &lhs, const vector<T> &rhs) {return !(lhs < rhs)
 template< typename T>
 bool operator<=(const vector<T> &lhs, const vector<T> &rhs) {return !(lhs > rhs);}
 
+template< typename T >
+void swap( ft::vector<T>& lhs, ft::vector<T>& rhs )
+{
+	lhs.swap(rhs);
+}
 
 }
 

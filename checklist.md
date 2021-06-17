@@ -44,10 +44,10 @@
 # VECTOR
 
 ## member functions
-- [ ] constructors
+- [3/5] constructors
 - [x] destructor
 - [x] operator=
-- [ ] assign
+- [1/2] assign
 - [ ] get_allocator
 ### element access
 - [x] at

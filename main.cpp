@@ -184,6 +184,12 @@ void vector_test()
 	a.push_back(12);
 	a.push_back(13);
 	a.push_back(14);
+
+	vector<int> b(a);
+	vector<int> c = a;
+	vector<int> d(10, 55);
+	// vector<int> e(d.begin(), d.end());
+
 	std::cout << "Capacity " << a.capacity() << " size: " << a.size() << std::endl;
 	for (size_t i = 0; i < a.size(); i++)
 		std::cout << a[i] << " ";
@@ -260,6 +266,8 @@ void vector_test()
 	std::cout << (compare_3 == compare_4) << (compare_3 != compare_4) << (compare_3 >= compare_4) << (compare_3 <= compare_4)
 		<< (compare_3 > compare_4) << (compare_3 < compare_4) << std::endl;
 
+	swap(a, b);
+	std::cout << a << b << c << d << std::endl;
 }
 
 int main(void)
