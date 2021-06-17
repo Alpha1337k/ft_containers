@@ -9,7 +9,6 @@
 
 namespace ft
 {
-class iterator;
 
 template <typename T>
 class list
@@ -269,7 +268,28 @@ public:
 		}
 	}
 
-	void remove( const T& value ) {remove_if([&value](T n){return n == value;});};
+	void remove( const T& value ) 
+	{
+		s_list_item *it = _begin;
+		s_list_item *tmp;
+
+		while (it)
+		{
+			if (it->next != 0 && it->next->data == value)
+			{
+				tmp = it->next->next;
+				delete it->next;
+				it->next = tmp;
+				_size--;
+				if (it->next == 0)
+					_end = it;
+				else if (it->next->next == 0)
+					_end = it->next->next;
+			}
+			else
+				it = it->next;
+		}
+	}
 	template< class UnaryPredicate >
 	void remove_if( UnaryPredicate p )
 	{
@@ -294,7 +314,6 @@ public:
 		}
 		
 	}
-
 
 	class iterator
 	{
@@ -396,14 +415,15 @@ public:
 	}
 };
 
-template< class T>
+template< typename T>
 bool operator==( const list<T>& lhs, const list<T>& rhs )
 {
+	typedef typename ft::list<T>::iterator iterator;
 	// std::cout << "Different sizes? " << lhs.size() << " vs " << rhs.size() << std::endl;
 	if (lhs.size() != rhs.size())
 		return (false);
-	auto li = lhs.begin();
-	auto ri = rhs.begin();
+	iterator li = lhs.begin();
+	iterator ri = rhs.begin();
 	while (li != lhs.end())
 	{
 		if (*li != *ri)
@@ -414,13 +434,15 @@ bool operator==( const list<T>& lhs, const list<T>& rhs )
 	return (true);
 }
 
-template< class T>
+template< typename T>
 bool operator!=( const list<T>& lhs, const list<T>& rhs ) {return !(lhs == rhs);}
 
-template< class T>
+template< typename T>
 bool operator<(const list<T> &lhs, const list<T> &rhs)
 {
-	auto l1 = lhs.begin(), l2 = lhs.end(), r1 = rhs.begin(), r2 = rhs.end();
+	typedef typename ft::list<T>::iterator iterator;
+
+	iterator l1 = lhs.begin(), l2 = lhs.end(), r1 = rhs.begin(), r2 = rhs.end();
 	for ( ; (l1 != l2) && (r1 != r2); ++l1, (void) ++r1 ) {
 		if (*l1 < *r1) return true;
         if (*r1 < *l1) return false;
@@ -428,20 +450,21 @@ bool operator<(const list<T> &lhs, const list<T> &rhs)
 	return (l1 == l2) && (r1 != r2);
 }
 
-template< class T>
+template< typename T>
 bool operator>(const list<T> &lhs, const list<T> &rhs)
 {
-	auto l1 = lhs.begin(), l2 = lhs.end(), r1 = rhs.begin(), r2 = rhs.end();
+	typedef typename ft::list<T>::iterator iterator;
+
+	iterator l1 = lhs.begin(), l2 = lhs.end(), r1 = rhs.begin(), r2 = rhs.end();
 	for ( ; (l1 != l2) && (r1 != r2); ++l1, ++r1 ) {
-		// std::cerr << "comparing " << *l1 << " against " << *r1 << std::endl;
 		if (*l1 < *r1) return false;
         if (*r1 < *l1) return true;
 	}
 	return (l1 != l2) && (r1 == r2);
 }
-template< class T>
+template< typename T>
 bool operator>=(const list<T> &lhs, const list<T> &rhs) {return !(lhs < rhs);}
-template< class T>
+template< typename T>
 bool operator<=(const list<T> &lhs, const list<T> &rhs) {return !(lhs > rhs);}
 
 }
