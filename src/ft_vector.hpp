@@ -161,6 +161,35 @@ bool operator==(const vector<T>& lhs, const vector<T>& rhs )
 template<class T>
 bool operator!=(const vector<T>& lhs, const vector<T>& rhs ) {return !(lhs == rhs);}
 
+template< typename T>
+bool operator<(const vector<T> &lhs, const vector<T> &rhs)
+{
+	size_t l1 = 0, r1 = 0;
+	size_t l_size = lhs.size(), r_size = rhs.size();
+	for (; l1 < l_size && r1 < r_size; l1++, r1++) {
+		if (lhs[l1] < rhs[r1]) return true;
+        if (rhs[l1] < lhs[r1]) return false;
+	}
+	return (l1 == l_size) && (r_size != r1);
+}
+
+template< typename T>
+bool operator>(const vector<T> &lhs, const vector<T> &rhs)
+{
+	size_t l1 = 0, r1 = 0;
+	size_t l_size = lhs.size(), r_size = rhs.size();
+	for (; l1 < l_size && r1 < r_size; l1++, r1++)  {
+		if (lhs[l1] < rhs[r1]) return false;
+        if (rhs[l1] < lhs[r1]) return true;
+	}
+	return (l1 != l_size) && (r_size == r1);
+}
+
+template< typename T>
+bool operator>=(const vector<T> &lhs, const vector<T> &rhs) {return !(lhs < rhs);}
+template< typename T>
+bool operator<=(const vector<T> &lhs, const vector<T> &rhs) {return !(lhs > rhs);}
+
 
 }
 

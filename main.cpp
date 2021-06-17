@@ -19,6 +19,15 @@ std::ostream &operator<<(std::ostream &out, list<T> &l)
 	return (out);
 }
 
+template <typename T>
+std::ostream &operator<<(std::ostream &out, vector<T> &v)
+{
+	for (vector<int>::iterator it = v.begin(); it != v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << "\n";
+	return (out);
+}
+
 void	list_test()
 {
 	list<int> l;
@@ -212,6 +221,41 @@ void vector_test()
 	for (vector<int>::iterator it = a1.begin(); it != a1.end(); it++)
 		std::cout << *it << " ";
 	std::cout << "\n";
+
+	vector<int> compare_1;
+	vector<int> compare_2;
+	vector<int> compare_3;
+	vector<int> compare_4;
+
+	compare_1.push_back(3);
+	compare_1.push_back(1);
+	compare_1.push_back(2);
+	compare_2.push_back(1);
+	compare_2.push_back(2);
+	compare_2.push_back(3);
+	compare_3.push_back(36);
+	compare_3.push_back(32);
+	compare_3.push_back(31);
+	compare_3.push_back(1);
+	compare_4.push_back(1);
+	compare_4.push_back(2);
+	compare_4.push_back(3);
+
+	std::cout << compare_1 << compare_2 << compare_3 << compare_4 << std::endl;
+
+	std::cout << (compare_1 == compare_2) << (compare_1 != compare_2) << (compare_1 >= compare_2) << (compare_1 <= compare_2)
+		<< (compare_1 > compare_2) << (compare_1 < compare_2) << std::endl;
+	std::cout << (compare_1 == compare_3) << (compare_1 != compare_3) << (compare_1 >= compare_3) << (compare_1 <= compare_3)
+		<< (compare_1 > compare_3) << (compare_1 < compare_3) << std::endl;
+	std::cout << (compare_1 == compare_4) << (compare_1 != compare_4) << (compare_1 >= compare_4) << (compare_1 <= compare_4)
+		<< (compare_1 > compare_4) << (compare_1 < compare_4) << std::endl;
+	std::cout << (compare_2 == compare_3) << (compare_2 != compare_3) << (compare_2 >= compare_3) << (compare_2 <= compare_3)
+		<< (compare_2 > compare_3) << (compare_2 < compare_3) << std::endl;
+	std::cout << (compare_2 == compare_4) << (compare_2 != compare_4) << (compare_2 >= compare_4) << (compare_2 <= compare_4)
+		<< (compare_2 > compare_4) << (compare_2 < compare_4) << std::endl;
+	std::cout << (compare_3 == compare_4) << (compare_3 != compare_4) << (compare_3 >= compare_4) << (compare_3 <= compare_4)
+		<< (compare_3 > compare_4) << (compare_3 < compare_4) << std::endl;
+
 }
 
 int main(void)

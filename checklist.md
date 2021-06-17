@@ -68,12 +68,12 @@
 - [x] capacity
 ### modifiers
 - [x] clear
-- [x] insert
-- [x] erase
+- [ ] insert
+- [ ] erase
 - [x] push_back
 - [x] pop_back
 - [x] resize
 - [x] swap
 
 ## non member functions
-- [2 / 7] operators
+- [7 / 7] operators
