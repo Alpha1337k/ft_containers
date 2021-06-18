@@ -1,9 +1,11 @@
 
 #include <ft_list.hpp>
+#include <ft_map.hpp>
 #include <ft_vector.hpp>
 #include <iostream>
 #include <list>
 #include <vector>
+#include <map>
 
 #ifdef USE_OS_VARIANT
 	using namespace std;
@@ -266,8 +268,25 @@ void vector_test()
 	std::cout << (compare_3 == compare_4) << (compare_3 != compare_4) << (compare_3 >= compare_4) << (compare_3 <= compare_4)
 		<< (compare_3 > compare_4) << (compare_3 < compare_4) << std::endl;
 
-	swap(a, b);
+	// swap(a, b);
 	std::cout << a << b << c << d << std::endl;
+
+	std::cout << "Capacity " << a.capacity() << " size: " << a.size() << std::endl;
+	std::cout << b << std::endl;
+	b.insert(b.begin(), 10);
+	std::cout << b << std::endl;
+	b.insert(b.begin() + 3, 66);
+	std::cout << b << std::endl;
+}
+
+void	map_test(void)
+{
+	map<int, int> m;
+
+	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
+	m[10] = 21;
+	std::cout << m[10] << std::endl;
+	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
 }
 
 int main(void)
@@ -276,4 +295,6 @@ int main(void)
 	list_test();
 	std::cout << "------------ VECTOR ----------- " << std::endl;
 	vector_test();
+	std::cout << "------------ MAP ----------- " << std::endl;
+	map_test();
 }

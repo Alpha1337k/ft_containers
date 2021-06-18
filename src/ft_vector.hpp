@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <limits>
+#include <iterator>
 
 namespace ft
 {
@@ -14,6 +15,14 @@ private:
 	T *_data;
 	size_t _size;
 	size_t _capacity;
+
+	template< class InputIt >
+	size_t distance (InputIt first, InputIt last)
+	{
+		size_t count = 0;
+		for (; first != last; first++, last++, count++);
+		return (count);
+	}
 public:
 	vector(): _data(0), _size(0), _capacity(0) {}
 	~vector() {delete[] _data;}
@@ -118,15 +127,47 @@ public:
 	public:
 		iterator(T *d): _data(d) {}
 		~iterator() {};
-		iterator operator++(int)
+		iterator& operator++()
 		{
 			_data++;
+			return *this;
+		}
+		iterator& operator--()
+		{
+			_data--;
+			return *this;
+		}
+		iterator operator++(int)
+		{
+			iterator old = *this;
+			operator++();
 			return (*this);
 		}
 		iterator operator--(int)
 		{
-			_data--;
+			iterator old = *this;
+			operator--();
 			return (*this);
+		}
+		iterator &operator+=(const int &val)
+		{
+			_data += val;
+			return (*this);
+		}
+		friend iterator operator+(iterator lhs, const int &rhs)
+		{
+			lhs += rhs;
+			return (lhs);
+		}
+		iterator &operator-=(const int &val)
+		{
+			_data -= val;
+			return (*this);
+		}
+		friend iterator operator-(iterator lhs, const int &rhs)
+		{
+			lhs -= rhs;
+			return (lhs);
 		}
 		friend bool operator==(const iterator& lhs, const iterator& rhs)
 		{
@@ -161,6 +202,43 @@ public:
 	reverse_iterator rbegin() const	{return reverse_iterator(_data + _size - 1);}
 	reverse_iterator rend()			{return reverse_iterator(_data - 1);}
 	reverse_iterator rend() const	{return reverse_iterator(_data - 1);}
+
+	iterator insert( iterator pos, const T& value )
+	{
+		insert(pos, 1, value);
+		return (pos);
+	}
+
+	void insert( iterator pos, size_t count, const T& value )
+	{
+		size_t i = &*pos - _data;
+		size_t x = _size + count;
+
+		reserve(_size + count);
+		for (; x >= i + count; x--)
+			_data[x] = _data[x - count];
+		for (x = 0; x < count; x++)
+			_data[x + i] = value;
+		_size += count;
+	}
+
+	// template< class InputIt, class T != int>
+	// void insert( iterator pos, InputIt first, InputIt last)
+	// {
+	// 	size_t i = &*pos - _data;
+	// 	size_t count = distance(first, last);
+		
+	// 	size_t x = _size + count;
+
+	// 	reserve(_size + count);
+	// 	for (; x >= i + count; x--)
+	// 		_data[x] = _data[x - count];
+	// 	x = 0;
+	// 	for (InputIt it = first; x < count; x++, it++)
+	// 		_data[x + i] = *it;
+	// 	_size += count;
+	// }
+
 
 };
 

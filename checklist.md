@@ -68,7 +68,7 @@
 - [x] capacity
 ### modifiers
 - [x] clear
-- [ ] insert
+- [x] insert
 - [ ] erase
 - [x] push_back
 - [x] pop_back
@@ -77,3 +77,47 @@
 
 ## non member functions
 - [7 / 7] operators
+
+# MAP
+
+## Member functions
+- [ ] constructor
+- [ ] destructor
+- [ ] operator=
+- [ ] get_allocator
+
+### Element access
+
+- [ ] operator[]
+
+### Iterators
+- [ ] begin
+- [ ] end
+- [ ] rbegin
+- [ ] rend
+
+### Capacity
+- [x] empty
+- [x] size
+- [ ] max_size
+
+### Modifiers
+- [ ] clear
+- [ ] insert
+- [ ] erase
+- [ ] swap
+
+### Lookup
+- [ ] count 
+- [ ] find
+- [ ] equal_range
+- [ ] lower_bound
+- [ ] upper_bound
+
+### Observers
+- [ ] ket_comp 
+- [ ] value_comp
+
+## Non member functions
+-[0 / 7] operators
+- [ ] swap
