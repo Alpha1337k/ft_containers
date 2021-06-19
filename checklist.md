@@ -31,7 +31,7 @@
 - [x] swap
 ### operations
 - [x] merge
-- [ ] splice
+- [x] splice
 - [x] remove
 - [x] reverse
 - [x] unique

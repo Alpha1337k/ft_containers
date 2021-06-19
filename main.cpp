@@ -201,6 +201,23 @@ void	list_test()
 	std::cout << l_ass << std::endl;
 	std::cout << "new size:" << l.size() << std::endl;
 	std::cout << "new size:" << l_ass.size() << std::endl;
+	std::cout << l_copy2 << std::endl;
+	list<int>::iterator iter = l.begin();
+	iter++;
+	iter++;
+
+	l.splice(iter, l_copy2);
+	std::cout << l << std::endl;
+	std::cout << l_copy2 << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
+	std::cout << "new size:" << l_copy2.size() << std::endl;
+
+	l_copy2.splice(l_copy2.begin(), l, iter, l.end());
+	std::cout << l << std::endl;
+	std::cout << l_copy2 << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
+	std::cout << "new size:" << l_copy2.size() << std::endl;
+
 }
 
 void vector_test()

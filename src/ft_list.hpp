@@ -388,8 +388,26 @@ public:
 			else
 				it++;
 		}
-		
 	}
+
+	void splice( iterator pos, list& other )
+	{
+		insert(pos, other.begin(), other.end(), 0);
+		other.erase(other.begin(), other.end());
+	}
+
+	void splice( iterator pos, list& other, iterator it )
+	{
+		insert(pos, 1, *it);
+		other.erase(it);
+	}
+
+	void splice(iterator pos, list& other, iterator first, iterator last)
+	{
+		insert(pos, first, last, 0);
+		other.erase(first, last);
+	}
+
 	iterator erase( iterator pos )
 	{
 		s_list_item *deref = pos._pos;
@@ -428,12 +446,25 @@ public:
 	}
 	void insert( iterator pos, size_t count, const T& value )
 	{
+		if (pos._pos == 0)
+		{
+			for (size_t i = 0; i < count; i++)
+				push_back(value);
+			return;	
+		}
 		s_list_item *it = pos._pos->prev;
 		s_list_item *end = pos._pos;
 
 		for (size_t i = 0; i < count; i++, it = it->next, _size++)
 			it->next = new s_list_item(it, end, value);
 		end->prev = it;
+	}
+	template< typename InputIt >
+	void insert( iterator pos, InputIt first, InputIt last, int xddd)
+	{
+		(void)xddd;
+		for (; first != last; first++)
+			insert(pos, 1, *first);
 	}
 };
 
