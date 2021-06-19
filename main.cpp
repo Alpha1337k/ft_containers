@@ -26,7 +26,6 @@ std::ostream &operator<<(std::ostream &out, vector<T> &v)
 {
 	for (vector<int>::iterator it = v.begin(); it != v.end(); it++)
 		std::cout << *it << " ";
-	std::cout << "\n";
 	return (out);
 }
 
@@ -318,9 +317,13 @@ void vector_test()
 	std::cout << "Capacity " << a.capacity() << " size: " << a.size() << std::endl;
 	std::cout << b << std::endl;
 	b.insert(b.begin(), 10);
-	std::cout << b << std::endl;
+	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
 	b.insert(b.begin() + 3, 66);
-	std::cout << b << std::endl;
+	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
+	b.erase(b.begin() + 3);
+	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
+	b.erase(b.begin() + 2, b.end() - 1);
+	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
 }
 
 void	map_test(void)
@@ -337,8 +340,8 @@ int main(void)
 {
 	std::cout << "------------ LIST ----------- " << std::endl;
 	list_test();
-	// std::cout << "------------ VECTOR ----------- " << std::endl;
-	// vector_test();
+	std::cout << "------------ VECTOR ----------- " << std::endl;
+	vector_test();
 	// std::cout << "------------ MAP ----------- " << std::endl;
 	// map_test();
 }

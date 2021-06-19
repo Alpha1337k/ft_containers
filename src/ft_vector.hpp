@@ -33,6 +33,7 @@ public:
 	}
 	vector& operator=( const vector& other )
 	{
+		reserve(other.size() * 2);
 		for (size_t i = 0; i < other._size; i++)
 			push_back(other._data[i]);
 
@@ -238,7 +239,26 @@ public:
 	// 		_data[x + i] = *it;
 	// 	_size += count;
 	// }
+	iterator erase(iterator pos )
+	{
+		size_t i = &*pos - _data + 1;
+		for (; i < _size; i++)
+			_data[i - 1] = _data[i];
+		_size--;
+		return (pos);
+	}
 
+	iterator erase( iterator first, iterator last )
+	{
+		size_t i = &*first - _data + 1;
+		size_t endi = &*last - _data + 1;
+
+		for (; i < endi; i++)
+		{
+			first = erase(first);
+		}
+		return (first);
+	}
 
 };
 

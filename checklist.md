@@ -69,7 +69,7 @@
 ### modifiers
 - [x] clear
 - [x] insert
-- [ ] erase
+- [x] erase
 - [x] push_back
 - [x] pop_back
 - [x] resize
