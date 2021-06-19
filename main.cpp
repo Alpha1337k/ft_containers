@@ -192,6 +192,15 @@ void	list_test()
 	l.remove_if([](int n){return n >= 10;});
 	std::cout << l << std::endl;
 	std::cout << "new size:" << l.size() << std::endl;
+	l = l_copy2;
+	l.sort();
+	std::cout << l << std::endl;
+	std::cout << l_ass << std::endl;
+	l.merge(l_ass);
+	std::cout << l << std::endl;
+	std::cout << l_ass << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
+	std::cout << "new size:" << l_ass.size() << std::endl;
 }
 
 void vector_test()

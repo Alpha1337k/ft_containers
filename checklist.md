@@ -30,7 +30,7 @@
 - [x] resize
 - [x] swap
 ### operations
-- [ ] merge
+- [x] merge
 - [ ] splice
 - [x] remove
 - [x] reverse

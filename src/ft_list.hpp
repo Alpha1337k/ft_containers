@@ -311,6 +311,35 @@ public:
 		} while (changes != 0);
 	}
 
+	void merge( list& other ) {merge(other, std::less<T>());}
+	template <class Compare>
+	void merge( list& other, Compare comp )
+	{
+		iterator it_this = this->begin();
+		iterator it_this_next = this->begin();
+		iterator it_other = other.begin();
+
+		it_this_next++;
+		do
+		{
+			if (it_this_next == this->end())
+			{
+				push_back(*it_other);
+				it_other = other.erase(it_other);
+			}
+			else if (comp(*it_this, *it_other) && !comp(*it_this_next, *it_other))
+			{
+				insert(it_this_next, *it_other);
+				it_other = other.erase(it_other);
+			}
+			else
+			{
+				it_this++;
+				it_this_next++;
+			}
+		} while (it_this != this->end() && other.size());
+	}
+
 	void unique() {unique(std::equal_to<T>());}
 	template< class BinaryPredicate >
 	void unique( BinaryPredicate p )
