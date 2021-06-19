@@ -21,8 +21,8 @@
 - [ ] max_size
 ### modifiers
 - [x] clear
-- [ ] insert
-- [ ] erase
+- [x] insert
+- [x] erase
 - [x] push_back
 - [x] pop_back
 - [x] push_front
@@ -32,7 +32,7 @@
 ### operations
 - [ ] merge
 - [ ] splice
-- [ ] remove
+- [x] remove
 - [x] reverse
 - [x] unique
 - [x] sort 

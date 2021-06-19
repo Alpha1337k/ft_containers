@@ -50,6 +50,79 @@ private:
 		_size = 0;
 	}
 public:
+	class iterator
+	{
+		protected:
+		public:
+			typedef T value_type;
+			s_list_item *_pos;
+			iterator(s_list_item *position): _pos(position)
+			{
+
+			}
+			iterator(const iterator &i) {*this = i;}
+			iterator& operator++()
+			{
+				_pos = _pos->next;
+				return *this;
+			}
+			iterator& operator--()
+			{
+				_pos = _pos->prev;
+				return *this;
+			}
+			iterator &operator=(const iterator &i)
+			{
+				_pos = i._pos;
+				return *this;
+			}
+			iterator operator++(int)
+			{
+				iterator old = *this;
+				operator++();
+				return (old);
+			}
+			iterator operator--(int)
+			{
+				iterator old = *this;
+				operator--();
+				return (old);
+			}
+			friend bool operator==(const iterator& lhs, const iterator& rhs)
+			{
+				return (lhs._pos == rhs._pos);
+			}
+			T	&operator*()
+			{
+				return (_pos->data);
+			}
+			friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
+	};
+	iterator begin()		{return iterator(_begin);}
+	iterator end()			{return iterator(0);}
+	iterator begin() const	{return iterator(_begin);}
+	iterator end() const	{return iterator(0);}
+	class reverse_iterator : public iterator
+	{
+		public:
+			reverse_iterator(s_list_item *position): iterator(position) {}
+			reverse_iterator operator++(int)
+			{
+				this->_pos = this->_pos->prev;
+				return (this->_pos);
+			}
+			reverse_iterator operator--(int)
+			{
+				this->_pos = this->_pos->next;
+				return (this->_pos);
+			}
+	};
+	
+	reverse_iterator rbegin()		{return reverse_iterator(_end);}
+	reverse_iterator rbegin() const	{return reverse_iterator(_end);}
+	reverse_iterator rend()			{return reverse_iterator(0);}
+	reverse_iterator rend() const	{return reverse_iterator(0);}
+
 	typedef T value_type;
 	
 	~list() {delete_list();}
@@ -60,6 +133,8 @@ public:
 		delete_list();
 		s_list_item *tmp = other._begin;
 		this->_size = 0;
+		this->_begin = 0;
+		this->_end = 0;
 		while (tmp)
 		{
 			push_back(tmp->data);
@@ -182,14 +257,6 @@ public:
 		this->_size = tmp_size;
 
 	}
-	// iterator insert( iterator pos, const T& value )
-	// {
-
-	// }
-	// void insert( iterator pos, size_type count, const T& value )
-	// {
-
-	// }
 	// template< class InputIt >
 	// void insert( iterator pos, InputIt first, InputIt last)
 	// {
@@ -270,139 +337,51 @@ public:
 
 	void remove( const T& value ) 
 	{
-		s_list_item *it = _begin;
-		s_list_item *tmp;
+		iterator it = begin();
 
-		while (it)
+		while (it != this->end())
 		{
-			if (it->next != 0 && it->next->data == value)
-			{
-				tmp = it->next->next;
-				delete it->next;
-				it->next = tmp;
-				_size--;
-				if (it->next == 0)
-					_end = it;
-				else if (it->next->next == 0)
-					_end = it->next->next;
-			}
+			if (*it == value)
+				it = erase(it);
 			else
-				it = it->next;
+				it++;
 		}
 	}
 	template< class UnaryPredicate >
 	void remove_if( UnaryPredicate p )
 	{
-		s_list_item *it = _begin;
-		s_list_item *tmp;
+		iterator it = begin();
 
-		while (it)
+		while (it != this->end())
 		{
-			if (it->next != 0 && p(it->next->data))
-			{
-				tmp = it->next->next;
-				delete it->next;
-				it->next = tmp;
-				_size--;
-				if (it->next == 0)
-					_end = it;
-				else if (it->next->next == 0)
-					_end = it->next->next;
-			}
+			if (p(*it))
+				it = erase(it);
 			else
-				it = it->next;
+				it++;
 		}
 		
 	}
-
-	class iterator
-	{
-		protected:
-		public:
-			typedef T value_type;
-			s_list_item *_pos;
-			iterator(s_list_item *position): _pos(position)
-			{
-
-			}
-			iterator(const iterator &i) {*this = i;}
-			iterator& operator++()
-			{
-				_pos = _pos->next;
-				return *this;
-			}
-			iterator& operator--()
-			{
-				_pos = _pos->prev;
-				return *this;
-			}
-			iterator &operator=(const iterator &i)
-			{
-				_pos = i._pos;
-				return *this;
-			}
-			iterator operator++(int)
-			{
-				iterator old = *this;
-				operator++();
-				return (old);
-			}
-			iterator operator--(int)
-			{
-				iterator old = *this;
-				operator--();
-				return (old);
-			}
-			friend bool operator==(const iterator& lhs, const iterator& rhs)
-			{
-				return (lhs._pos == rhs._pos);
-			}
-			T	&operator*()
-			{
-				return (_pos->data);
-			}
-			friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
-	};
-	iterator begin()		{return iterator(_begin);}
-	iterator end()			{return iterator(0);}
-	iterator begin() const	{return iterator(_begin);}
-	iterator end() const	{return iterator(0);}
-	class reverse_iterator : public iterator
-	{
-		public:
-			reverse_iterator(s_list_item *position): iterator(position) {}
-			reverse_iterator operator++(int)
-			{
-				this->_pos = this->_pos->prev;
-				return (this->_pos);
-			}
-			reverse_iterator operator--(int)
-			{
-				this->_pos = this->_pos->next;
-				return (this->_pos);
-			}
-	};
-	
-	reverse_iterator rbegin()		{return reverse_iterator(_end);}
-	reverse_iterator rbegin() const	{return reverse_iterator(_end);}
-	reverse_iterator rend()			{return reverse_iterator(0);}
-	reverse_iterator rend() const	{return reverse_iterator(0);}
 	iterator erase( iterator pos )
 	{
 		s_list_item *deref = pos._pos;
+		
 		if (deref == 0)
 			return (pos);
-		std::cerr << "deref: " << deref->data << std::endl;
-		if (deref->prev == 0)
-			_begin = deref->next;
-		if (deref->next == 0)
-			_end = deref->prev;
-		if (deref->prev != 0)
-			deref->prev->next = deref->next;
-		pos = iterator(deref->next);
+		s_list_item *prev = deref->prev;
+		s_list_item *next = deref->next;
+
 		delete deref;
 		_size--;
-		return (pos);
+
+		if (prev)
+			prev->next = next;
+		if (next)
+			next->prev = prev;
+		if (!prev)
+			_begin = next;
+		if (!next)
+			_end = prev;
+		return (iterator(next));
 	}
 	iterator erase( iterator first, iterator last )
 	{
@@ -412,6 +391,20 @@ public:
 		} while (first != last);
 
 		return (first);
+	}
+	iterator insert( iterator pos, const T& value )
+	{
+		insert(pos, 1, value);
+		return (pos);
+	}
+	void insert( iterator pos, size_t count, const T& value )
+	{
+		s_list_item *it = pos._pos->prev;
+		s_list_item *end = pos._pos;
+
+		for (size_t i = 0; i < count; i++, it = it->next, _size++)
+			it->next = new s_list_item(it, end, value);
+		end->prev = it;
 	}
 };
 

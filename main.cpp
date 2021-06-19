@@ -157,23 +157,41 @@ void	list_test()
 	std::cout << (compare_3 == compare_4) << (compare_3 != compare_4) << (compare_3 >= compare_4) << (compare_3 <= compare_4)
 		<< (compare_3 > compare_4) << (compare_3 < compare_4) << std::endl;
 	std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
-	// list<int>::iterator it_tmp = l.begin();
-	// it_tmp++;
-	// it_tmp++;
-	// it_tmp++;
-	// it_tmp = l.erase(it_tmp);
-	// std::cout << l << std::endl;
-	// std::cout << "new size:" << l.size() << " start: " << l.front() << " end: " << l.back() <<std::endl;
-	// l.erase(l.begin(), it_tmp);
-	// std::cout << l << std::endl;
-	// std::cout << "new size:" << l.size() << " start: " << l.front() << "end: " << l.back() <<std::endl;
 
-	// l.remove(22);
-	// std::cout << l << std::endl;
-	// std::cout << "new size:" << l.size() << std::endl;
-	// l.remove_if([](int n){return n > 8;});
-	// std::cout << l << std::endl;
-	// std::cout << "new size:" << l.size() << std::endl;
+	list<int>::iterator it_tmp = l.begin();
+	it_tmp++;
+	it_tmp++;
+	it_tmp++;
+
+	l.insert(it_tmp, 10);
+	std::cout << l << " | " << *it_tmp << " | " << l.size() <<std::endl;
+
+	l.insert(it_tmp, 3, 55);
+	std::cout << l << " | " << *it_tmp << " | " << l.size() <<std::endl;
+
+	it_tmp = l.erase(it_tmp);
+	list<int> l_copy2(l);
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << " start: " << l.front() << " end: " << l.back() <<std::endl;
+	l.erase(l.begin(), it_tmp);
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << " start: " << l.front() << " end: " << l.back() <<std::endl;
+	l.erase(l.begin(), l.end());
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
+	l.erase(l.begin(), l.end());
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
+
+	l = l_copy2;
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << " start: " << l.front() << " end: " << l.back() <<std::endl;
+	l.remove(22);
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
+	l.remove_if([](int n){return n >= 10;});
+	std::cout << l << std::endl;
+	std::cout << "new size:" << l.size() << std::endl;
 }
 
 void vector_test()
@@ -293,8 +311,8 @@ int main(void)
 {
 	std::cout << "------------ LIST ----------- " << std::endl;
 	list_test();
-	std::cout << "------------ VECTOR ----------- " << std::endl;
-	vector_test();
-	std::cout << "------------ MAP ----------- " << std::endl;
-	map_test();
+	// std::cout << "------------ VECTOR ----------- " << std::endl;
+	// vector_test();
+	// std::cout << "------------ MAP ----------- " << std::endl;
+	// map_test();
 }
