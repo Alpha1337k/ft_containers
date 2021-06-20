@@ -121,3 +121,51 @@
 ## Non member functions
 -[0 / 7] operators
 - [ ] swap
+
+# Queue
+
+## Member functions
+
+- [2 / 2] constuctors
+- [x] destructors
+- [x] operator=
+
+### element access
+- [x] front
+- [x] back
+
+### capacity
+- [x] empty
+- [x] size
+
+### modifers
+- [x] push
+- [x] pop
+- [ ] swap
+
+## Non member functions
+- [7 / 7] operators
+- [ ] swap
+
+# Stack
+
+## Member functions
+- [2 / 2] constuctors
+- [x] destructors
+- [x] operator=
+
+### element access
+- [x] top
+
+### capacity
+- [x] empty
+- [x] size
+
+### modifers
+- [x] push
+- [x] pop
+- [ ] swap
+
+## Non member functions
+- [7 / 7] operators
+- [ ] swap

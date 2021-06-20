@@ -2,8 +2,10 @@
 #include <ft_list.hpp>
 #include <ft_map.hpp>
 #include <ft_vector.hpp>
+#include <ft_stack.hpp>
 #include <iostream>
 #include <list>
+#include <stack>
 #include <vector>
 #include <map>
 
@@ -324,6 +326,7 @@ void vector_test()
 	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
 	b.erase(b.begin() + 2, b.end() - 1);
 	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
+
 }
 
 void	map_test(void)
@@ -336,6 +339,45 @@ void	map_test(void)
 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
 }
 
+void	stack_test(void)
+{
+    stack<int> c1;
+    c1.push(5);
+    std::cout << c1.size() << '\n';
+ 
+    stack<int> c2(c1);
+    std::cout << c2.size() << '\n';
+ 
+    std::deque<int> deq {3, 1, 4, 1, 5};
+    stack<int> c3(deq);
+    std::cout << c3.size() << '\n';
+
+    stack<int>   s;
+ 
+    s.push( 2 );
+    s.push( 6 );
+    s.push( 51 );
+ 
+    std::cout << s.size() << " elements on stack\n";
+    std::cout << "Top element: "
+	      << s.top()         // Leaves element on stack
+	      << "\n";
+    std::cout << s.size() << " elements on stack\n";
+    s.pop();
+    std::cout << s.size() << " elements on stack\n";
+    std::cout << "Top element: " << s.top() << "\n";
+
+    stack<int> container;
+ 
+    std::cout << "Initially, container.empty(): " << container.empty() << '\n';
+ 
+    container.push(42);
+    std::cout << "After adding elements, container.empty(): " << container.empty() << '\n';
+    std::vector<std::string>
+        v1{"1","2","3","4"},
+        v2{"Ɐ","B","Ɔ","D","Ǝ"};
+}
+
 int main(void)
 {
 	std::cout << "------------ LIST ----------- " << std::endl;
@@ -344,4 +386,6 @@ int main(void)
 	vector_test();
 	// std::cout << "------------ MAP ----------- " << std::endl;
 	// map_test();
+	std::cout << "------------ STACK ----------- " << std::endl;
+	stack_test();
 }
