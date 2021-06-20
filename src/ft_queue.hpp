@@ -3,6 +3,9 @@
 
 #include <deque>
 
+namespace ft
+{
+
 template <typename T, typename Container = std::deque<T>>
 class queue
 {
@@ -51,5 +54,6 @@ bool operator>( const queue<T,Container>& lhs, const queue<T,Container>& rhs ) {
 template< class T, class Container >
 bool operator>=( const queue<T,Container>& lhs, const queue<T,Container>& rhs ) {return lhs._c >= rhs._c;}
 
+}
 
 #endif
