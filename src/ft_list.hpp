@@ -13,6 +13,12 @@ namespace ft
 template <typename T>
 class list
 {
+public:
+	typedef T value_type;
+	typedef size_t size_type;
+	typedef T&		const_reference;
+	typedef T& 		reference;
+
 private:
 	struct 	s_list_item
 	{
@@ -122,8 +128,6 @@ public:
 	reverse_iterator rbegin() const	{return reverse_iterator(_end);}
 	reverse_iterator rend()			{return reverse_iterator(0);}
 	reverse_iterator rend() const	{return reverse_iterator(0);}
-
-	typedef T value_type;
 	
 	~list() {delete_list();}
 	list(): _begin(0), _end(0),_size(0) {}

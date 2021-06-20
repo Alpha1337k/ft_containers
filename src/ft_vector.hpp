@@ -11,6 +11,11 @@ namespace ft
 template <typename T>
 class vector
 {
+public:
+	typedef T value_type;
+	typedef size_t size_type;
+	typedef T&		const_reference;
+	typedef T& 		reference;
 private:
 	T *_data;
 	size_t _size;
