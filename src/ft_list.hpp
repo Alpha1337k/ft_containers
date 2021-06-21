@@ -67,6 +67,11 @@ public:
 
 			}
 			iterator(const iterator &i) {*this = i;}
+			iterator &operator=(const iterator &i)
+			{
+				_pos = i._pos;
+				return *this;
+			}
 			iterator& operator++()
 			{
 				_pos = _pos->next;
@@ -75,11 +80,6 @@ public:
 			iterator& operator--()
 			{
 				_pos = _pos->prev;
-				return *this;
-			}
-			iterator &operator=(const iterator &i)
-			{
-				_pos = i._pos;
 				return *this;
 			}
 			iterator operator++(int)
@@ -261,11 +261,6 @@ public:
 		this->_size = tmp_size;
 
 	}
-	// template< class InputIt >
-	// void insert( iterator pos, InputIt first, InputIt last)
-	// {
-		
-	// }
 
 	bool empty() const {return (!!!_size);}
 	size_t size() const {return _size;}
@@ -508,17 +503,7 @@ bool operator<(const list<T> &lhs, const list<T> &rhs)
 }
 
 template< typename T>
-bool operator>(const list<T> &lhs, const list<T> &rhs)
-{
-	typedef typename ft::list<T>::iterator iterator;
-
-	iterator l1 = lhs.begin(), l2 = lhs.end(), r1 = rhs.begin(), r2 = rhs.end();
-	for ( ; (l1 != l2) && (r1 != r2); ++l1, ++r1 ) {
-		if (*l1 < *r1) return false;
-        if (*r1 < *l1) return true;
-	}
-	return (l1 != l2) && (r1 == r2);
-}
+bool operator>(const list<T> &lhs, const list<T> &rhs)	{return rhs < lhs;}
 template< typename T>
 bool operator>=(const list<T> &lhs, const list<T> &rhs) {return !(lhs < rhs);}
 template< typename T>
