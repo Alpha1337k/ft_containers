@@ -331,7 +331,7 @@ void vector_test()
 
 void	map_test(void)
 {
-	map<int, int> m;
+	std::map<int, int> m;
 
 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
 	m[10] = 21;
