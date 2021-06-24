@@ -31,7 +31,7 @@ std::ostream &operator<<(std::ostream &out, vector<T> &v)
 	return (out);
 }
 
-void	list_test()
+void	list_test_depr()
 {
 	list<int> l;
 
@@ -331,24 +331,37 @@ void vector_test()
 
 void	map_test(void)
 {
-	std::map<int, int> m;
+	map<int, int> m;
 
 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
 	m[10] = 21;
+	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
 	std::cout << m[10] << std::endl;
 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
+	// std::cout << "Count: " << m.count(10) << std::endl;
+
+	map<char,int> mymap;
+
+	mymap['b'] = 100;
+	mymap['a'] = 200;
+	mymap['c'] = 300;
+
+	// show content:
+	for (map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
+		std::cout << it->first << " => " << it->second << '\n';
 }
 
 void stack_test();
+void list_test();
 
 int main(void)
 {
-	std::cout << "------------ LIST ----------- " << std::endl;
-	list_test();
-	std::cout << "------------ VECTOR ----------- " << std::endl;
-	vector_test();
-	// std::cout << "------------ MAP ----------- " << std::endl;
-	// map_test();
-	std::cout << "------------ STACK ----------- " << std::endl;
-	stack_test();
+	// std::cout << "------------ LIST ----------- " << std::endl;
+	// list_test();
+	// std::cout << "------------ VECTOR ----------- " << std::endl;
+	// vector_test();
+	std::cout << "------------ MAP ----------- " << std::endl;
+	map_test();
+	// std::cout << "------------ STACK ----------- " << std::endl;
+	// stack_test();
 }
