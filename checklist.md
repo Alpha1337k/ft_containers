@@ -83,16 +83,16 @@
 ## Member functions
 - [ ] constructor
 - [ ] destructor
-- [ ] operator=
+- [x] operator=
 - [ ] get_allocator
 
 ### Element access
 
-- [ ] operator[]
+- [x] operator[]
 
 ### Iterators
-- [ ] begin
-- [ ] end
+- [x] begin
+- [x] end
 - [ ] rbegin
 - [ ] rend
 
@@ -105,21 +105,21 @@
 - [ ] clear
 - [ ] insert
 - [ ] erase
-- [ ] swap
+- [x] swap
 
 ### Lookup
-- [ ] count 
-- [ ] find
+- [x] count 
+- [x] find
 - [ ] equal_range
 - [ ] lower_bound
 - [ ] upper_bound
 
 ### Observers
-- [ ] ket_comp 
+- [ ] key_comp 
 - [ ] value_comp
 
 ## Non member functions
--[0 / 7] operators
+-[7 / 7] operators
 - [ ] swap
 
 # Queue
