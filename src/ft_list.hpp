@@ -6,6 +6,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <type_traits>
 
 namespace ft
 {
@@ -165,7 +166,7 @@ public:
 			push_back(value);
 	}
 
-	template< class InputIt >
+	template< typename InputIt >
 	void assign( InputIt first, InputIt last )
 	{
 		delete_list();
@@ -449,6 +450,12 @@ public:
 		{
 			for (size_t i = 0; i < count; i++)
 				push_back(value);
+			return;	
+		}
+		if (pos._pos->prev == 0)
+		{
+			for (size_t i = 0; i < count; i++)
+				push_front(value);
 			return;	
 		}
 		s_list_item *it = pos._pos->prev;
