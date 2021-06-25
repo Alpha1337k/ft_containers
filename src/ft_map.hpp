@@ -246,27 +246,30 @@ public:
 		iterator operator++(int)
 		{
 			std::cout << _pos << " | " << status << " | " << _base << std::endl;
-			if (_pos->left && _pos != _base)
+			if (_pos->left && _pos != _base && _origin != _pos->left)
 			{
 				std::cout << "going left!" << std::endl;
 				status = 0;
 				_pos = _pos->left;
+				while (_pos->left)
+					_pos = _pos->left;
 			}
 			else if (_pos->right)
 			{
 				std::cout << "going right!" << std::endl;
 				status = 1;
 				_pos = _pos->right;
+				while (_pos->left)
+					_pos = _pos->left;
 			}
 			else if (_pos->left == 0 && _pos->right == 0)
 			{
 				std::cout << "going up!" << std::endl;
-				status = 2;
 				do {
 					_origin = _pos;
 					_pos = _pos->back;
 				} while (_pos && _pos->right == _origin);
-				status = 0;
+				status = 1;
 			}
 			else
 			{
