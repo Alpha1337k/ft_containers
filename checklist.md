@@ -103,7 +103,7 @@
 
 ### Modifiers
 - [x] clear
-- [ ] insert
+- [1 / 3] insert
 - [x] erase
 - [x] swap
 
