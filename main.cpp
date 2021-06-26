@@ -329,37 +329,38 @@ void vector_test()
 
 }
 
-void	map_test(void)
-{
-	map<int, int> m;
+// void	map_test(void)
+// {
+// 	map<int, int> m;
 
-	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
-	m[10] = 21;
-	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
-	std::cout << m[10] << std::endl;
-	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
-	m.clear();
-	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
-	// std::cout << "Count: " << m.count(10) << std::endl;
+// 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
+// 	m[10] = 21;
+// 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
+// 	std::cout << m[10] << std::endl;
+// 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
+// 	m.clear();
+// 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
+// 	// std::cout << "Count: " << m.count(10) << std::endl;
 
-	map<char,int> mymap;
+// 	map<char,int> mymap;
 
-	mymap['b'] = 100;
-	mymap['a'] = 200;
-	mymap['c'] = 300;
+// 	mymap['b'] = 100;
+// 	mymap['a'] = 200;
+// 	mymap['c'] = 300;
 
-	std::cout << "empty: " << mymap.empty() << " size: " << mymap.size() << std::endl;
+// 	std::cout << "empty: " << mymap.empty() << " size: " << mymap.size() << std::endl;
 
-	// show content:
-	for (map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
-		std::cout << it->first << " => " << it->second << '\n';
+// 	// show content:
+// 	for (map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
+// 		std::cout << it->first << " => " << it->second << '\n';
 
-	mymap.clear();
-	std::cout << "empty: " << mymap.empty() << " size: " << mymap.size() << std::endl;
-}
+// 	mymap.clear();
+// 	std::cout << "empty: " << mymap.empty() << " size: " << mymap.size() << std::endl;
+// }
 
 void stack_test();
 void list_test();
+void map_test();
 
 int main(void)
 {

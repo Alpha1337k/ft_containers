@@ -12,7 +12,7 @@ protected:
 	typedef size_t size_type;
 	typedef Compare key_compare;
 	typedef std::pair<const K, T> value_type;
-	
+
 	struct map_node
 	{
 		map_node *left;
@@ -35,6 +35,7 @@ protected:
 	};
 	map_node *_nodes;
 	size_t	_size;
+	Compare _cmp;
 
 	void rr(map_node* parent)
 	{
@@ -322,7 +323,7 @@ protected:
 		do {
 			if ((it->key < key))
 				it = go_or_create(it, 1, key, value);
-			if ((key < it->key))
+			else if ((key < it->key))
 				it = go_or_create(it, 0, key, value);
 			else
 				break;
@@ -331,20 +332,26 @@ protected:
 		return (it);
 	}
 public:
-	map(): _nodes(0), _size(0) {}
-	~map() {}
+	map(): _nodes(0), _size(0), _cmp(Compare()) {}
+	template< class InputIt >
+	map( InputIt first, InputIt last, const Compare& comp = Compare()): _nodes(0), _size(0), _cmp(comp)
+	{
+		for (; first != last; first++)
+			get_add_node(first->first, first->second);
+	}
+	explicit map( const Compare& comp): _nodes(0), _size(0), _cmp(comp) {}
+	~map() {clear();}
 	map(const map &m): _nodes(0), _size(0) {*this = m;}
 
 	map	&operator=(const map &m)
 	{
-		this->_size = m._size;
 		iterator it = m.begin();
 		while (it != m.end())
 		{
-			get_add_node(it->first) = it->second;
+			get_add_node(it->first)->value = it->second;
 			it++;
 		}
-		
+		return *this;
 	}
 	T& operator[](const K &key)
 	{
@@ -453,7 +460,14 @@ public:
 			it = it->left;
 		return iterator(it, _nodes);
 	}
+	const iterator 		begin() const {
+		map_node *it = _nodes;
+		while (it->left)
+			it = it->left;
+		return iterator(it, _nodes);
+	}
 	iterator 		end() {return iterator(0, _nodes);}
+	const iterator 		end() const {return iterator(0, _nodes);}
 
 	bool empty() const {return !!!_size;}
 	size_t size() const {return _size;}

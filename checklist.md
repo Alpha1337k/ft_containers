@@ -81,8 +81,8 @@
 # MAP
 
 ## Member functions
-- [ ] constructor
-- [ ] destructor
+- [4 / 4] constructor
+- [x] destructor
 - [x] operator=
 - [ ] get_allocator
 
