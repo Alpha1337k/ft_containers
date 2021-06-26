@@ -1,6 +1,8 @@
 #ifndef FT_MAP_HPP
 #define FT_MAP_HPP
 
+#include <iostream>
+
 namespace ft
 {
 template <typename K, typename T, class Compare = std::less<K>>
@@ -19,14 +21,12 @@ protected:
 		map_node *right;
 		map_node *back;
 		bool isred;
-		T	value;
-		K	key;
-		map_node(map_node *l, map_node *r, map_node *b, const K &k, T val): key(k)
+		std::pair<K, T> val;
+		map_node(map_node *l, map_node *r, map_node *b, const K &k, T val): val(k, val)
 		{
 			left = l;
 			right = r;
 			back = b;
-			value = val;
 			if (!b)
 				isred = false;
 			else
@@ -155,15 +155,49 @@ protected:
 		return (it->left);
 	}
 
+	void	update_back(map_node *n, map_node *it)
+	{
+		if (n != 0)
+			n->back = it;
+	}
+
 	void	swap_succesor(map_node *lhs, map_node *rhs)
 	{
-		int tmp_v = lhs->value;
-		int tmp_k = lhs->key;
+		// std::pair<K, T> tmp(lhs->val);
+		// lhs->val = rhs->val;
+		// rhs->val = tmp;
+		map_node *lhs_ptr[3];
 
-		lhs->value = rhs->value;
-		lhs->key = rhs->key;
-		rhs->value = tmp_v;
-		rhs->key = tmp_k;
+		lhs_ptr[0] = lhs->left;
+		lhs_ptr[1] = lhs->right;
+		lhs_ptr[2] = lhs->back;
+
+		lhs->left = rhs->left;
+		lhs->right = rhs->right;
+		lhs->back = rhs->back;
+		rhs->left = lhs_ptr[0];
+		rhs->right = lhs_ptr[1];
+		rhs->back = lhs_ptr[2];
+		std::cout << "updating.." << std::endl;
+		update_back(lhs->left, lhs);
+		update_back(lhs->right, lhs);
+		update_back(rhs->left, rhs);
+		update_back(rhs->right, rhs);
+		std::cout << "backing.." << std::endl;
+		if (rhs->back)
+		{
+			if (rhs->back->left == lhs)
+				rhs->back->left = rhs;
+			else
+				rhs->back->right = rhs;
+		}
+		if (lhs->back)
+		{
+			if (lhs->back->left == rhs)
+				lhs->back->left = lhs;
+			else
+				lhs->back->right = lhs;
+		}
 	}
 
 	void	fix_dblack(map_node *it)
@@ -235,14 +269,15 @@ protected:
 
 	map_node	*remove_node(map_node *it)
 	{
-		iterator tmp = iterator(_nodes, _nodes);
-
+		if (it == 0)
+			return (0);
 		map_node *next = to_replace(it);
 
 		bool dblack = (next == 0 || next->isred == 0) && it->isred == 0;
 		map_node *parent = it->back;
 		map_node *sibling = get_sibling(it);
 
+		std::cout << it << " | " << next << " | " << parent << " | " << sibling << " | " << it->val.first << std::endl;
 		if (next == 0)
 		{
 			if (it == _nodes)
@@ -265,12 +300,13 @@ protected:
 		{
 			if (it == _nodes)
 			{
-				it->value = next->value;
-				it->key = next->key;
-				it->left = 0;
-				it->right = 0;
-				delete next;
-				return (it);
+				delete it;
+				next->left = 0;
+				next->right = 0;
+				next->back = 0;
+				_nodes = next;
+				std::cout << "returning next " << std::endl;
+				return (next);
 			}
 			else
 			{
@@ -321,9 +357,9 @@ protected:
 			return (_nodes);
 		}
 		do {
-			if ((it->key < key))
+			if ((it->val.first < key))
 				it = go_or_create(it, 1, key, value);
-			else if ((key < it->key))
+			else if ((key < it->val.first))
 				it = go_or_create(it, 0, key, value);
 			else
 				break;
@@ -348,14 +384,14 @@ public:
 		iterator it = m.begin();
 		while (it != m.end())
 		{
-			get_add_node(it->first)->value = it->second;
+			get_add_node(it->first)->val.second = it->second;
 			it++;
 		}
 		return *this;
 	}
 	T& operator[](const K &key)
 	{
-		return (get_add_node(key)->value);
+		return (get_add_node(key)->val.second);
 	}
 	void swap( map& other )
 	{
@@ -379,13 +415,13 @@ public:
 	{
 		protected:
 			Compare _c;
-			value_compare( Compare c ): _c(c) {}
 		public:
-			bool operator()( const value_type& lhs, const value_type& rhs ) const {
-				return (_c(lhs.first, rhs.second));
+			value_compare( Compare c ): _c(c) {}
+			bool operator()(const value_type& lhs, const value_type& rhs ) const {
+				return (_c(lhs.first, rhs.first));
 			}
 	};
-	// map::value_compare value_comp() const {return value_compare(key_compare)();}
+	map::value_compare value_comp() const {return value_compare(_cmp);}
 
 
 	class iterator
@@ -397,14 +433,7 @@ public:
 		int status = 0;
 
 	public:
-		K	first;
-		T	second;
 		iterator(map_node *pos, map_node *base): _pos(pos), _base(base),_origin(pos) {
-			if (_pos != 0)
-			{
-				first = _pos->key;
-				second = _pos->value;
-			}
 		}
 		~iterator() {}
 		iterator operator++(int)
@@ -433,17 +462,12 @@ public:
 			}
 			else
 				_pos = 0;
-			if (_pos)
-			{
-				first = _pos->key;
-				second = _pos->value;
-			}
 			return *this;
 		}
-		iterator *operator->() { return this;}
-		std::pair<K , T>	&operator*()
+		std::pair<K, T>	*operator->() { return &_pos->val;}
+		std::pair<K, T>	&operator*()
 		{
-			return (std::pair<K, T>(_pos->key, _pos->value));
+			return (_pos->val);
 		}
 		friend bool operator==(const iterator& lhs, const iterator& rhs)
 		{
@@ -500,10 +524,17 @@ public:
 		map_node *it = first._pos;
 		while (it && it != last_key)
 		{
+			std::cout << "removing.." << it << std::endl;
 			it = remove_node(it);
 			_size--;
 		}
-		
+	}
+	std::pair<iterator, bool> insert( const value_type& value )
+	{
+		size_t old_size = _size;
+		iterator i = iterator(get_add_node(value.first, value.second), _nodes);
+
+		return (std::pair<iterator, bool>(i, !(old_size == _size)));
 	}
 };
 
