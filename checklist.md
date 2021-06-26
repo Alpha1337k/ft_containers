@@ -102,9 +102,9 @@
 - [ ] max_size
 
 ### Modifiers
-- [ ] clear
+- [x] clear
 - [ ] insert
-- [ ] erase
+- [x] erase
 - [x] swap
 
 ### Lookup

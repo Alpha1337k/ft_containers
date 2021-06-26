@@ -128,10 +128,169 @@ protected:
 					it = parent;
 				}
 			}
-
-
 		}
 		_nodes->isred = 0;
+	}
+	map_node *to_replace(map_node *n)
+	{
+		if (n->left && n->right)
+		{
+			map_node *it = n->right;
+			while (it->left != 0)
+				it = it->left;
+			return (it);		
+		}
+		if (n->right)
+			return (n->right);
+		return (n->left);
+	}
+
+	map_node	*get_sibling(map_node *it)
+	{
+		if (it == 0 || it->back == 0)
+			return (0);
+		if (it->back->left == it)
+			return (it->right);
+		return (it->left);
+	}
+
+	void	swap_succesor(map_node *lhs, map_node *rhs)
+	{
+		int tmp_v = lhs->value;
+		int tmp_k = lhs->key;
+
+		lhs->value = rhs->value;
+		lhs->key = rhs->key;
+		rhs->value = tmp_v;
+		rhs->key = tmp_k;
+	}
+
+	void	fix_dblack(map_node *it)
+	{
+		if (it == _nodes)
+			return;
+		
+		map_node *sibling = get_sibling(it);
+		map_node *parent = it->back;
+
+		if (sibling == 0)
+			return (fix_dblack(parent));
+		if (sibling->isred)
+		{
+			parent->isred = true;
+			sibling->isred = false;
+			if (parent->left == sibling)
+				rr(parent);
+			else
+				rl(parent);
+			fix_dblack(it);
+		}
+		else
+		{
+			if ((sibling->left && sibling->left->isred) || (sibling->right && sibling->right->isred))
+			{
+				if (sibling->left && sibling->left->isred)
+				{
+					if (parent->left == sibling)
+					{
+						sibling->left->isred = sibling->isred;
+						sibling->isred = parent->isred;
+						rr(parent);
+					}
+					else
+					{
+						sibling->left->isred = parent->isred;
+						rr(sibling);
+						rl(parent);
+					}
+				}
+				else
+				{
+					if (parent->left == sibling)
+					{
+						sibling->right->isred = parent->isred;
+						rl(sibling);
+						rr(parent);
+					}
+					else
+					{
+						sibling->right->isred = sibling->isred;
+						sibling->isred = parent->isred;
+						rl(parent);
+					}
+					
+				}
+			}
+			else
+			{
+				sibling->isred = true;
+				if (parent->isred == false)
+					fix_dblack(parent);
+				else
+					parent->isred = false;
+			}
+		}
+	}
+
+	map_node	*remove_node(map_node *it)
+	{
+		iterator tmp = iterator(_nodes, _nodes);
+
+		map_node *next = to_replace(it);
+
+		bool dblack = (next == 0 || next->isred == 0) && it->isred == 0;
+		map_node *parent = it->back;
+		map_node *sibling = get_sibling(it);
+
+		if (next == 0)
+		{
+			if (it == _nodes)
+				_nodes = 0;
+			else
+			{
+				if (dblack)
+					fix_dblack(it);
+				else if (sibling)
+					sibling->isred = true;
+				if (parent->left == it)
+					parent->left = 0;
+				else if (parent->right == it)
+					parent->right = 0;
+			}
+			delete it;
+			return (parent);
+		}
+		else if (it->left == 0 || it->right == 0)
+		{
+			if (it == _nodes)
+			{
+				it->value = next->value;
+				it->key = next->key;
+				it->left = 0;
+				it->right = 0;
+				delete next;
+				return (it);
+			}
+			else
+			{
+				if (parent->left == it)
+					parent->left = next;
+				else
+					parent->right = next;
+				delete it;
+				next->back = parent;
+				if (dblack)
+					fix_dblack(next);
+				else
+					next->isred = false;
+				return (next);
+			}
+		}
+		else
+		{
+			swap_succesor(next, it);
+			return (remove_node(next));
+		}
 	}
 	map_node	*go_or_create(map_node *parent, int dir, K key, T value)
 	{
@@ -173,7 +332,7 @@ protected:
 	}
 public:
 	map(): _nodes(0), _size(0) {}
-	~map() {clear();}
+	~map() {}
 	map(const map &m): _nodes(0), _size(0) {*this = m;}
 
 	map	&operator=(const map &m)
@@ -204,12 +363,10 @@ public:
 
 	void clear()
 	{
-		erase(begin(), end());		
+		erase(begin(), end());
 	}
 
-	void erase( iterator pos );
-
-	key_compare key_comp() const {return key_compare;}
+	// key_compare key_comp() const {return key_compare;}
 
 	class value_compare
 	{
@@ -221,12 +378,12 @@ public:
 				return (_c(lhs.first, rhs.second));
 			}
 	};
-	map::value_compare value_comp() const {return value_compare(key_compare)();}
+	// map::value_compare value_comp() const {return value_compare(key_compare)();}
 
 
 	class iterator
 	{
-	private:
+	public:
 		map_node *_pos;
 		map_node *_base;
 		map_node *_origin;
@@ -245,10 +402,8 @@ public:
 		~iterator() {}
 		iterator operator++(int)
 		{
-			std::cout << _pos << " | " << status << " | " << _base << std::endl;
 			if (_pos->left && _pos != _base && _origin != _pos->left)
 			{
-				std::cout << "going left!" << std::endl;
 				status = 0;
 				_pos = _pos->left;
 				while (_pos->left)
@@ -256,7 +411,6 @@ public:
 			}
 			else if (_pos->right)
 			{
-				std::cout << "going right!" << std::endl;
 				status = 1;
 				_pos = _pos->right;
 				while (_pos->left)
@@ -264,7 +418,6 @@ public:
 			}
 			else if (_pos->left == 0 && _pos->right == 0)
 			{
-				std::cout << "going up!" << std::endl;
 				do {
 					_origin = _pos;
 					_pos = _pos->back;
@@ -272,10 +425,7 @@ public:
 				status = 1;
 			}
 			else
-			{
-				std::cout << "end???" << std::endl;
 				_pos = 0;
-			}
 			if (_pos)
 			{
 				first = _pos->key;
@@ -290,7 +440,6 @@ public:
 		}
 		friend bool operator==(const iterator& lhs, const iterator& rhs)
 		{
-			std::cout << "Comparing.." << std::endl;
 			return (lhs._pos == rhs._pos);
 		}
 		friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
@@ -320,12 +469,27 @@ public:
 		iterator it = begin();
 		while (it != end())
 		{
-			std::cout << "Checking.." << std::endl;
 			if (it->first == key)
 				return (it);
 			it++;
 		}
 		return (it);
+	}
+	void erase( iterator pos ) {
+		map_node *it = pos._pos;
+		remove_node(it);
+	}
+	
+	void erase( iterator first, iterator last )
+	{
+		map_node *last_key = last._pos;
+		map_node *it = first._pos;
+		while (it && it != last_key)
+		{
+			it = remove_node(it);
+			_size--;
+		}
+		
 	}
 };
 

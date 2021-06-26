@@ -338,6 +338,8 @@ void	map_test(void)
 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
 	std::cout << m[10] << std::endl;
 	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
+	m.clear();
+	std::cout << "empty: " << m.empty() << " size: " << m.size() << std::endl;
 	// std::cout << "Count: " << m.count(10) << std::endl;
 
 	map<char,int> mymap;
@@ -346,9 +348,14 @@ void	map_test(void)
 	mymap['a'] = 200;
 	mymap['c'] = 300;
 
+	std::cout << "empty: " << mymap.empty() << " size: " << mymap.size() << std::endl;
+
 	// show content:
 	for (map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); it++)
 		std::cout << it->first << " => " << it->second << '\n';
+
+	mymap.clear();
+	std::cout << "empty: " << mymap.empty() << " size: " << mymap.size() << std::endl;
 }
 
 void stack_test();
