@@ -277,7 +277,7 @@ protected:
 		map_node *parent = it->back;
 		map_node *sibling = get_sibling(it);
 
-		std::cout << it << " | " << next << " | " << parent << " | " << sibling << " | " << it->val.first << std::endl;
+		std::cout << it << " | " << next << " | " << parent << " | " << sibling << " | " << _nodes << " | "  << it->val.first << std::endl;
 		if (next == 0)
 		{
 			if (it == _nodes)
@@ -535,6 +535,13 @@ public:
 		iterator i = iterator(get_add_node(value.first, value.second), _nodes);
 
 		return (std::pair<iterator, bool>(i, !(old_size == _size)));
+	}
+
+	template< class InputIt >
+	void insert( InputIt first, InputIt last )
+	{
+		for(; first != last; first++)
+			get_add_node(first.first, first.second);
 	}
 };
 
