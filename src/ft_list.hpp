@@ -344,23 +344,24 @@ public:
 	template< class BinaryPredicate >
 	void unique( BinaryPredicate p )
 	{
-		s_list_item *it = _begin;
-		s_list_item *tmp;
-		while (it)
+		iterator lc = begin();
+		iterator rc = begin();
+		rc++;
+
+		if (lc == end())
+			return;
+		while (rc != end())
 		{
-			if (it->next != 0 && p(it->next->data, it->data) == true)
+			if (p(*rc, *lc))
 			{
-				tmp = it->next->next;
-				delete it->next;
-				it->next = tmp;
-				_size--;
-				if (it->next == 0)
-					_end = it;
-				else if (it->next->next == 0)
-					_end = it->next->next;
+				lc = erase(lc);
+				rc++;
 			}
 			else
-				it = it->next;
+			{
+				lc++;
+				rc++;
+			}
 		}
 	}
 
@@ -368,7 +369,7 @@ public:
 	{
 		iterator it = begin();
 
-		while (it != this->end())
+		while (it != end())
 		{
 			if (*it == value)
 				it = erase(it);
@@ -411,24 +412,21 @@ public:
 	iterator erase( iterator pos )
 	{
 		s_list_item *deref = pos._pos;
-		
+		s_list_item *rv;
 		if (deref == 0)
 			return (pos);
-		s_list_item *prev = deref->prev;
-		s_list_item *next = deref->next;
-
+		if (deref->prev)
+			deref->prev->next = deref->next;
+		else
+			_begin = deref->next;
+		if (deref->next)
+			deref->next->prev = deref->prev;
+		else
+			_end = deref->prev;
+		rv = deref->next;
 		delete deref;
 		_size--;
-
-		if (prev)
-			prev->next = next;
-		if (next)
-			next->prev = prev;
-		if (!prev)
-			_begin = next;
-		if (!next)
-			_end = prev;
-		return (iterator(next));
+		return (iterator(rv));
 	}
 	iterator erase( iterator first, iterator last )
 	{
@@ -478,7 +476,6 @@ template< typename T>
 bool operator==( const list<T>& lhs, const list<T>& rhs )
 {
 	typedef typename ft::list<T>::iterator iterator;
-	// std::cout << "Different sizes? " << lhs.size() << " vs " << rhs.size() << std::endl;
 	if (lhs.size() != rhs.size())
 		return (false);
 	iterator li = lhs.begin();
