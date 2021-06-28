@@ -4,7 +4,10 @@
 #include <memory>
 #include <limits>
 #include <iterator>
-
+#include <cstddef>
+#include <cstdint>
+#include <iostream>
+#include <numeric>
 namespace ft
 {
 
@@ -13,6 +16,7 @@ class vector
 {
 public:
 	typedef T value_type;
+	typedef ptrdiff_t difference_type;
 	typedef size_t size_type;
 	typedef T&		const_reference;
 	typedef T& 		reference;
@@ -38,7 +42,7 @@ public:
 	}
 	vector& operator=( const vector& other )
 	{
-		reserve(other.size() * 2);
+		reserve(other.size() == 0 ? 1 : other.size() * 2);
 		for (size_t i = 0; i < other._size; i++)
 			push_back(other._data[i]);
 
@@ -65,15 +69,22 @@ public:
 	bool empty() const {return !!!_size;}
 	size_t size() const {return _size;}
 	size_t capacity() const {return _capacity;}
-	size_t max_size() const {return (std::numeric_limits<T>::max() / sizeof(T));}
+	size_t max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(T) * 2 + 1);}
+	void clear() {delete[] _data; _size = 0; _capacity = 0; _data = 0;}
 
 	T	&back() {return _data[_size == 0 ? 0 : _size - 1];}
 	T	&front() {return _data[0];}
+	const T&front() const {return _data[0];}
+	const T	&back() const {return _data[_size == 0 ? 0 : _size - 1];}
 	void push_back( const T& value )
 	{
 		if (_size >= _capacity)
-			reserve(_capacity * 2);
+			reserve(_capacity == 0 ? 1 : _capacity * 2);
 		_data[_size++] = value;
+	}
+	void pop_back()
+	{
+		_size--;
 	}
 	T& operator[](size_t idx)
 	{
@@ -85,10 +96,10 @@ public:
 	}
 	void reserve( size_t new_size)
 	{
-		if (new_size < _capacity)
+		if (new_size <= _capacity)
 			return;
-		if (new_size == 0 && _capacity == 0)
-			new_size++;
+		if (new_size > max_size())
+			throw std::length_error("vector::reserve");
 		T *new_addr = new T[new_size];
 		for (size_t i = 0; i < _size; i++)
 			new_addr[i] = _data[i];
@@ -102,17 +113,31 @@ public:
 			throw std::out_of_range("out of range");
 		return (_data[pos]);
 	}
+	const T& at(size_t pos) const
+	{
+		if (pos >= _size)
+			throw std::out_of_range("out of range");
+		return (_data[pos]);
+	}
 	void resize( size_t count, T value = T() )
 	{
-		T *new_addr = new T[count];
-		for (size_t i = 0; i < count && i < _size; i++)
+		T *new_addr;
+		if (count > _capacity)
+			new_addr = new T[count];
+		else
+			new_addr = _data;
+		for (size_t i = 0; _data != new_addr && i < count && i < _size; i++)
 			new_addr[i] = _data[i];
 		for (size_t i = _size; i < count; i++)
 			new_addr[i] = value;
-		delete[] _data;
-		_capacity = count;
+		
+		if (_data != new_addr)
+		{
+			delete[] _data;
+			_capacity = count;
+			_data = new_addr;
+		}
 		_size = count;
-		_data = new_addr;
 	}
 	void swap(vector& other)
 	{
@@ -215,22 +240,26 @@ public:
 		return (pos);
 	}
 
-	void insert( iterator pos, size_t count, const T& value )
+	void insert  ( iterator pos, size_t count, const T& value )
 	{
-		size_t i = &*pos - _data;
-		size_t x = _size + count;
+		size_t i_pos = &*pos - _data;
 
-		reserve(_size + count);
-		for (; x >= i + count; x--)
-			_data[x] = _data[x - count];
-		for (x = 0; x < count; x++)
-			_data[x + i] = value;
+		if (_size + count > _capacity)
+			reserve(_size * 2);
+		for (size_t i = _size + count; i >= i_pos + count; i--)
+			_data[i] = _data[i - count];
+		for (size_t i = 0; i < count; i++)
+			_data[i_pos + i] = value;
 		_size += count;
 	}
 
-	// template< class InputIt, class T != int>
+	// template< class InputIt>
 	// void insert( iterator pos, InputIt first, InputIt last)
 	// {
+	// 	typedef typename std::__is_integer<InputIt>::__type is_i;
+	// 	std::cout << is_i << std::endl;
+	// 	exit(0);
+		
 	// 	size_t i = &*pos - _data;
 	// 	size_t count = distance(first, last);
 		
@@ -244,6 +273,7 @@ public:
 	// 		_data[x + i] = *it;
 	// 	_size += count;
 	// }
+
 	iterator erase(iterator pos )
 	{
 		size_t i = &*pos - _data + 1;
@@ -259,9 +289,7 @@ public:
 		size_t endi = &*last - _data + 1;
 
 		for (; i < endi; i++)
-		{
 			first = erase(first);
-		}
 		return (first);
 	}
 
@@ -294,16 +322,7 @@ bool operator<(const vector<T> &lhs, const vector<T> &rhs)
 }
 
 template< typename T>
-bool operator>(const vector<T> &lhs, const vector<T> &rhs)
-{
-	size_t l1 = 0, r1 = 0;
-	size_t l_size = lhs.size(), r_size = rhs.size();
-	for (; l1 < l_size && r1 < r_size; l1++, r1++)  {
-		if (lhs[l1] < rhs[r1]) return false;
-        if (rhs[l1] < lhs[r1]) return true;
-	}
-	return (l1 != l_size) && (r_size == r1);
-}
+bool operator>(const vector<T> &lhs, const vector<T> &rhs) {return rhs < lhs;}
 
 template< typename T>
 bool operator>=(const vector<T> &lhs, const vector<T> &rhs) {return !(lhs < rhs);}
