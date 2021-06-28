@@ -63,9 +63,13 @@ void	l_pop_test(void)
 	l.push_back(120);
 	l.push_front(0);
 
+	std::cout << l << std::endl;
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << l.back() << std::endl;
 	l.pop_back();
 	std::cout << l << std::endl;
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << l.front() << std::endl;
 	l.pop_front();
 	std::cout << l << std::endl;
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
@@ -108,6 +112,7 @@ void	l_assign_test(void)
 void	l_cie_test(void)
 {
 	list<int> l;
+	list<int> copy;
 
 	l.insert(l.begin(), 10);
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
@@ -134,9 +139,78 @@ void	l_cie_test(void)
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
 	std::cout << l << std::endl;
 
+	copy = l;
 	l.erase(l.begin(), l.end());
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
 	std::cout << l << std::endl;
+
+	l = copy;
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << l << std::endl;
+	l.resize(20, 88);
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << l << std::endl;
+	l.resize(21, 89);
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << l << std::endl;
+	l.resize(0, 89);
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << l << std::endl;
+	l.resize(5);
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << l << std::endl;
+}
+
+void	l_op_test(void)
+{
+	list<int> l;
+	list<int> lb;
+
+	l.insert(l.begin(), 10, 666);
+	lb.insert(lb.begin(), 10, 777);
+
+	l.swap(lb);
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << "empty? " << lb.empty() << " size: " << lb.size() << std::endl;
+	std::cout << l << std::endl;
+	std::cout << lb << std::endl;
+
+	l.clear();
+	lb.clear();
+
+	for (size_t i = 0; i < 100; i += 2)
+		l.push_back(i);
+	for (size_t i = 1; i < 100; i += 2)
+		lb.push_back(i);
+
+	l.merge(lb);
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << "empty? " << lb.empty() << " size: " << lb.size() << std::endl;
+	std::cout << l << std::endl;
+	std::cout << lb << std::endl;
+	l.reverse();
+	std::cout << l << std::endl;
+	for (size_t i = 1; i < 100; i += 2)
+		lb.push_back(i);
+	l.reverse();
+	l.merge(lb);
+	std::cout << l << std::endl;
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	l.unique();
+	std::cout << l << std::endl;
+	std::cout << "remove::empty? " << l.empty() << " size: " << l.size() << std::endl;
+	l.remove(22);
+	l.remove(101);
+	std::cout << l << std::endl;
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	l.remove_if([](int n){return n % 2;});
+	std::cout << l << std::endl;
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::swap(l, lb);
+	std::cout << l << std::endl;
+	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
+	std::cout << lb << std::endl;
+	std::cout << "empty? " << lb.empty() << " size: " << lb.size() << std::endl;
 }
 
 void	l_comp_test(void)
@@ -184,12 +258,14 @@ void	list_test(void)
 
 	std::cout << "\t------- Create " << std::endl;
 	l_create_test();
-	std::cout << "\t------- Pop " << std::endl;
+	std::cout << "\t------- Pop, back, front" << std::endl;
 	l_pop_test();
 	std::cout << "\t------- Assign " << std::endl;
 	l_assign_test();
-	std::cout << "\t------- Clear, insert, erase " << std::endl;
+	std::cout << "\t------- Clear, insert, erase, resize " << std::endl;
 	l_cie_test();
+	std::cout << "\t------- Operations, swap " << std::endl;
+	l_op_test();
 	std::cout << "\t------- Compare_test " << std::endl;
 	l_comp_test();
 }
