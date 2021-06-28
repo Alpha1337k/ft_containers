@@ -178,12 +178,12 @@ protected:
 		rhs->left = lhs_ptr[0];
 		rhs->right = lhs_ptr[1];
 		rhs->back = lhs_ptr[2];
-		std::cout << "updating.." << std::endl;
+		// std::cout << "updating.." << std::endl;
 		update_back(lhs->left, lhs);
 		update_back(lhs->right, lhs);
 		update_back(rhs->left, rhs);
 		update_back(rhs->right, rhs);
-		std::cout << "backing.." << std::endl;
+		// std::cout << "backing.." << std::endl;
 		if (rhs->back)
 		{
 			if (rhs->back->left == lhs)
@@ -277,7 +277,7 @@ protected:
 		map_node *parent = it->back;
 		map_node *sibling = get_sibling(it);
 
-		std::cout << it << " | " << next << " | " << parent << " | " << sibling << " | " << _nodes << " | "  << it->val.first << std::endl;
+		// std::cout << it << " | " << next << " | " << parent << " | " << sibling << " | " << _nodes << " | "  << it->val.first << std::endl;
 		if (next == 0)
 		{
 			if (it == _nodes)
@@ -301,11 +301,9 @@ protected:
 			if (it == _nodes)
 			{
 				delete it;
-				next->left = 0;
-				next->right = 0;
 				next->back = 0;
 				_nodes = next;
-				std::cout << "returning next " << std::endl;
+				// std::cout << "returning next " << std::endl;
 				return (next);
 			}
 			else
@@ -409,7 +407,7 @@ public:
 		erase(begin(), end());
 	}
 
-	// key_compare key_comp() const {return key_compare;}
+	key_compare key_comp() const {return _cmp;}
 
 	class value_compare
 	{
@@ -520,13 +518,16 @@ public:
 	
 	void erase( iterator first, iterator last )
 	{
-		map_node *last_key = last._pos;
-		map_node *it = first._pos;
-		while (it && it != last_key)
+		iterator next = first;
+		size_t removed = 0;
+		while (next != last)
 		{
-			std::cout << "removing.." << it << std::endl;
-			it = remove_node(it);
+			// std::cout << removed << " removing.." << first->first << std::endl;
+			next++;
+			remove_node(first._pos);
+			first = next;
 			_size--;
+			removed++;
 		}
 	}
 	std::pair<iterator, bool> insert( const value_type& value )
@@ -543,6 +544,35 @@ public:
 		for(; first != last; first++)
 			get_add_node(first.first, first.second);
 	}
+
+	iterator lower_bound( const K& key )
+	{
+		iterator it = begin();
+		while (it != end())
+		{
+			if (!_cmp(it->first, key)) // !key < k
+				break;
+			it++;
+		}
+		return (it);
+	}
+	iterator upper_bound( const K& key )
+	{
+		iterator it = begin();
+		while (it != end())
+		{
+			if (_cmp(key, it->first))  // key < k
+				break;
+			it++;
+		}
+		return (it);		
+	}
+
+	std::pair<iterator,iterator> equal_range( const K& key )
+	{
+		return (std::pair<iterator, iterator>(lower_bound(key), upper_bound(key)));
+	}
+
 };
 
 template <typename K, typename T, typename Compare = std::less<K>>
