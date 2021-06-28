@@ -221,113 +221,6 @@ void	list_test_depr()
 
 }
 
-void vector_test()
-{
-	vector<int> a;
-
-	std::cout << "Max size: " << a.max_size() << std::endl;
-	a.push_back(10);
-	a.push_back(11);
-	a.push_back(12);
-	a.push_back(13);
-	a.push_back(14);
-
-	vector<int> b(a);
-	vector<int> c = a;
-	vector<int> d(10, 55);
-	// vector<int> e(d.begin(), d.end());
-
-	std::cout << "Capacity " << a.capacity() << " size: " << a.size() << std::endl;
-	for (size_t i = 0; i < a.size(); i++)
-		std::cout << a[i] << " ";
-	std::cout << "\n";
-	std::cout << "Front: " << a.front() << " back " << a.back() << std::endl;
-	try
-	{
-		a.at(10) = 0;
-	}
-	catch(const std::exception& e) {
-		std::cout << "caught error!" << std::endl; }
-	a.at(1) = 69;
-	for (size_t i = 0; i < a.size(); i++)
-		std::cout << a[i] << " ";
-	std::cout << "\n";
-	a.resize(2);
-	for (size_t i = 0; i < a.size(); i++)
-		std::cout << a[i] << " ";
-	std::cout << "\n";
-	a.resize(10, 69);
-	a.resize(11);
-	for (size_t i = 0; i < a.size(); i++)
-		std::cout << a[i] << " ";
-	std::cout << "\n";
-	vector<int> a1;
-	a1.push_back(1);
-	a1.swap(a);
-	for (size_t i = 0; i < a.size(); i++)
-		std::cout << a[i] << " ";
-	std::cout << "\n";
-	std::cout << "are a and a1 the same???\t" << (bool)(a == a1) << std::endl;
-	vector<int> a2;
-	a2.push_back(1);
-	std::cout << "are a and a2 the same???\t" << (bool)(a2 == a) << std::endl;
-	for (vector<int>::iterator it = a1.begin(); it != a1.end(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
-
-	for (vector<int>::reverse_iterator it = a1.rbegin(); it != a1.rend(); it++)
-		std::cout << *it << " ";
-	std::cout << "\n";
-
-	vector<int> compare_1;
-	vector<int> compare_2;
-	vector<int> compare_3;
-	vector<int> compare_4;
-
-	compare_1.push_back(3);
-	compare_1.push_back(1);
-	compare_1.push_back(2);
-	compare_2.push_back(1);
-	compare_2.push_back(2);
-	compare_2.push_back(3);
-	compare_3.push_back(36);
-	compare_3.push_back(32);
-	compare_3.push_back(31);
-	compare_3.push_back(1);
-	compare_4.push_back(1);
-	compare_4.push_back(2);
-	compare_4.push_back(3);
-
-	std::cout << compare_1 << compare_2 << compare_3 << compare_4 << std::endl;
-
-	std::cout << (compare_1 == compare_2) << (compare_1 != compare_2) << (compare_1 >= compare_2) << (compare_1 <= compare_2)
-		<< (compare_1 > compare_2) << (compare_1 < compare_2) << std::endl;
-	std::cout << (compare_1 == compare_3) << (compare_1 != compare_3) << (compare_1 >= compare_3) << (compare_1 <= compare_3)
-		<< (compare_1 > compare_3) << (compare_1 < compare_3) << std::endl;
-	std::cout << (compare_1 == compare_4) << (compare_1 != compare_4) << (compare_1 >= compare_4) << (compare_1 <= compare_4)
-		<< (compare_1 > compare_4) << (compare_1 < compare_4) << std::endl;
-	std::cout << (compare_2 == compare_3) << (compare_2 != compare_3) << (compare_2 >= compare_3) << (compare_2 <= compare_3)
-		<< (compare_2 > compare_3) << (compare_2 < compare_3) << std::endl;
-	std::cout << (compare_2 == compare_4) << (compare_2 != compare_4) << (compare_2 >= compare_4) << (compare_2 <= compare_4)
-		<< (compare_2 > compare_4) << (compare_2 < compare_4) << std::endl;
-	std::cout << (compare_3 == compare_4) << (compare_3 != compare_4) << (compare_3 >= compare_4) << (compare_3 <= compare_4)
-		<< (compare_3 > compare_4) << (compare_3 < compare_4) << std::endl;
-
-	// swap(a, b);
-	std::cout << a << b << c << d << std::endl;
-
-	std::cout << "Capacity " << a.capacity() << " size: " << a.size() << std::endl;
-	std::cout << b << std::endl;
-	b.insert(b.begin(), 10);
-	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
-	b.insert(b.begin() + 3, 66);
-	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
-	b.erase(b.begin() + 3);
-	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
-	b.erase(b.begin() + 2, b.end() - 1);
-	std::cout << b << "| cap | " << b.capacity() << " | size | " << b.size() <<std::endl;
-
-}
 
 // void	map_test(void)
 // {
@@ -361,15 +254,17 @@ void vector_test()
 void stack_test();
 void list_test();
 void map_test();
+void vector_test();
 
 int main(void)
 {
-	// std::cout << "------------ LIST ----------- " << std::endl;
-	// list_test();
+	
+	std::cout << "------------ LIST ----------- " << std::endl;
+	list_test();
 	// std::cout << "------------ VECTOR ----------- " << std::endl;
 	// vector_test();
-	std::cout << "------------ MAP ----------- " << std::endl;
-	map_test();
+	// std::cout << "------------ MAP ----------- " << std::endl;
+	// map_test
 	// std::cout << "------------ STACK ----------- " << std::endl;
 	// stack_test();
 }
