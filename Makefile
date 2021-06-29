@@ -6,7 +6,7 @@
 #    By: alpha <alpha@student.codam.nl>               +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/06/15 00:20:06 by alpha         #+#    #+#                  #
-#    Updated: 2021/06/20 03:23:38 by alpha         ########   odam.nl          #
+#    Updated: 2021/06/29 12:36:05 by alpha         ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME=ft_containers
 
 CC=clang++
 FLAGS=-Wall -Werror -Wextra
-DEBUG_FLAGS=-g -fsanitize=address
+DEBUG_FLAGS=-g
 SRC=main.cpp test/*.cpp
 HEADERS=src/*.hpp
 LIBS=-I src/
