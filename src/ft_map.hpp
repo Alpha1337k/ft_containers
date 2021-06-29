@@ -2,6 +2,7 @@
 #define FT_MAP_HPP
 
 #include <iostream>
+#include <ft_pair.hpp>
 
 namespace ft
 {
@@ -13,318 +14,68 @@ protected:
 	typedef T mapped_type;
 	typedef size_t size_type;
 	typedef Compare key_compare;
-	typedef std::pair<const K, T> value_type;
+	typedef ft::pair<const K, T> value_type;
 
 	struct map_node
 	{
 		map_node *left;
 		map_node *right;
 		map_node *back;
-		bool isred;
-		std::pair<K, T> val;
+		ft::pair<K, T> val;
 		map_node(map_node *l, map_node *r, map_node *b, const K &k, T val): val(k, val)
 		{
 			left = l;
 			right = r;
 			back = b;
-			if (!b)
-				isred = false;
-			else
-				isred = true;
 		}
 	};
 	map_node *_nodes;
 	size_t	_size;
 	Compare _cmp;
-
-	void rr(map_node* parent)
+	
+	void		update_back(map_node *it, map_node *replace)
 	{
-		map_node* left = parent->left;
-		parent->left = left->right;
-		if (parent->left)
-			parent->left->back = parent;
-		left->back = parent->back;
-		if (!parent->back) // set new root if needed
-			_nodes = left;
-		else if (parent == parent->back->left)
-			parent->back->left = left;
-		else
-			parent->back->right = left;
-		left->right = parent;
-		parent->back = left;
-	}
-
-	void rl(map_node* parent)
-	{
-		map_node* right = parent->right;
-		parent->right = right->left;
-		if (parent->right)
-			parent->right->back = parent;
-		right->back = parent->back;
-		if (!parent->back)
-			_nodes = right;
-		else if (parent == parent->back->left)
-			parent->back->left = right;
-		else
-			parent->back->right = right;
-		right->left = parent;
-		parent->back = right;
-	}
-	void		rebalance_tree(map_node *it)
-	{
-		map_node *grand_parent = 0, *parent = 0, *uncle = 0;
-
-		while (it != _nodes && it->isred && it->back->isred)
-		{
-			parent = it->back;
-			grand_parent = it->back->back;
-
-			if (parent == grand_parent->left)
-			{
-				uncle = grand_parent->right;
-				if (uncle && uncle->isred)
-				{
-					grand_parent->isred = 1;
-					parent->isred = 0;
-					uncle->isred = 0;
-					it = grand_parent;
-				}
-				else
-				{
-					if (it == parent->right)
-					{
-						rl(parent);
-						it = parent;
-						parent = parent->back;
-					}
-					rr(grand_parent);
-					bool tmp_color = parent->isred;
-					parent->isred = grand_parent->isred;
-					grand_parent->isred = tmp_color;
-					it = parent;
-				}
-			}
-			else
-			{
-				uncle = grand_parent->left;
-				if (uncle && uncle->isred)
-				{
-					grand_parent->isred = 1;
-					parent->isred = 0;
-					uncle->isred = 0;
-					it = grand_parent;
-				}
-				else
-				{
-					if (it == parent->left)
-					{
-						rr(parent);
-						it = parent;
-						parent = parent->back;
-					}
-					rl(grand_parent);
-					bool tmp_color = parent->isred;
-					parent->isred = grand_parent->isred;
-					grand_parent->isred = tmp_color;
-					it = parent;
-				}
-			}
-		}
-		_nodes->isred = 0;
-	}
-	map_node *to_replace(map_node *n)
-	{
-		if (n->left && n->right)
-		{
-			map_node *it = n->right;
-			while (it->left != 0)
-				it = it->left;
-			return (it);		
-		}
-		if (n->right)
-			return (n->right);
-		return (n->left);
-	}
-
-	map_node	*get_sibling(map_node *it)
-	{
-		if (it == 0 || it->back == 0)
-			return (0);
-		if (it->back->left == it)
-			return (it->right);
-		return (it->left);
-	}
-
-	void	update_back(map_node *n, map_node *it)
-	{
-		if (n != 0)
-			n->back = it;
-	}
-
-	void	swap_succesor(map_node *lhs, map_node *rhs)
-	{
-		// std::pair<K, T> tmp(lhs->val);
-		// lhs->val = rhs->val;
-		// rhs->val = tmp;
-		map_node *lhs_ptr[3];
-
-		lhs_ptr[0] = lhs->left;
-		lhs_ptr[1] = lhs->right;
-		lhs_ptr[2] = lhs->back;
-
-		lhs->left = rhs->left;
-		lhs->right = rhs->right;
-		lhs->back = rhs->back;
-		rhs->left = lhs_ptr[0];
-		rhs->right = lhs_ptr[1];
-		rhs->back = lhs_ptr[2];
-		// std::cout << "updating.." << std::endl;
-		update_back(lhs->left, lhs);
-		update_back(lhs->right, lhs);
-		update_back(rhs->left, rhs);
-		update_back(rhs->right, rhs);
-		// std::cout << "backing.." << std::endl;
-		if (rhs->back)
-		{
-			if (rhs->back->left == lhs)
-				rhs->back->left = rhs;
-			else
-				rhs->back->right = rhs;
-		}
-		if (lhs->back)
-		{
-			if (lhs->back->left == rhs)
-				lhs->back->left = lhs;
-			else
-				lhs->back->right = lhs;
-		}
-	}
-
-	void	fix_dblack(map_node *it)
-	{
-		if (it == _nodes)
+		if (!it->back)
 			return;
-		
-		map_node *sibling = get_sibling(it);
-		map_node *parent = it->back;
-
-		if (sibling == 0)
-			return (fix_dblack(parent));
-		if (sibling->isred)
-		{
-			parent->isred = true;
-			sibling->isred = false;
-			if (parent->left == sibling)
-				rr(parent);
-			else
-				rl(parent);
-			fix_dblack(it);
-		}
+		if (it->back->left == it)
+			it->back->left = replace;
 		else
-		{
-			if ((sibling->left && sibling->left->isred) || (sibling->right && sibling->right->isred))
-			{
-				if (sibling->left && sibling->left->isred)
-				{
-					if (parent->left == sibling)
-					{
-						sibling->left->isred = sibling->isred;
-						sibling->isred = parent->isred;
-						rr(parent);
-					}
-					else
-					{
-						sibling->left->isred = parent->isred;
-						rr(sibling);
-						rl(parent);
-					}
-				}
-				else
-				{
-					if (parent->left == sibling)
-					{
-						sibling->right->isred = parent->isred;
-						rl(sibling);
-						rr(parent);
-					}
-					else
-					{
-						sibling->right->isred = sibling->isred;
-						sibling->isred = parent->isred;
-						rl(parent);
-					}
-					
-				}
-			}
-			else
-			{
-				sibling->isred = true;
-				if (parent->isred == false)
-					fix_dblack(parent);
-				else
-					parent->isred = false;
-			}
-		}
+			it->back->right = replace;
 	}
 
-	map_node	*remove_node(map_node *it)
+	void	remove_node(map_node *it)
 	{
 		if (it == 0)
-			return (0);
-		map_node *next = to_replace(it);
-
-		bool dblack = (next == 0 || next->isred == 0) && it->isred == 0;
-		map_node *parent = it->back;
-		map_node *sibling = get_sibling(it);
-
-		// std::cout << it << " | " << next << " | " << parent << " | " << sibling << " | " << _nodes << " | "  << it->val.first << std::endl;
-		if (next == 0)
+			return;
+		std::cout << it->val.first << std::endl;
+		if (it->left == 0 && it->right == 0)
 		{
-			if (it == _nodes)
-				_nodes = 0;
-			else
-			{
-				if (dblack)
-					fix_dblack(it);
-				else if (sibling)
-					sibling->isred = true;
-				if (parent->left == it)
-					parent->left = 0;
-				else if (parent->right == it)
-					parent->right = 0;
-			}
+			update_back(it, 0);
 			delete it;
-			return (parent);
 		}
 		else if (it->left == 0 || it->right == 0)
 		{
-			if (it == _nodes)
-			{
-				delete it;
-				next->back = 0;
-				_nodes = next;
-				// std::cout << "returning next " << std::endl;
-				return (next);
-			}
+			map_node *tmp;
+			if (it->left)
+				tmp = it->left;
 			else
-			{
-				if (parent->left == it)
-					parent->left = next;
-				else
-					parent->right = next;
-				delete it;
-				next->back = parent;
-				if (dblack)
-					fix_dblack(next);
-				else
-					next->isred = false;
-				return (next);
-			}
+				tmp = it->right;
+			tmp->back = it->back;
+			update_back(it, tmp);
+			delete it;
 		}
 		else
 		{
-			swap_succesor(next, it);
-			return (remove_node(next));
+			map_node *tmp = it->right;
+			while (tmp->left)
+				tmp = tmp->left;
+			if (tmp->right)
+				tmp->back->left = tmp->right;
+			tmp->back = it->back;
+			update_back(it, tmp);
+			it->left->back = tmp;
+			it->right->back = tmp;
+			delete it;
 		}
 	}
 	map_node	*go_or_create(map_node *parent, int dir, K key, T value)
@@ -362,7 +113,7 @@ protected:
 			else
 				break;
 		} while (1);
-		rebalance_tree(it);
+
 		return (it);
 	}
 
@@ -467,8 +218,8 @@ public:
 				_pos = 0;
 			return *this;
 		}
-		std::pair<K, T>	*operator->() { return &_pos->val;}
-		std::pair<K, T>	&operator*()
+		pair<K, T>	*operator->() { return &_pos->val;}
+		pair<K, T>	&operator*()
 		{
 			return (_pos->val);
 		}
@@ -527,7 +278,6 @@ public:
 		size_t removed = 0;
 		while (next != last)
 		{
-			// std::cout << removed << " removing.." << first->first << std::endl;
 			next++;
 			remove_node(first._pos);
 			first = next;
@@ -535,12 +285,12 @@ public:
 			removed++;
 		}
 	}
-	std::pair<iterator, bool> insert( const value_type& value )
+	pair<iterator, bool> insert( const value_type& value )
 	{
 		size_t old_size = _size;
 		iterator i = iterator(get_add_node(value.first, value.second), _nodes);
 
-		return (std::pair<iterator, bool>(i, !(old_size == _size)));
+		return (pair<iterator, bool>(i, !(old_size == _size)));
 	}
 
 	template< class InputIt >
@@ -573,9 +323,9 @@ public:
 		return (it);		
 	}
 
-	std::pair<iterator,iterator> equal_range( const K& key )
+	pair<iterator,iterator> equal_range( const K& key )
 	{
-		return (std::pair<iterator, iterator>(lower_bound(key), upper_bound(key)));
+		return (pair<iterator, iterator>(lower_bound(key), upper_bound(key)));
 	}
 
 };
