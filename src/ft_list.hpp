@@ -63,10 +63,7 @@ public:
 		public:
 			typedef T value_type;
 			s_list_item *_pos;
-			iterator(s_list_item *position): _pos(position)
-			{
-
-			}
+			iterator(s_list_item *position): _pos(position) {}
 			iterator(const iterator &i) {*this = i;}
 			iterator &operator=(const iterator &i)
 			{
@@ -103,6 +100,10 @@ public:
 			{
 				return (_pos->data);
 			}
+			T	*operator->()
+			{
+				return (&_pos->data);
+			}
 			friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
 	};
 	iterator begin()		{return iterator(_begin);}
@@ -113,15 +114,27 @@ public:
 	{
 		public:
 			reverse_iterator(s_list_item *position): iterator(position) {}
-			reverse_iterator operator++(int)
+			reverse_iterator &operator++()
 			{
 				this->_pos = this->_pos->prev;
-				return (this->_pos);
+				return *this;
+			}
+			reverse_iterator &operator--()
+			{
+				this->_pos = this->_pos->next;
+				return *this;
+			}
+			reverse_iterator operator++(int)
+			{
+				reverse_iterator old = *this;
+				operator++();
+				return (old);
 			}
 			reverse_iterator operator--(int)
 			{
-				this->_pos = this->_pos->next;
-				return (this->_pos);
+				reverse_iterator old = *this;
+				operator--();
+				return (old);
 			}
 	};
 	
