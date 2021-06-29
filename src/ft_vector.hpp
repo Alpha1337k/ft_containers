@@ -185,7 +185,7 @@ public:
 			_data += val;
 			return (*this);
 		}
-		friend iterator operator+(iterator lhs, const int &rhs)
+		friend iterator operator+(vector<T>::iterator lhs, const int &rhs)
 		{
 			lhs += rhs;
 			return (lhs);
@@ -195,38 +195,80 @@ public:
 			_data -= val;
 			return (*this);
 		}
-		friend iterator operator-(iterator lhs, const int &rhs)
+		friend iterator operator-(vector<T>::iterator lhs, const int &rhs)
 		{
 			lhs -= rhs;
 			return (lhs);
 		}
+	
 		friend bool operator==(const iterator& lhs, const iterator& rhs)
 		{
 			return (lhs._data == rhs._data);
 		}
 		friend bool operator!=(const iterator& lhs, const iterator& rhs) {return !(lhs == rhs);}
+		const T	&operator*() const
+		{
+			return (*_data);
+		}
 		T	&operator*()
 		{
 			return (*_data);
+		}
+		T	*operator->()
+		{
+			return (_data);
 		}
 	};
 	iterator begin()		{return iterator(_data);}
 	iterator end()			{return iterator(_data + _size);}	
 	iterator begin() const	{return iterator(_data);}
 	iterator end()	const	{return iterator(_data + _size);}
+	typedef iterator	const_iterator;
 	class reverse_iterator : public iterator
 	{
 	public:
 		reverse_iterator(T *d): iterator(d) {}
-		reverse_iterator operator++(int)
+		reverse_iterator &operator++()
 		{
 			this->_data--;
 			return (*this);
 		}
-		reverse_iterator operator--(int)
+		reverse_iterator &operator--()
 		{
 			this->_data++;
 			return (*this);
+		}
+		reverse_iterator operator++(int)
+		{
+			iterator old = *this;
+			operator++();
+			return (*this);
+		}
+		reverse_iterator operator--(int)
+		{
+			iterator old = *this;
+			operator--();
+			return (*this);
+		}
+		reverse_iterator &operator+=(const int &val)
+		{
+			this->_data += val;
+			return (*this);
+		}
+		friend reverse_iterator operator+(reverse_iterator lhs, const int &rhs)
+		{
+			lhs += rhs;
+			return (lhs);
+		}
+		reverse_iterator &operator-=(const int &val)
+		{
+			this->_data -= val;
+			return (*this);
+		}
+		friend reverse_iterator operator-(reverse_iterator lhs, const int &rhs)
+		{
+			lhs -= rhs;
+			return (lhs);
 		}
 	};
 	reverse_iterator rbegin()		{return reverse_iterator(_data + _size - 1);}
@@ -323,7 +365,6 @@ bool operator<(const vector<T> &lhs, const vector<T> &rhs)
 
 template< typename T>
 bool operator>(const vector<T> &lhs, const vector<T> &rhs) {return rhs < lhs;}
-
 template< typename T>
 bool operator>=(const vector<T> &lhs, const vector<T> &rhs) {return !(lhs < rhs);}
 template< typename T>

@@ -110,6 +110,8 @@ public:
 	iterator end()			{return iterator(0);}
 	iterator begin() const	{return iterator(_begin);}
 	iterator end() const	{return iterator(0);}
+
+	typedef iterator const_iterator;
 	class reverse_iterator : public iterator
 	{
 		public:
