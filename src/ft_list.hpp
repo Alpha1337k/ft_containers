@@ -513,6 +513,13 @@ bool operator>=(const list<T> &lhs, const list<T> &rhs) {return !(lhs < rhs);}
 template< typename T>
 bool operator<=(const list<T> &lhs, const list<T> &rhs) {return !(lhs > rhs);}
 
+
+template< typename T>
+void	swap(ft::list<T> &lhs, ft::list<T> &rhs)
+{
+	lhs.swap(rhs);
+}
+
 }
 
 #endif

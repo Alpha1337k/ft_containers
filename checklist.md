@@ -40,6 +40,8 @@
 ## non member functions
 
 - [7 / 7] operators
+- [x] swap
+
 
 # VECTOR
 
@@ -77,6 +79,8 @@
 
 ## non member functions
 - [7 / 7] operators
+- [x] swap
+
 
 # MAP
 
