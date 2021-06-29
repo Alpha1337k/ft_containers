@@ -92,13 +92,18 @@ void	m_create_test(void)
 	std::cout << "Done!" << std::endl;
 }
 
-void	m_insert_test(void)
+void	m_modifiers_test(void)
 {
 	map<char, int> m1;
+	map<char, int> m2;
 	m1['a'] = 300;
 	m1['b'] = 301;
 	m1['c'] = 302;
 	m1['d'] = 304;
+	m2['w'] = 304;
+	m2['x'] = 301;
+	m2['y'] = 302;
+	m2['z'] = 300;
 
 	std::pair<map<char, int>::iterator, bool> rv = m1.insert(std::pair<char, int>('e', 305));
 	std::cout << m1 << std::endl;
@@ -106,6 +111,23 @@ void	m_insert_test(void)
 	rv = m1.insert(std::pair<char, int>('e', 308));
 	std::cout << m1 << std::endl;
 	std::cout << rv.first->first << " : " << rv.first->second << " : " << rv.second << std::endl;
+	m1.erase(m1.find('c'));
+	std::cout << m1 << std::endl;
+	std::cout << "empty: " << m1.empty() << " size: " << m1.size() << std::endl;
+	m1.erase(m1.find('d'), m1.end());
+	std::cout << m1 << std::endl;
+	std::cout << "empty: " << m1.empty() << " size: " << m1.size() << std::endl;
+	std::cout << m2 << std::endl;
+	m1.swap(m2);
+	std::cout << m1 << std::endl;
+	std::cout << "empty: " << m1.empty() << " size: " << m1.size() << std::endl;
+	std::cout << m2 << std::endl;
+	std::cout << "empty: " << m2.empty() << " size: " << m2.size() << std::endl;
+	swap(m1, m2);
+	std::cout << m1 << std::endl;
+	std::cout << "empty: " << m1.empty() << " size: " << m1.size() << std::endl;
+	std::cout << m2 << std::endl;
+	std::cout << "empty: " << m2.empty() << " size: " << m2.size() << std::endl;
 }
 
 void	m_lookup_test(void)
@@ -137,8 +159,8 @@ void	map_test()
 {
 	std::cout << "\t------- Create " << std::endl;
 	m_create_test();
-	std::cout << "\t------- Insert " << std::endl;
-	m_insert_test();
+	std::cout << "\t------- Modifiers " << std::endl;
+	m_modifiers_test();
 	std::cout << "\t------- Observers" << std::endl;
 	m_observer_test();
 	std::cout << "\t------- Lookup " << std::endl;
