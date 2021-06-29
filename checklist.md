@@ -110,17 +110,17 @@
 ### Lookup
 - [x] count 
 - [x] find
-- [ ] equal_range
-- [ ] lower_bound
-- [ ] upper_bound
+- [x] equal_range
+- [x] lower_bound
+- [x] upper_bound
 
 ### Observers
-- [ ] key_comp 
-- [ ] value_comp
+- [x] key_comp 
+- [x] value_comp
 
 ## Non member functions
 -[7 / 7] operators
-- [ ] swap
+- [x] swap
 
 # Queue
 

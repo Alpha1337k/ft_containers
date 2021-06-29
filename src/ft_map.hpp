@@ -355,9 +355,9 @@ protected:
 			return (_nodes);
 		}
 		do {
-			if ((it->val.first < key))
+			if (_cmp(it->val.first, key))
 				it = go_or_create(it, 1, key, value);
-			else if ((key < it->val.first))
+			else if (_cmp(key, it->val.first))
 				it = go_or_create(it, 0, key, value);
 			else
 				break;
@@ -365,6 +365,11 @@ protected:
 		rebalance_tree(it);
 		return (it);
 	}
+
+	/*
+		start of the map functions
+	*/
+
 public:
 	map(): _nodes(0), _size(0), _cmp(Compare()) {}
 	template< class InputIt >
@@ -396,9 +401,9 @@ public:
 		size_t tmp_size = this->_size;
 		map_node *tmp_node = this->_nodes;
 
-		this->_size = other.size;
+		this->_size = other._size;
 		this->_nodes = other._nodes;
-		other.size = tmp_size;
+		other._size = tmp_size;
 		other._nodes = tmp_node;
 	}
 
@@ -475,7 +480,6 @@ public:
 
 	};
 
-
 	iterator 		begin() {
 		map_node *it = _nodes;
 		while (it->left)
@@ -513,6 +517,7 @@ public:
 	}
 	void erase( iterator pos ) {
 		map_node *it = pos._pos;
+		_size--;
 		remove_node(it);
 	}
 	
@@ -598,8 +603,6 @@ bool operator<(const map<K, T> &lhs, const map<K,T> &rhs)
 {
 	typedef typename ft::map<K, T>::iterator iterator;
 
-
-
 	iterator li = lhs.begin(), le = lhs.end(), ri = rhs.begin(), re = rhs.end();
 	for ( ; (li != le) && (ri != re); li++, ri++ ) {
 		if (li->first < ri->first || li->second < ri->second) return true;
@@ -614,6 +617,12 @@ template <typename K, typename T, typename Compare = std::less<K>>
 bool operator>=(const map<K, T> &lhs, const map<K,T> &rhs) {return !(lhs < rhs);}
 template <typename K, typename T, typename Compare = std::less<K>>
 bool operator<=(const map<K, T> &lhs, const map<K,T> &rhs) {return !(lhs > rhs);}
+
+template <typename K, typename T, class Compare = std::less<K>>
+void	swap(ft::map<K, T, Compare> &lhs, ft::map<K, T, Compare> &rhs)
+{
+	lhs.swap(rhs);
+}
 
 }
 
