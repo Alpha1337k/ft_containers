@@ -124,6 +124,56 @@ void	v_capacity_test()
 	std::cout << "empty? " << a.empty() << " size: " << a.size() << " capacity: " << a.capacity() << std::endl;
 }
 
+class OBJ
+{
+	public:
+		OBJ() {}
+		std::string print() {return ("printin!!");}
+};
+
+void	v_iterator_test()
+{
+	vector<int> l;
+	vector<OBJ> l1;
+	
+	l.push_back(3);
+	l.push_back(1);
+	l.push_back(2);
+	l.push_back(4);
+	l.push_back(6);
+	l.push_back(8);
+
+	l1.push_back(OBJ());
+	const vector<int> l2(l);
+
+	vector<int>::iterator it = l.begin();
+	vector<OBJ>::iterator it2 = l1.begin();
+	std::cout << *it << std::endl;
+	it += 3;
+	std::cout << *it << std::endl;
+	it -= 1;
+	std::cout << *it << std::endl;
+
+	std::cout << *(it - 2) << std::endl;
+
+	std::cout << it2->print() << std::endl;
+	for (vector<int>::reverse_iterator itr = l.rbegin(); itr != l.rend(); ++itr)
+		std::cout << *itr << " ";
+	std::cout << std::endl;
+	for (vector<int>::reverse_iterator itr = l.rbegin(); itr != l.rend(); itr++)
+	{
+		std::cout << *++itr << " ";
+		if (itr == l.rend())
+			break;
+		--itr;
+	}
+	std::cout << std::endl;
+	for (vector<int>::const_iterator itr = l2.begin(); itr != l2.end(); itr++)
+		std::cout << *itr << " ";
+	std::cout << std::endl;
+
+}
+
 void	v_modifiers_test()
 {
 	vector<int> a;
@@ -228,6 +278,8 @@ void	vector_test(void)
 	v_create_test();
 	std::cout << "\t------- Access " << std::endl;
 	v_access_test();
+	std::cout << "\t------- Iterators " << std::endl;
+	v_iterator_test();
 	std::cout << "\t------- Capacity " << std::endl;
 	v_capacity_test();
 	std::cout << "\t------- Modifiers " << std::endl;

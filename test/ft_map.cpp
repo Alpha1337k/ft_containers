@@ -40,7 +40,7 @@ void	m_observer_test(void)
 	value_compare val_cmp = cont.value_comp();
 	ModCmp key_cm = cont.key_comp();
 
-    const std::pair<int, char> val = { 100, 'a' };
+    const pair<int, char> val = { 100, 'a' };
 
     for (map<int, char, ModCmp>::iterator it = cont.begin(); it != cont.end(); it++) {
         bool before = val_cmp(*it, val);
@@ -105,10 +105,10 @@ void	m_modifiers_test(void)
 	m2['y'] = 302;
 	m2['z'] = 300;
 
-	std::pair<map<char, int>::iterator, bool> rv = m1.insert(std::pair<char, int>('e', 305));
+	pair<map<char, int>::iterator, bool> rv = m1.insert(pair<char, int>('e', 305));
 	std::cout << m1 << std::endl;
 	std::cout << rv.first->first << " : " << rv.first->second << " : " << rv.second << std::endl;
-	rv = m1.insert(std::pair<char, int>('e', 308));
+	rv = m1.insert(pair<char, int>('e', 308));
 	std::cout << m1 << std::endl;
 	std::cout << rv.first->first << " : " << rv.first->second << " : " << rv.second << std::endl;
 	m1.erase(m1.find('c'));

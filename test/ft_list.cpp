@@ -250,7 +250,7 @@ void	l_iterator_test(void)
 		--itr;
 	}
 	std::cout << std::endl;
-	for (list<int>::iterator itr = l2.begin(); itr != l2.end(); itr++)
+	for (list<int>::const_iterator itr = l2.begin(); itr != l2.end(); itr++)
 		std::cout << *itr << " ";
 	std::cout << std::endl;
 
