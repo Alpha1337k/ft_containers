@@ -11,7 +11,7 @@
 namespace ft
 {
 
-template <typename T>
+template <typename T, class Allocator = std::allocator<T>>
 class vector
 {
 public:
@@ -24,6 +24,7 @@ private:
 	T *_data;
 	size_t _size;
 	size_t _capacity;
+	Allocator _alloc;
 
 	template< class InputIt >
 	size_t distance (InputIt first, InputIt last)
@@ -33,10 +34,10 @@ private:
 		return (count);
 	}
 public:
-	vector(): _data(0), _size(0), _capacity(0) {}
-	~vector() {delete[] _data;}
-	vector (const vector &other): _data(0), _size(0), _capacity(0) {*this = other;}
-	explicit vector( size_t count, const T& value = T()): _data(0), _size(0), _capacity(0)
+	vector(): _data(0), _size(0), _capacity(0), _alloc(Allocator()) {}
+	~vector() {_alloc.deallocate(_data, _capacity);}
+	vector (const vector &other): _data(0), _size(0), _capacity(0), _alloc(Allocator()) {*this = other;}
+	explicit vector( size_t count, const T& value = T()): _data(0), _size(0), _capacity(0), _alloc(Allocator())
 	{
 		resize(count, value);
 	}
@@ -48,7 +49,7 @@ public:
 
 		return *this;
 	}
-	// template< class InputIt >
+	// template< class InputIt, std::enable_if_t<std::is_integral<T>::value, bool> = false>
 	// vector( InputIt first, InputIt last): _data(0), _size(0), _capacity(0)
 	// {
 	// 	for (; first != last; first++)
@@ -60,17 +61,17 @@ public:
 		resize(count, value);
 	}
 
-	// template< class InputIt >
+	// template< class InputIt, std::enable_if_t<std::is_integral<T>::value, int> = 0 >
 	// void assign( InputIt first, InputIt last )
 	// {
-
+	// 	resize(10, 999);
 	// }
 
 	bool empty() const {return !!!_size;}
 	size_t size() const {return _size;}
 	size_t capacity() const {return _capacity;}
 	size_t max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(T) * 2 + 1);}
-	void clear() {delete[] _data; _size = 0; _capacity = 0; _data = 0;}
+	void clear() {_alloc.deallocate(_data, _capacity);; _size = 0; _capacity = 0; _data = 0;}
 
 	T	&back() {return _data[_size == 0 ? 0 : _size - 1];}
 	T	&front() {return _data[0];}
@@ -100,10 +101,10 @@ public:
 			return;
 		if (new_size > max_size())
 			throw std::length_error("vector::reserve");
-		T *new_addr = new T[new_size];
+		T *new_addr = _alloc.allocate(new_size);
 		for (size_t i = 0; i < _size; i++)
 			new_addr[i] = _data[i];
-		delete[] _data;
+		_alloc.deallocate(_data, _capacity);
 		_data = new_addr;
 		_capacity = new_size;
 	}
@@ -123,7 +124,7 @@ public:
 	{
 		T *new_addr;
 		if (count > _capacity)
-			new_addr = new T[count];
+			new_addr = _alloc.allocate(count);
 		else
 			new_addr = _data;
 		for (size_t i = 0; _data != new_addr && i < count && i < _size; i++)
@@ -133,7 +134,7 @@ public:
 		
 		if (_data != new_addr)
 		{
-			delete[] _data;
+			_alloc.deallocate(_data, _capacity);
 			_capacity = count;
 			_data = new_addr;
 		}
@@ -185,7 +186,7 @@ public:
 			_data += val;
 			return (*this);
 		}
-		friend iterator operator+(vector<T>::iterator lhs, const int &rhs)
+		friend iterator operator+(vector<T, Allocator>::iterator lhs, const int &rhs)
 		{
 			lhs += rhs;
 			return (lhs);
@@ -195,7 +196,7 @@ public:
 			_data -= val;
 			return (*this);
 		}
-		friend iterator operator-(vector<T>::iterator lhs, const int &rhs)
+		friend iterator operator-(vector<T, Allocator>::iterator lhs, const int &rhs)
 		{
 			lhs -= rhs;
 			return (lhs);
