@@ -2,11 +2,13 @@
 #define FT_MAP_HPP
 
 #include <iostream>
-#include <ft_pair.hpp>
+#include <ft_node.hpp>
+#include <ft_bintree.hpp>
 
 namespace ft
 {
-template <typename K, typename T, class Compare = std::less<K>>
+
+template <typename K, typename T, class Compare = std::less<K>, class Allocator = std::allocator<ft::pair<const K, T> > >
 class map
 {
 protected:
@@ -16,146 +18,43 @@ protected:
 	typedef Compare key_compare;
 	typedef ft::pair<const K, T> value_type;
 
-	struct map_node
-	{
-		map_node *left;
-		map_node *right;
-		map_node *back;
-		ft::pair<K, T> val;
-		map_node(map_node *l, map_node *r, map_node *b, const K &k, T val): val(k, val)
-		{
-			left = l;
-			right = r;
-			back = b;
-		}
-	};
-	map_node *_nodes;
-	size_t	_size;
+	bintree<K, T, Compare> _tree;
 	Compare _cmp;
-	
-	void		update_back(map_node *it, map_node *replace)
-	{
-		if (!it->back)
-			return;
-		if (it->back->left == it)
-			it->back->left = replace;
-		else
-			it->back->right = replace;
-	}
-
-	void	remove_node(map_node *it)
-	{
-		if (it == 0)
-			return;
-		std::cout << it->val.first << std::endl;
-		if (it->left == 0 && it->right == 0)
-		{
-			update_back(it, 0);
-			delete it;
-		}
-		else if (it->left == 0 || it->right == 0)
-		{
-			map_node *tmp;
-			if (it->left)
-				tmp = it->left;
-			else
-				tmp = it->right;
-			tmp->back = it->back;
-			update_back(it, tmp);
-			delete it;
-		}
-		else
-		{
-			map_node *tmp = it->right;
-			while (tmp->left)
-				tmp = tmp->left;
-			if (tmp->right)
-				tmp->back->left = tmp->right;
-			tmp->back = it->back;
-			update_back(it, tmp);
-			it->left->back = tmp;
-			it->right->back = tmp;
-			delete it;
-		}
-	}
-	map_node	*go_or_create(map_node *parent, int dir, K key, T value)
-	{
-		if (dir == 1)
-		{
-			if (!parent->right)
-			{
-				_size++;
-				parent->right = new map_node(0, 0, parent, key, value);
-			}
-			return (parent->right);
-		}
-		if (!parent->left)
-		{
-			_size++;
-			parent->left = new map_node(0, 0, parent, key, value);
-		}
-		return (parent->left);
-	}
-	map_node	*get_add_node(K key, T value = T())
-	{
-		map_node *it = _nodes;
-		if (_nodes == 0)
-		{
-			_size++;
-			_nodes = new map_node(0, 0, 0, key, value);
-			return (_nodes);
-		}
-		do {
-			if (_cmp(it->val.first, key))
-				it = go_or_create(it, 1, key, value);
-			else if (_cmp(key, it->val.first))
-				it = go_or_create(it, 0, key, value);
-			else
-				break;
-		} while (1);
-
-		return (it);
-	}
-
-	/*
-		start of the map functions
-	*/
-
 public:
-	map(): _nodes(0), _size(0), _cmp(Compare()) {}
+	map(): _tree() {}
 	template< class InputIt >
-	map( InputIt first, InputIt last, const Compare& comp = Compare()): _nodes(0), _size(0), _cmp(comp)
+	map( InputIt first, InputIt last, const Compare& comp = Compare()): _tree(), _cmp(comp)
 	{
 		for (; first != last; first++)
-			get_add_node(first->first, first->second);
+			_tree.get_add_node(first->first, first->second);
 	}
-	explicit map( const Compare& comp): _nodes(0), _size(0), _cmp(comp) {}
+	explicit map( const Compare& comp): _tree(), _cmp(comp()) {}
 	~map() {clear();}
-	map(const map &m): _nodes(0), _size(0) {*this = m;}
+	map(const map &m): _tree() {*this = m;}
 
 	map	&operator=(const map &m)
 	{
 		iterator it = m.begin();
 		while (it != m.end())
 		{
-			get_add_node(it->first)->val.second = it->second;
+			_tree.get_add_node(it->first)->val.second = it->second;
 			it++;
 		}
 		return *this;
 	}
 	T& operator[](const K &key)
 	{
-		return (get_add_node(key)->val.second);
+		return (_tree.get_add_node(key)->val.second);
 	}
 	void swap( map& other )
 	{
-		size_t tmp_size = this->_size;
-		map_node *tmp_node = this->_nodes;
+		size_t tmp_size = this->_tree._size;
+		map_node<K, T> *tmp_node = this->_tree._nodes;
 
-		this->_size = other._size;
-		this->_nodes = other._nodes;
-		other._size = tmp_size;
-		other._nodes = tmp_node;
+		this->_tree._size = other._tree._size;
+		this->_tree._nodes = other._tree._nodes;
+		other._tree._size = tmp_size;
+		other._tree._nodes = tmp_node;
 	}
 
 	void clear()
@@ -181,13 +80,13 @@ public:
 	class iterator
 	{
 	public:
-		map_node *_pos;
-		map_node *_base;
-		map_node *_origin;
+		map_node<K, T> *_pos;
+		map_node<K, T> *_base;
+		map_node<K, T> *_origin;
 		int status = 0;
 
 	public:
-		iterator(map_node *pos, map_node *base): _pos(pos), _base(base),_origin(pos) {
+		iterator(map_node<K, T> *pos, map_node<K, T> *base): _pos(pos), _base(base),_origin(pos) {
 		}
 		~iterator() {}
 		iterator operator++(int)
@@ -232,22 +131,22 @@ public:
 	};
 
 	iterator 		begin() {
-		map_node *it = _nodes;
+		map_node<K, T> *it = _tree._nodes;
 		while (it->left)
 			it = it->left;
-		return iterator(it, _nodes);
+		return iterator(it, _tree._nodes);
 	}
 	const iterator 		begin() const {
-		map_node *it = _nodes;
+		map_node<K, T> *it = _tree._nodes;
 		while (it->left)
 			it = it->left;
-		return iterator(it, _nodes);
+		return iterator(it, _tree._nodes);
 	}
-	iterator 		end() {return iterator(0, _nodes);}
-	const iterator 		end() const {return iterator(0, _nodes);}
+	iterator 		end() {return iterator(0, _tree._nodes);}
+	const iterator 		end() const {return iterator(0, _tree._nodes);}
 
-	bool empty() const {return !!!_size;}
-	size_t size() const {return _size;}
+	bool empty() const {return !!!_tree._size;}
+	size_t size() const {return _tree._size;}
 	size_type count( const K& key )
 	{
 		if (find(key) == end())
@@ -267,9 +166,9 @@ public:
 		return (it);
 	}
 	void erase( iterator pos ) {
-		map_node *it = pos._pos;
-		_size--;
-		remove_node(it);
+		map_node<K, T> *it = pos._pos;
+		_tree._size--;
+		_tree.remove_node(it);
 	}
 	
 	void erase( iterator first, iterator last )
@@ -279,18 +178,18 @@ public:
 		while (next != last)
 		{
 			next++;
-			remove_node(first._pos);
+			_tree.remove_node(first._pos);
 			first = next;
-			_size--;
+			_tree._size--;
 			removed++;
 		}
 	}
 	pair<iterator, bool> insert( const value_type& value )
 	{
-		size_t old_size = _size;
-		iterator i = iterator(get_add_node(value.first, value.second), _nodes);
+		size_t old_size = _tree._size;
+		iterator i = iterator(_tree.get_add_node(value.first, value.second), _tree._nodes);
 
-		return (pair<iterator, bool>(i, !(old_size == _size)));
+		return (pair<iterator, bool>(i, !(old_size == _tree._size)));
 	}
 
 	template< class InputIt >
