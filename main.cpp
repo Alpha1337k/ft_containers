@@ -255,16 +255,29 @@ void stack_test();
 void list_test();
 void map_test();
 void vector_test();
+void pair_test();
+void iterator_test();
+void integral_test();
+void enable_if_test();
+
 
 int main(void)
 {
-	
-	std::cout << "------------ LIST ----------- " << std::endl;
-	list_test();
-	// std::cout << "------------ VECTOR ----------- " << std::endl;
-	// vector_test();
+
+	// std::cout << "------------ PAIR ----------- " << std::endl;
+	// pair_test();
+	// std::cout << "------------ LIST ----------- " << std::endl;
+	// list_test();
+	std::cout << "------------ VECTOR ----------- " << std::endl;
+	vector_test();
 	// std::cout << "------------ MAP ----------- " << std::endl;
-	// map_test
+	// map_test();
+	// std::cout << "------------ Iterator ----------- " << std::endl;
+	// iterator_test();
+	// std::cout << "------------ Integral ----------- " << std::endl;
+	// integral_test();
+	std::cout << "------------ Enable if ----------- " << std::endl;
+	enable_if_test();
 	// std::cout << "------------ STACK ----------- " << std::endl;
 	// stack_test();
 }
