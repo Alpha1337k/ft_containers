@@ -86,11 +86,11 @@ public:
 		int status = 0;
 
 	public:
-		iterator(map_node<K, T> *pos, map_node<K, T> *base): _pos(pos), _base(base),_origin(pos) {
-		}
+		iterator(map_node<K, T> *pos, map_node<K, T> *base): _pos(pos), _base(base), _origin(pos) {}
 		~iterator() {}
 		iterator operator++(int)
 		{
+			// std::cout << _pos->left << " " << _pos->right << " " << _pos->back << " " << _base  << " " << _origin << std::endl;
 			if (_pos->left && _pos != _base && _origin != _pos->left)
 			{
 				status = 0;
@@ -113,8 +113,16 @@ public:
 				} while (_pos && _pos->right == _origin);
 				status = 1;
 			}
+			else if (_pos->back)
+			{
+				_origin = _pos;
+				_pos = _pos->back;
+			}
 			else
+			{
+				// std::cout << "End or smth " << std::endl;
 				_pos = 0;
+			}
 			return *this;
 		}
 		pair<K, T>	*operator->() { return &_pos->val;}
