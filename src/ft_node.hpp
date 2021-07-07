@@ -10,12 +10,13 @@ struct map_node
 	map_node *right;
 	map_node *back;
 	ft::pair<K, T> val;
-	map_node(map_node *l, map_node *r, map_node *b, const K &k, T val): val(k, val)
+	map_node(map_node *l, map_node *r, map_node *b, const K &k, T &val): val(k, val)
 	{
 		left = l;
 		right = r;
 		back = b;
 	}
+	map_node(const map_node &other) {*this = other;}
 	map_node &operator=(const map_node &other)
 	{
 		this->left = other.left;
