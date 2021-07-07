@@ -8,6 +8,9 @@
 #include <cstdint>
 #include <iostream>
 #include <numeric>
+#include <ft_enable_if.hpp>
+#include <ft_is_integral.hpp>
+
 namespace ft
 {
 
@@ -37,6 +40,7 @@ public:
 	vector(): _data(0), _size(0), _capacity(0), _alloc(Allocator()) {}
 	~vector() {_alloc.deallocate(_data, _capacity);}
 	vector (const vector &other): _data(0), _size(0), _capacity(0), _alloc(Allocator()) {*this = other;}
+
 	explicit vector( size_t count, const T& value = T()): _data(0), _size(0), _capacity(0), _alloc(Allocator())
 	{
 		resize(count, value);
@@ -49,23 +53,28 @@ public:
 
 		return *this;
 	}
-	// template< class InputIt, std::enable_if_t<std::is_integral<T>::value, bool> = false>
-	// vector( InputIt first, InputIt last): _data(0), _size(0), _capacity(0)
-	// {
-	// 	for (; first != last; first++)
-	// 		push_back(*first);
-	// }
+
+	template< class InputIt>
+	vector( InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = nullptr): 
+		_data(0), _size(0), _capacity(0), _alloc(Allocator())
+	{
+		for (; first != last; first++)
+			push_back(*first);
+	}
 
 	void assign( size_t count, const T& value )
 	{
+		clear();
 		resize(count, value);
 	}
 
-	// template< class InputIt, std::enable_if_t<std::is_integral<T>::value, int> = 0 >
-	// void assign( InputIt first, InputIt last )
-	// {
-	// 	resize(10, 999);
-	// }
+	template< class InputIt>
+	void assign( InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = nullptr)
+	{
+		clear();
+		for (; first != last; first++)
+			push_back(*first);
+	}
 
 	bool empty() const {return !!!_size;}
 	size_t size() const {return _size;}
@@ -285,7 +294,9 @@ public:
 
 	void insert  ( iterator pos, size_t count, const T& value )
 	{
-		size_t i_pos = &*pos - _data;
+		size_t i_pos = 0;
+		if (_data != 0)
+			i_pos = &*pos - _data;
 
 		if (_size + count > _capacity)
 			reserve(_size * 2);
@@ -296,26 +307,24 @@ public:
 		_size += count;
 	}
 
-	// template< class InputIt>
-	// void insert( iterator pos, InputIt first, InputIt last)
-	// {
-	// 	typedef typename std::__is_integer<InputIt>::__type is_i;
-	// 	std::cout << is_i << std::endl;
-	// 	exit(0);
+	template< class InputIt>
+	void insert( iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = nullptr)
+	{	
+		size_t i = 0;
+		if (_data != 0)
+			i = &*pos - _data;
+		size_t count = distance(first, last);
 		
-	// 	size_t i = &*pos - _data;
-	// 	size_t count = distance(first, last);
-		
-	// 	size_t x = _size + count;
+		size_t x = _size + count;
 
-	// 	reserve(_size + count);
-	// 	for (; x >= i + count; x--)
-	// 		_data[x] = _data[x - count];
-	// 	x = 0;
-	// 	for (InputIt it = first; x < count; x++, it++)
-	// 		_data[x + i] = *it;
-	// 	_size += count;
-	// }
+		reserve(_size + count);
+		for (; x >= i + count; x--)
+			_data[x] = _data[x - count];
+		x = 0;
+		for (InputIt it = first; x < count; x++, it++)
+			_data[x + i] = *it;
+		_size += count;
+	}
 
 	iterator erase(iterator pos )
 	{
