@@ -19,7 +19,7 @@ std::string	integral_bool(void)
 	return "false";
 }
 
-void	integral_test(void)
+void	intergral_test(void)
 {
 	// std::cout << is_integral<A>::value			<< '\n';
     // std::cout << is_integral_v<B> 				<< '\n';
