@@ -12,12 +12,12 @@
 struct test
 {
 	enum { int_t, float_t } type;
-	template <typename Integer, enable_if_t<is_integral<Integer>::value, bool> = true >
+	template <typename Integer, ft::enable_if_t<ft::is_integral<Integer>::value, bool> = true >
 	test(Integer)
 	{
 		std::cout << "interger!!!" << std::endl;
 	}
-	template <typename Float, enable_if_t<std::is_floating_point<Float>::value, bool> = true >
+	template <typename Float, ft::enable_if_t<std::is_floating_point<Float>::value, bool> = true >
 	test(Float)
 	{
 		std::cout << "float!!!" << std::endl;
