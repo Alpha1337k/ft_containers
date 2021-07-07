@@ -131,11 +131,7 @@ void	l_cie_test(void)
 	std::cout << l << std::endl;
 
 	const std::string extra(66, 'x');
-#ifdef USE_OS_VARIANT
 	l.insert(l.begin(), extra.begin() + 1, extra.end());
-#else
-	l.insert(l.begin(), extra.begin() + 1, extra.end(), 0);
-#endif
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
 	std::cout << l << std::endl;
 
