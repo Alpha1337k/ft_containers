@@ -213,7 +213,7 @@ void	v_modifiers_test()
 	b.resize(10);
 	b.insert(b.begin(), 10);
 	std::cout << b << std::endl;
-	auto it = b.begin();
+	vector<int>::iterator it = b.begin();
 	it++;
 
 	std::cout << *it << std::endl;
@@ -241,6 +241,7 @@ void	v_modifiers_test()
 	std::cout << a << std::endl;
 	std::cout << "empty? " << a.empty() << " size: " << a.size() << " capacity: " << a.capacity() << std::endl;
 	it = b.begin();
+	std::cout << *it << std::endl;
 	it++;
 	it++;
 	it++;

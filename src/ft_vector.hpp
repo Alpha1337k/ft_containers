@@ -33,12 +33,12 @@ private:
 	size_t distance (InputIt first, InputIt last)
 	{
 		size_t count = 0;
-		for (; first != last; first++, last++, count++);
+		for (; first != last; first++, count++);
 		return (count);
 	}
 public:
 	vector(): _data(0), _size(0), _capacity(0), _alloc(Allocator()) {}
-	~vector() {_alloc.deallocate(_data, _capacity);}
+	~vector() {clear();}
 	vector (const vector &other): _data(0), _size(0), _capacity(0), _alloc(Allocator()) {*this = other;}
 
 	explicit vector( size_t count, const T& value = T()): _data(0), _size(0), _capacity(0), _alloc(Allocator())
@@ -80,7 +80,12 @@ public:
 	size_t size() const {return _size;}
 	size_t capacity() const {return _capacity;}
 	size_t max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(T) * 2 + 1);}
-	void clear() {_alloc.deallocate(_data, _capacity);; _size = 0; _capacity = 0; _data = 0;}
+	void clear() {
+		_alloc.deallocate(_data, _capacity);
+		_size = 0;
+		_capacity = 0;
+		_data = 0;
+	}
 
 	T	&back() {return _data[_size == 0 ? 0 : _size - 1];}
 	T	&front() {return _data[0];}
@@ -90,7 +95,8 @@ public:
 	{
 		if (_size >= _capacity)
 			reserve(_capacity == 0 ? 1 : _capacity * 2);
-		_data[_size++] = value;
+		_alloc.construct(&_data[_size], value);
+		_size++;
 	}
 	void pop_back()
 	{
@@ -106,13 +112,14 @@ public:
 	}
 	void reserve( size_t new_size)
 	{
+		// std::cout << "New size: " << new_size << std::endl;
 		if (new_size <= _capacity)
 			return;
 		if (new_size > max_size())
 			throw std::length_error("vector::reserve");
 		T *new_addr = _alloc.allocate(new_size);
 		for (size_t i = 0; i < _size; i++)
-			new_addr[i] = _data[i];
+			_alloc.construct(&new_addr[i], _data[i]);
 		_alloc.deallocate(_data, _capacity);
 		_data = new_addr;
 		_capacity = new_size;
@@ -167,6 +174,11 @@ public:
 		T		*_data;
 	public:
 		iterator(T *d): _data(d) {}
+		iterator &operator=(const iterator &i)
+		{
+			_data = i._data;
+			return (*this);
+		}
 		~iterator() {};
 		iterator& operator++()
 		{
@@ -299,7 +311,7 @@ public:
 			i_pos = &*pos - _data;
 
 		if (_size + count > _capacity)
-			reserve(_size * 2);
+			reserve(_size == 0 ? count : _size * 2);
 		for (size_t i = _size + count; i >= i_pos + count; i--)
 			_data[i] = _data[i - count];
 		for (size_t i = 0; i < count; i++)
@@ -310,19 +322,19 @@ public:
 	template< class InputIt>
 	void insert( iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = nullptr)
 	{	
-		size_t i = 0;
+		size_t i_pos = 0;
 		if (_data != 0)
-			i = &*pos - _data;
+			i_pos = &*pos - _data;
 		size_t count = distance(first, last);
-		
-		size_t x = _size + count;
 
-		reserve(_size + count);
-		for (; x >= i + count; x--)
-			_data[x] = _data[x - count];
-		x = 0;
-		for (InputIt it = first; x < count; x++, it++)
-			_data[x + i] = *it;
+		// std::cout << "p--------------------------"<< i_pos << " " << count << " " << _size << std::endl;
+		if (_size + count > _capacity)
+			reserve(_size == 0 ? count : _size * 2);
+		for (size_t i = _size + count; i > i_pos + count; i--)
+			_data[i] = _data[i - count];
+		size_t x = 0;
+		for (InputIt it = first; x < count && it != last; x++, it++)
+			_alloc.construct(&_data[x + i_pos], *it);
 		_size += count;
 	}
 
