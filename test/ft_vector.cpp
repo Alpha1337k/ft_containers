@@ -8,10 +8,11 @@
 	using namespace ft;
 #endif
 
-template <typename T>
-std::ostream &operator<<(std::ostream &out, vector<T> &v)
+template <typename T, typename Allocator>
+std::ostream &operator<<(std::ostream &out, vector<T, Allocator> &v)
 {
-	for (vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	typedef typename vector<T, Allocator>::iterator iterator;
+	for (iterator it = v.begin(); it != v.end(); it++)
 		std::cout << *it << " ";
 	return (out);
 }
@@ -31,11 +32,12 @@ void	v_create_test()
 	vector<int> v2(v1);
 	vector<int> v3 = v1;
 	vector<int> v4(10, 100);
-	// vector<int> v5(v1.begin(), v1.end());
+	vector<int> v5(v1.begin(), v1.end());
 	std::cout << "empty? " << v1.empty() << " size: " << v1.size() << v1 << std::endl;
 	std::cout << "empty? " << v2.empty() << " size: " << v2.size() << v2 << std::endl;
 	std::cout << "empty? " << v3.empty() << " size: " << v3.size() << v3 << std::endl;
 	std::cout << "empty? " << v4.empty() << " size: " << v4.size() << v4 << std::endl;
+	std::cout << "empty? " << v5.empty() << " size: " << v5.size() << v5 << std::endl;
 }
 
 void	v_access_test()
@@ -74,7 +76,8 @@ void	v_access_test()
 	for (size_t i = 0; i < v.size(); i++)
 		v[i]++;
 	for (size_t i = 0; i < v.size(); i++)
-		std::cout << v[i] << std::endl;
+		std::cout << v[i] << " ";
+	std::cout << std::endl;
 
 	std::cout << v.front() << std::endl;
 	std::cout << v.back() << std::endl;
@@ -83,8 +86,22 @@ void	v_access_test()
 	std::cout << v_c.front() << std::endl;
 	std::cout << v_c.back() << std::endl;
 	for (size_t i = 0; i < v_c.size(); i++)
-		std::cout << v_c[i] << std::endl;
+		std::cout << v_c[i] << " ";
+	std::cout << std::endl;
 	std::cout << v.at(3) << std::endl;
+
+}
+
+void	v_assign_test()
+{
+	vector<double> a;
+	vector<double> b;
+
+	a.assign(10, 69.69);
+	std::cout << "empty? " << a.empty() << " size: " << a.size() << a << std::endl;
+	vector<double>::iterator it = a.begin() + 2;
+	b.assign(it, a.end());
+	std::cout << "empty? " << b.empty() << " size: " << b.size() << b << std::endl;
 
 }
 
@@ -230,6 +247,23 @@ void	v_modifiers_test()
 	b.erase(b.begin(), it);
 	std::cout << b << std::endl;
 	std::cout << "empty? " << b.empty() << " size: " << b.size() << " capacity: " << b.capacity() << std::endl;
+
+	vector<std::string> c;
+
+	c.push_back("a1");
+	c.push_back("a2");
+	c.push_back("a3");
+	c.push_back("a4");
+	c.push_back("a5");
+
+	std::cout << c << std::endl;
+	std::cout << "empty? " << c.empty() << " size: " << c.size() << " capacity: " << c.capacity() << std::endl;
+	vector<std::string> c1;
+
+	c1.insert(c1.begin(), c.begin() + 2, c.end());
+	std::cout << c1 << std::endl;
+	std::cout << "empty? " << c1.empty() << " size: " << c1.size() << " capacity: " << c1.capacity() << std::endl;	
+
 }
 
 void	v_compare_test(void)
@@ -276,6 +310,8 @@ void	vector_test(void)
 {
 	std::cout << "\t------- Create " << std::endl;
 	v_create_test();
+	std::cout << "\t------- Assign " << std::endl;
+	v_assign_test();
 	std::cout << "\t------- Access " << std::endl;
 	v_access_test();
 	std::cout << "\t------- Iterators " << std::endl;
