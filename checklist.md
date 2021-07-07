@@ -168,8 +168,8 @@
 ### modifers
 - [x] push
 - [x] pop
-- [ ] swap
+- [x] swap
 
 ## Non member functions
 - [7 / 7] operators
-- [ ] swap
+- [x] swap

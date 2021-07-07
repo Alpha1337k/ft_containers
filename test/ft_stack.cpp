@@ -13,7 +13,6 @@
 	using namespace ft;
 #endif
 
-
 void swap_test()
 {
 	stack<int> s1;
@@ -95,7 +94,7 @@ void pop_test()
 	std::cout << s1.empty() << " | " << s1.size()<< std::endl;
 }
 
-void list_stack()
+void container_test()
 {
 	list<int> l1;
 	l1.resize(10, 10);
@@ -131,6 +130,20 @@ void list_stack()
 	s4.push(42);
 	std::cout << s4.empty() << " | " << s4.size()<< std::endl;
 	std::cout << s4.top() << std::endl;
+
+	std::vector<double> v2;
+	v2.push_back(0.1);
+	v2.push_back(0.2);
+	v2.push_back(0.3);
+	v2.push_back(0.4);
+	v2.push_back(0.5);
+
+	std::stack<int, std::vector<double>> s5(v2);
+	std::cout << s5.empty() << " | " << s5.size()<< std::endl;
+	std::cout << s5.top() << std::endl;
+	s5.push(42);
+	std::cout << s5.empty() << " | " << s5.size()<< std::endl;
+	std::cout << s5.top() << std::endl;
 }
 
 
@@ -156,6 +169,6 @@ void stack_test()
 	operator_test();
 	top_test();
 	compare_test();
-	list_stack();
+	container_test();
 	swap_test();
 }

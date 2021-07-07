@@ -35,9 +35,7 @@ public:
 	void pop() {_c.pop_back();}
 	void swap( stack& other )
 	{
-		Container tmp = other._c;
-		other._c = this->_c;
-		this->_c = tmp;
+		this->_c.swap(other._c);
 	}
 
 	template <typename T1, typename Container1>
@@ -64,6 +62,11 @@ bool operator>( const stack<T, Container>& lhs, const stack<T, Container>& rhs )
 template <typename T, typename Container>
 bool operator<( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return lhs._c < rhs._c;}
 
+template< typename T, typename Container>
+void	swap(ft::stack<T, Container> &lhs, ft::stack<T, Container> &rhs)
+{
+	lhs.swap(rhs);
+}
 
 }
 

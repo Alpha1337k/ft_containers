@@ -268,16 +268,16 @@ int main(void)
 	// pair_test();
 	// std::cout << "------------ LIST ----------- " << std::endl;
 	// list_test();
-	std::cout << "------------ VECTOR ----------- " << std::endl;
-	vector_test();
+	// std::cout << "------------ VECTOR ----------- " << std::endl;
+	// vector_test();
 	// std::cout << "------------ MAP ----------- " << std::endl;
 	// map_test();
 	// std::cout << "------------ Iterator ----------- " << std::endl;
 	// iterator_test();
 	// std::cout << "------------ Integral ----------- " << std::endl;
 	// integral_test();
-	std::cout << "------------ Enable if ----------- " << std::endl;
-	enable_if_test();
-	// std::cout << "------------ STACK ----------- " << std::endl;
-	// stack_test();
+	// std::cout << "------------ Enable if ----------- " << std::endl;
+	// enable_if_test();
+	std::cout << "------------ STACK ----------- " << std::endl;
+	stack_test();
 }
