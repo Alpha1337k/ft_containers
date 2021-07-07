@@ -55,7 +55,7 @@ public:
 	}
 
 	template< class InputIt>
-	vector( InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = nullptr): 
+	vector( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr): 
 		_data(0), _size(0), _capacity(0), _alloc(Allocator())
 	{
 		for (; first != last; first++)
@@ -69,7 +69,7 @@ public:
 	}
 
 	template< class InputIt>
-	void assign( InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = nullptr)
+	void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
 	{
 		clear();
 		for (; first != last; first++)
