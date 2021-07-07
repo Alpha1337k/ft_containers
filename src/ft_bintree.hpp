@@ -33,7 +33,7 @@ public:
 	{
 		if (it == 0)
 			return;
-		std::cout << it->val.first << std::endl;
+		// std::cout << it->val.first << std::endl;
 		if (it->left == 0 && it->right == 0)
 		{
 			update_back(it, 0);
@@ -72,7 +72,7 @@ public:
 			{
 				_size++;
 				parent->right = _alloc.allocate(1);
-				*parent->right = map_node<K, T>(0, 0, parent, key, value);
+				_alloc.construct(parent->right, map_node<K, T>(0, 0, parent, key, value));
 			}
 			return (parent->right);
 		}
@@ -80,7 +80,7 @@ public:
 		{
 			_size++;
 			parent->left = _alloc.allocate(1);
-			*parent->left = map_node<K, T>(0, 0, parent, key, value);
+			_alloc.construct(parent->left, map_node<K, T>(0, 0, parent, key, value));
 		}
 		return (parent->left);
 	}
@@ -91,7 +91,7 @@ public:
 		{
 			_size++;
 			_nodes = _alloc.allocate(1);
-			*_nodes = map_node<K, T>(0, 0, 0, key, value);
+			_alloc.construct(_nodes, map_node<K, T>(0, 0, 0, key, value));
 			return (_nodes);
 		}
 		do {
