@@ -29,10 +29,10 @@ public:
 	value_type &back() {return _c.back();}
 	const value_type &back() const {return _c.back();}
 
-	bool empty() const {return _c.empty()};
+	bool empty() const {return _c.empty();}
 	size_type size() const {_c.size();}
 
-	void push(const value_type &value) { c.push_back(value);}
+	void push(const value_type &value) { _c.push_back(value);}
 	void pop() {_c.pop();}
 };
 
