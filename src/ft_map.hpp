@@ -5,6 +5,7 @@
 #include <ft_node.hpp>
 #include <ft_queue.hpp>
 #include <ft_bintree.hpp>
+#include <ft_iterator.hpp>
 
 namespace ft
 {
@@ -12,13 +13,93 @@ namespace ft
 template <typename K, typename T, class Compare = std::less<K>, class Allocator = std::allocator<ft::pair<const K, T> > >
 class map
 {
-protected:
+public:
 	typedef K key_type;
 	typedef T mapped_type;
 	typedef size_t size_type;
 	typedef Compare key_compare;
 	typedef ft::pair<const K, T> value_type;
 
+	class iterator
+	{
+	public:
+		typedef T 					value_type;
+		typedef ptrdiff_t 			difference_type;
+		typedef size_t 				size_type;
+		typedef T&					const_reference;
+		typedef T& 					reference;
+		typedef typename std::allocator_traits<Allocator>::pointer	pointer;
+		typedef	T					iterator_category;
+	protected:
+		map_node<K, T> *_pos;
+		map_node<K, T> *_origin;
+		key_compare		_comp = std::less<K>();
+	public:
+		iterator(map_node<K, T> *pos, key_compare comp): _pos(pos), _origin(pos), _comp(comp) {}
+		~iterator() {}
+		iterator &operator++()
+		{
+			if (_pos->right)
+			{
+				_pos = _pos->right;
+				while (_pos->left)
+					_pos = _pos->left;
+			}
+			else
+			{
+				do
+				{
+					_origin = _pos;
+					_pos = _pos->back;
+				} while (_pos && _comp(_pos->val.first, _origin->val.first));
+			}
+			return *this;
+		}
+		iterator &operator--()
+		{
+			if (_pos->left)
+			{
+				_pos = _pos->left;
+				while (_pos->right)
+					_pos = _pos->right;
+			}
+			else
+			{
+				do
+				{
+					_origin = _pos;
+					_pos = _pos->back;
+				} while (_pos && _comp(_origin->val.first, _pos->val.first));
+			}
+			return *this;
+		}
+		iterator operator++(int)
+		{
+			iterator old = *this;
+			operator++();
+			return (*this);
+		}
+		iterator operator--(int)
+		{
+			iterator old = *this;
+			operator--();
+			return (*this);
+		}
+		ft::pair<K, T>	*operator->() { return &_pos->val;}
+		ft::pair<K, T>	&operator*()
+		{
+			return (_pos->val);
+		}
+		friend bool operator==(const iterator& lhs, const iterator& rhs)
+		{
+			return (lhs._pos == rhs._pos);
+		}
+		friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
+
+	};
+	typedef	iterator const_iterator;
+	typedef	ft::reverse_iterator<iterator> reverse_iterator;
+private:
 	bintree<K, T, Compare> _tree;
 	Compare _cmp;
 public:
@@ -82,78 +163,6 @@ public:
 		_tree.inorder();
 	}
 
-	class iterator
-	{
-	public:
-		map_node<K, T> *_pos;
-		map_node<K, T> *_origin;
-		key_compare		_comp = std::less<K>();
-		int status = 0;
-
-	public:
-		iterator(map_node<K, T> *pos, key_compare comp): _pos(pos), _origin(pos), _comp(comp) {}
-		~iterator() {}
-		iterator &operator++()
-		{
-			if (_pos->right)
-			{
-				_pos = _pos->right;
-				while (_pos->left)
-					_pos = _pos->left;
-			}
-			else
-			{
-				do
-				{
-					_origin = _pos;
-					_pos = _pos->back;
-				} while (_pos && _comp(_pos->val.first, _origin->val.first));
-			}
-			return *this;
-		}
-		iterator &operator--()
-		{
-			if (_pos->left)
-			{
-				_pos = _pos->left;
-				while (_pos->right)
-					_pos = _pos->right;
-			}
-			else
-			{
-				do
-				{
-					_origin = _pos;
-					_pos = _pos->back;
-				} while (_pos && _comp(_origin->val.first, _pos->val.first));
-			}
-			return *this;
-		}
-		iterator operator++(int)
-		{
-			iterator old = *this;
-			operator++();
-			return (*this);
-		}
-		iterator operator--(int)
-		{
-			iterator old = *this;
-			operator--();
-			return (*this);
-		}
-		pair<K, T>	*operator->() { return &_pos->val;}
-		pair<K, T>	&operator*()
-		{
-			return (_pos->val);
-		}
-		friend bool operator==(const iterator& lhs, const iterator& rhs)
-		{
-			return (lhs._pos == rhs._pos);
-		}
-		friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
-
-	};
-
 	iterator 		begin() {
 		map_node<K, T> *it = _tree._nodes;
 		while (it->left)
@@ -203,23 +212,28 @@ public:
 		}
 		return (it);
 	}
-	void erase( iterator pos ) {
-		map_node<K, T> *it = pos._pos;
+	size_type erase( const key_type& key )
+	{
+		map_node<K, T> *n = _tree.get_node(key);
+		if (n == 0)
+			return (0);
+		_tree.remove_node(n);
 		_tree._size--;
-		_tree.remove_node(it);
+		return (1);
+	}
+
+	void erase( iterator pos ) {
+		erase(pos->first);
 	}
 	
 	void erase( iterator first, iterator last )
 	{
 		iterator next = first;
-		size_t removed = 0;
 		while (next != last)
 		{
 			next++;
-			_tree.remove_node(first._pos);
+			erase(first->first);
 			first = next;
-			_tree._size--;
-			removed++;
 		}
 	}
 	pair<iterator, bool> insert( const value_type& value )
