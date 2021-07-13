@@ -86,13 +86,12 @@ public:
 	{
 	public:
 		map_node<K, T> *_pos;
-		map_node<K, T> *_base;
 		map_node<K, T> *_origin;
 		key_compare		_comp = std::less<K>();
 		int status = 0;
 
 	public:
-		iterator(map_node<K, T> *pos, map_node<K, T> *base): _pos(pos), _base(base), _origin(pos) {}
+		iterator(map_node<K, T> *pos, key_compare comp): _pos(pos), _origin(pos), _comp(comp) {}
 		~iterator() {}
 		iterator &operator++()
 		{
@@ -159,30 +158,30 @@ public:
 		map_node<K, T> *it = _tree._nodes;
 		while (it->left)
 			it = it->left;
-		return iterator(it, _tree._nodes);
+		return iterator(it, _cmp);
 	}
 	const iterator 		begin() const {
 		map_node<K, T> *it = _tree._nodes;
 		while (it->left)
 			it = it->left;
-		return iterator(it, _tree._nodes);
+		return iterator(it, _cmp);
 	}
 	iterator 		rbegin() {
 		map_node<K, T> *it = _tree._nodes;
 		while (it->right)
 			it = it->right;
-		return iterator(it, _tree._nodes);
+		return iterator(it, _cmp);
 	}
 	const iterator 		rbegin() const {
 		map_node<K, T> *it = _tree._nodes;
 		while (it->right)
 			it = it->right;
-		return iterator(it, _tree._nodes);
+		return iterator(it, _cmp);
 	}
-	iterator 			end() {return iterator(0, _tree._nodes);}
-	const iterator 		end() const {return iterator(0, _tree._nodes);}
-	iterator 			rend() {return iterator(0, _tree._nodes);}
-	const iterator 		rend() const {return iterator(0, _tree._nodes);}
+	iterator 			end() {return iterator(0, _cmp);}
+	const iterator 		end() const {return iterator(0, _cmp);}
+	iterator 			rend() {return iterator(0, _cmp);}
+	const iterator 		rend() const {return iterator(0, _cmp);}
 
 	bool empty() const {return !!!_tree._size;}
 	size_t size() const {return _tree._size;}
@@ -226,7 +225,7 @@ public:
 	pair<iterator, bool> insert( const value_type& value )
 	{
 		size_t old_size = _tree._size;
-		iterator i = iterator(_tree.get_add_node(value.first, value.second), _tree._nodes);
+		iterator i = iterator(_tree.get_add_node(value.first, value.second), _cmp);
 
 		return (pair<iterator, bool>(i, !(old_size == _tree._size)));
 	}
