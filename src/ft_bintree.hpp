@@ -19,6 +19,20 @@ public:
 	bintree(): _cmp(Compare()), _alloc(Allocator()), _size(0), _nodes(0) {}
 
 
+	void inorder()
+	{
+		inorder(_nodes, 0);
+	}
+
+	void inorder(map_node<K, T> *trav, int depth = 0)
+	{
+		if (trav == NULL)
+			return;
+		inorder(trav->left, depth + 1);
+		printf("[%d, %d] ", trav->val.first, depth);
+		inorder(trav->right, depth + 1);
+	}
+
 	void	update_back(map_node<K, T> *it, map_node<K, T> *replace)
 	{
 		if (!it->back)
@@ -48,6 +62,8 @@ public:
 				tmp = it->right;
 			tmp->back = it->back;
 			update_back(it, tmp);
+			if (it == _nodes)
+				_nodes = tmp;
 			_alloc.deallocate(it, 1);
 		}
 		else
@@ -102,6 +118,20 @@ public:
 			else
 				break;
 		} while (1);
+		return (it);
+	}
+	map_node<K, T>	*get_node(K key)
+	{
+		map_node<K, T> *it = _nodes;
+		while (it != 0)
+		{
+			if (_cmp(it->val.first, key))
+				it = it->right;
+			else if (_cmp(key, it->val.first))
+				it = it->left;
+			else
+				break;
+		}
 		return (it);
 	}
 
