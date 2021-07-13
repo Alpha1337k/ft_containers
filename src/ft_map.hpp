@@ -94,10 +94,8 @@ public:
 	public:
 		iterator(map_node<K, T> *pos, map_node<K, T> *base): _pos(pos), _base(base), _origin(pos) {}
 		~iterator() {}
-		iterator operator++(int)
+		iterator &operator++()
 		{
-			// std::cout << _pos->left << " " << _pos->right << " " << _pos->back << " " << _base  << " " << _origin << std::endl;
-
 			if (_pos->right)
 			{
 				_pos = _pos->right;
@@ -113,6 +111,36 @@ public:
 				} while (_pos && _comp(_pos->val.first, _origin->val.first));
 			}
 			return *this;
+		}
+		iterator &operator--()
+		{
+			if (_pos->left)
+			{
+				_pos = _pos->left;
+				while (_pos->right)
+					_pos = _pos->right;
+			}
+			else
+			{
+				do
+				{
+					_origin = _pos;
+					_pos = _pos->back;
+				} while (_pos && _comp(_origin->val.first, _pos->val.first));
+			}
+			return *this;
+		}
+		iterator operator++(int)
+		{
+			iterator old = *this;
+			operator++();
+			return (*this);
+		}
+		iterator operator--(int)
+		{
+			iterator old = *this;
+			operator--();
+			return (*this);
 		}
 		pair<K, T>	*operator->() { return &_pos->val;}
 		pair<K, T>	&operator*()
@@ -139,8 +167,22 @@ public:
 			it = it->left;
 		return iterator(it, _tree._nodes);
 	}
-	iterator 		end() {return iterator(0, _tree._nodes);}
+	iterator 		rbegin() {
+		map_node<K, T> *it = _tree._nodes;
+		while (it->right)
+			it = it->right;
+		return iterator(it, _tree._nodes);
+	}
+	const iterator 		rbegin() const {
+		map_node<K, T> *it = _tree._nodes;
+		while (it->right)
+			it = it->right;
+		return iterator(it, _tree._nodes);
+	}
+	iterator 			end() {return iterator(0, _tree._nodes);}
 	const iterator 		end() const {return iterator(0, _tree._nodes);}
+	iterator 			rend() {return iterator(0, _tree._nodes);}
+	const iterator 		rend() const {return iterator(0, _tree._nodes);}
 
 	bool empty() const {return !!!_tree._size;}
 	size_t size() const {return _tree._size;}
