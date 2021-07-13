@@ -10,6 +10,7 @@
 #include <numeric>
 #include <ft_enable_if.hpp>
 #include <ft_is_integral.hpp>
+#include <ft_iterator.hpp>
 
 namespace ft
 {
@@ -18,11 +19,96 @@ template <typename T, class Allocator = std::allocator<T>>
 class vector
 {
 public:
+
+	class iterator
+	{
+	public:
+		typedef T 					value_type;
+		typedef ptrdiff_t 			difference_type;
+		typedef size_t 				size_type;
+		typedef T&					const_reference;
+		typedef T& 					reference;
+		typedef typename std::allocator_traits<Allocator>::pointer	pointer;
+		typedef	T					iterator_category;
+	protected:
+		T		*_data;
+	public:
+		iterator(T *d): _data(d) {}
+		iterator &operator=(const iterator &i)
+		{
+			_data = i._data;
+			return (*this);
+		}
+		~iterator() {};
+		iterator& operator++()
+		{
+			_data++;
+			return *this;
+		}
+		iterator& operator--()
+		{
+			_data--;
+			return *this;
+		}
+		iterator operator++(int)
+		{
+			iterator old = *this;
+			operator++();
+			return (*this);
+		}
+		iterator operator--(int)
+		{
+			iterator old = *this;
+			operator--();
+			return (*this);
+		}
+		iterator &operator+=(const int &val)
+		{
+			_data += val;
+			return (*this);
+		}
+		friend iterator operator+(vector<T, Allocator>::iterator lhs, const int &rhs)
+		{
+			lhs += rhs;
+			return (lhs);
+		}
+		iterator &operator-=(const int &val)
+		{
+			_data -= val;
+			return (*this);
+		}
+		friend iterator operator-(vector<T, Allocator>::iterator lhs, const int &rhs)
+		{
+			lhs -= rhs;
+			return (lhs);
+		}
+	
+		friend bool operator==(const iterator& lhs, const iterator& rhs)
+		{
+			return (lhs._data == rhs._data);
+		}
+		friend bool operator!=(const iterator& lhs, const iterator& rhs) {return !(lhs == rhs);}
+		const T	&operator*() const
+		{
+			return (*_data);
+		}
+		T	&operator*()
+		{
+			return (*_data);
+		}
+		T	*operator->()
+		{
+			return (_data);
+		}
+	};
 	typedef T value_type;
 	typedef ptrdiff_t difference_type;
 	typedef size_t size_type;
 	typedef T&		const_reference;
 	typedef T& 		reference;
+	typedef	iterator const_iterator;
+	//typedef	ft::reverse_iterator<const ft::vector::iterator> const_reverse_iterator;
+	typedef	ft::reverse_iterator<iterator> reverse_iterator;
 private:
 	T *_data;
 	size_t _size;
@@ -168,131 +254,12 @@ public:
 		other._size = tmp_size;
 		other._capacity = tmp_capacity;
 	}
-	class iterator
-	{
-	protected:
-		T		*_data;
-	public:
-		iterator(T *d): _data(d) {}
-		iterator &operator=(const iterator &i)
-		{
-			_data = i._data;
-			return (*this);
-		}
-		~iterator() {};
-		iterator& operator++()
-		{
-			_data++;
-			return *this;
-		}
-		iterator& operator--()
-		{
-			_data--;
-			return *this;
-		}
-		iterator operator++(int)
-		{
-			iterator old = *this;
-			operator++();
-			return (*this);
-		}
-		iterator operator--(int)
-		{
-			iterator old = *this;
-			operator--();
-			return (*this);
-		}
-		iterator &operator+=(const int &val)
-		{
-			_data += val;
-			return (*this);
-		}
-		friend iterator operator+(vector<T, Allocator>::iterator lhs, const int &rhs)
-		{
-			lhs += rhs;
-			return (lhs);
-		}
-		iterator &operator-=(const int &val)
-		{
-			_data -= val;
-			return (*this);
-		}
-		friend iterator operator-(vector<T, Allocator>::iterator lhs, const int &rhs)
-		{
-			lhs -= rhs;
-			return (lhs);
-		}
-	
-		friend bool operator==(const iterator& lhs, const iterator& rhs)
-		{
-			return (lhs._data == rhs._data);
-		}
-		friend bool operator!=(const iterator& lhs, const iterator& rhs) {return !(lhs == rhs);}
-		const T	&operator*() const
-		{
-			return (*_data);
-		}
-		T	&operator*()
-		{
-			return (*_data);
-		}
-		T	*operator->()
-		{
-			return (_data);
-		}
-	};
+
 	iterator begin()		{return iterator(_data);}
 	iterator end()			{return iterator(_data + _size);}	
 	iterator begin() const	{return iterator(_data);}
 	iterator end()	const	{return iterator(_data + _size);}
-	typedef iterator	const_iterator;
-	class reverse_iterator : public iterator
-	{
-	public:
-		reverse_iterator(T *d): iterator(d) {}
-		reverse_iterator &operator++()
-		{
-			this->_data--;
-			return (*this);
-		}
-		reverse_iterator &operator--()
-		{
-			this->_data++;
-			return (*this);
-		}
-		reverse_iterator operator++(int)
-		{
-			iterator old = *this;
-			operator++();
-			return (*this);
-		}
-		reverse_iterator operator--(int)
-		{
-			iterator old = *this;
-			operator--();
-			return (*this);
-		}
-		reverse_iterator &operator+=(const int &val)
-		{
-			this->_data += val;
-			return (*this);
-		}
-		friend reverse_iterator operator+(reverse_iterator lhs, const int &rhs)
-		{
-			lhs += rhs;
-			return (lhs);
-		}
-		reverse_iterator &operator-=(const int &val)
-		{
-			this->_data -= val;
-			return (*this);
-		}
-		friend reverse_iterator operator-(reverse_iterator lhs, const int &rhs)
-		{
-			lhs -= rhs;
-			return (lhs);
-		}
-	};
+
 	reverse_iterator rbegin()		{return reverse_iterator(_data + _size - 1);}
 	reverse_iterator rbegin() const	{return reverse_iterator(_data + _size - 1);}
 	reverse_iterator rend()			{return reverse_iterator(_data - 1);}
