@@ -10,6 +10,7 @@ void	run_test(size_t size)
 	std::vector<int> sorted;
 	std::queue<int>	unsorted;
 	ft::map<int, int> mappie;
+	std::map<int, int> real_mappie;
 
 	for (size_t i = 0; i < size; i++)
 		sorted.push_back(i);
@@ -22,24 +23,34 @@ void	run_test(size_t size)
 	for (; !unsorted.empty(); )
 	{
 		mappie[unsorted.front()] = unsorted.front();
+		real_mappie[unsorted.front()] = unsorted.front();
 		unsorted.pop();
 	}
 	size_t failsafe = 0;
 	mappie.inorder();
 	std::cout << std::endl;
+	std::map<int, int>::iterator rit = real_mappie.begin();
 	for (ft::map<int, int>::iterator it = mappie.begin(); it != mappie.end() && failsafe != size + 2; it++)
 	{
-		std::cout << it->first << " ";
+		std::cout << it->first << " " << rit->first << std::endl;
+		if (rit ==	real_mappie.end() || rit->first != it->first)
+		{
+			std::cerr << "KO, they differ!" << std::endl;
+			if (rit != real_mappie.end())
+				std::cerr << "diff: " << it->first << " " << rit->first << std::endl;
+			return;
+		}
+		rit++;
 		failsafe++;
 	}
-	std::cout << std::endl << std::endl;
+	std::cerr << "OK" << std::endl;
 }
 
 int		main()
 {
-	size_t size = 10;
+	size_t size = 2;
 	srand(time(NULL));
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 100; i++)
 	{
 		run_test(size);
 	}

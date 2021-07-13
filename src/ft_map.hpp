@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <ft_node.hpp>
+#include <ft_queue.hpp>
 #include <ft_bintree.hpp>
 
 namespace ft
@@ -76,6 +77,10 @@ public:
 	};
 	map::value_compare value_comp() const {return value_compare(_cmp);}
 
+	void inorder()
+	{
+		_tree.inorder();
+	}
 
 	class iterator
 	{
@@ -83,6 +88,7 @@ public:
 		map_node<K, T> *_pos;
 		map_node<K, T> *_base;
 		map_node<K, T> *_origin;
+		key_compare		_comp = std::less<K>();
 		int status = 0;
 
 	public:
@@ -91,37 +97,20 @@ public:
 		iterator operator++(int)
 		{
 			// std::cout << _pos->left << " " << _pos->right << " " << _pos->back << " " << _base  << " " << _origin << std::endl;
-			if (_pos->left && _pos != _base && _origin != _pos->left)
+
+			if (_pos->right)
 			{
-				status = 0;
-				_pos = _pos->left;
-				while (_pos->left)
-					_pos = _pos->left;
-			}
-			else if (_pos->right)
-			{
-				status = 1;
 				_pos = _pos->right;
 				while (_pos->left)
 					_pos = _pos->left;
 			}
-			else if (_pos->left == 0 && _pos->right == 0)
-			{
-				do {
-					_origin = _pos;
-					_pos = _pos->back;
-				} while (_pos && _pos->right == _origin);
-				status = 1;
-			}
-			else if (_pos->back)
-			{
-				_origin = _pos;
-				_pos = _pos->back;
-			}
 			else
 			{
-				// std::cout << "End or smth " << std::endl;
-				_pos = 0;
+				do
+				{
+					_origin = _pos;
+					_pos = _pos->back;
+				} while (_pos && _comp(_pos->val.first, _origin->val.first));
 			}
 			return *this;
 		}
