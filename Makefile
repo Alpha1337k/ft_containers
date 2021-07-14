@@ -45,7 +45,7 @@ clean:
 	$(RM) $(OBJ)
 
 fclean: clean
-	$(RM) $(NAME) $(NAME_MAP) $(NAME_SCHOOL)
+	$(RM) $(NAME) $(NAME_MAP) $(NAME_SCHOOL) $(NAME_SCHOOL)_stl
 
 re: fclean all
 
