@@ -46,7 +46,7 @@ void	run_test(size_t size)
 	failsafe = 0;
 	std::cout << "----- test 2" << std::endl;
 	std::map<int, int>::reverse_iterator rrit = real_mappie.rbegin();
-	for (ft::map<int, int>::iterator it = mappie.rbegin(); it != mappie.rend() && failsafe != size + 2; it--)
+	for (ft::map<int, int>::reverse_iterator it = mappie.rbegin(); it != mappie.rend() && failsafe != size + 2; ++it)
 	{
 		std::cout << it->first << " " << rrit->first << std::endl;
 		if (rrit ==	real_mappie.rend() || rrit->first != it->first)
@@ -64,7 +64,7 @@ void	run_test(size_t size)
 
 int		main()
 {
-	size_t size = 100;
+	size_t size = 10;
 	srand(time(NULL));
 	for (int i = 0; i < 100; i++)
 	{
