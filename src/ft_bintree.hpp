@@ -25,6 +25,19 @@ namespace ft
 template <typename K, typename T, class Compare = std::less<K>, class Allocator = std::allocator<map_node<const K, T>> >
 class bintree
 {
+private:
+	map_node<const K, T> *clonetree(map_node<const K, T> *n, map_node<const K, T> *parent)
+	{
+		if (n == 0)
+			return (0);
+		map_node<const K, T> *newnode = _alloc.allocate(1);
+		_alloc.construct(newnode, map_node<const K, T>(0, 0, parent, n->val.first, n->val.second));
+		newnode->left = n->left;
+		newnode->right = n->right;
+
+		return (newnode);
+	}
+
 protected:
 	Compare _cmp;
 	Allocator _alloc;
@@ -32,6 +45,12 @@ public:
 	size_t	_size;
 	map_node<const K, T> *_nodes;
 	bintree(): _cmp(Compare()), _alloc(Allocator()), _size(0), _nodes(0) {}
+
+	bintree &operator=(const bintree &b)
+	{
+		_nodes = clonetree(b._nodes, 0);
+		return *this;
+	}
 
 
 	void inorder()

@@ -138,12 +138,8 @@ public:
 
 	map	&operator=(const map &m)
 	{
-		iterator it = m.begin();
-		while (it != m.end())
-		{
-			_tree.get_add_node(it->first)->val.second = it->second;
-			it++;
-		}
+		clear();
+		_tree = m._tree;
 		return *this;
 	}
 	T& operator[](const K &key)
