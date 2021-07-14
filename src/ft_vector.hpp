@@ -41,9 +41,12 @@ public:
 		typedef T 					value_type;
 		typedef ptrdiff_t 			difference_type;
 		typedef size_t 				size_type;
-		typedef T&					const_reference;
-		typedef T& 					reference;
-		typedef typename std::allocator_traits<Allocator>::pointer	pointer;
+		typedef value_type const&	const_reference;
+		typedef value_type& 		reference;
+		typedef	Allocator			allocator_type;
+		typedef typename std::allocator_traits<Allocator>::pointer			pointer;
+		typedef typename std::allocator_traits<Allocator>::const_pointer	const_pointer;
+
 		typedef	T					iterator_category;
 	protected:
 		T		*_data;
@@ -116,12 +119,15 @@ public:
 			return (_data);
 		}
 	};
-	typedef T value_type;
-	typedef ptrdiff_t difference_type;
-	typedef size_t size_type;
-	typedef T&		const_reference;
-	typedef T& 		reference;
-	typedef	iterator const_iterator;
+	typedef T 			value_type;
+	typedef ptrdiff_t	difference_type;
+	typedef size_t		size_type;
+	typedef T const&	const_reference;
+	typedef T& 			reference;
+	typedef	iterator 	const_iterator;
+	typedef	Allocator			allocator_type;
+	typedef typename std::allocator_traits<Allocator>::pointer			pointer;
+	typedef typename std::allocator_traits<Allocator>::const_pointer	const_pointer;
 	//typedef	ft::reverse_iterator<const ft::vector::iterator> const_reverse_iterator;
 	typedef	ft::reverse_iterator<iterator> reverse_iterator;
 private:
@@ -142,7 +148,7 @@ public:
 	~vector() {clear();}
 	vector (const vector &other): _data(0), _size(0), _capacity(0), _alloc(Allocator()) {*this = other;}
 
-	explicit vector( size_t count, const T& value = T()): _data(0), _size(0), _capacity(0), _alloc(Allocator())
+	explicit vector( size_t count, const T& value = T(), const Allocator& alloc = Allocator()): _data(0), _size(0), _capacity(0), _alloc(alloc)
 	{
 		resize(count, value);
 	}
@@ -156,8 +162,8 @@ public:
 	}
 
 	template< class InputIt>
-	vector( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr): 
-		_data(0), _size(0), _capacity(0), _alloc(Allocator())
+	vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr): 
+		_data(0), _size(0), _capacity(0), _alloc(alloc)
 	{
 		for (; first != last; first++)
 			push_back(*first);
@@ -178,9 +184,9 @@ public:
 	}
 
 	bool empty() const {return !!!_size;}
-	size_t size() const {return _size;}
-	size_t capacity() const {return _capacity;}
-	size_t max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(T) * 2 + 1);}
+	size_type size() const {return _size;}
+	size_type capacity() const {return _capacity;}
+	size_type max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(T) * 2 + 1);}
 	void clear() {
 		_alloc.deallocate(_data, _capacity);
 		_size = 0;
@@ -188,10 +194,14 @@ public:
 		_data = 0;
 	}
 
-	T	&back() {return _data[_size == 0 ? 0 : _size - 1];}
-	T	&front() {return _data[0];}
-	const T&front() const {return _data[0];}
-	const T	&back() const {return _data[_size == 0 ? 0 : _size - 1];}
+	reference back() {return _data[_size == 0 ? 0 : _size - 1];}
+	reference front() {return _data[0];}
+	const_reference front() const {return _data[0];}
+	const_reference back() const {return _data[_size == 0 ? 0 : _size - 1];}
+
+	T	*data() {return _data;}
+	const T	*data() {return _data;}
+
 	void push_back( const T& value )
 	{
 		if (_size >= _capacity)
@@ -203,15 +213,15 @@ public:
 	{
 		_size--;
 	}
-	T& operator[](size_t idx)
+	reference operator[](size_type idx)
 	{
 		return _data[idx];
 	}
-	const T &operator[]( size_t idx ) const
+	const_reference operator[](size_type idx ) const
 	{
 		return _data[idx];
 	}
-	void reserve( size_t new_size)
+	void reserve(size_type new_size)
 	{
 		// std::cout << "New size: " << new_size << std::endl;
 		if (new_size <= _capacity)
@@ -225,19 +235,19 @@ public:
 		_data = new_addr;
 		_capacity = new_size;
 	}
-	T& at(size_t pos)
+	reference  at(size_type pos)
 	{
 		if (pos >= _size)
 			throw std::out_of_range("out of range");
 		return (_data[pos]);
 	}
-	const T& at(size_t pos) const
+	const_reference at(size_type pos) const
 	{
 		if (pos >= _size)
 			throw std::out_of_range("out of range");
 		return (_data[pos]);
 	}
-	void resize( size_t count, T value = T() )
+	void resize( size_type count, T value = T() )
 	{
 		T *new_addr;
 		if (count > _capacity)
