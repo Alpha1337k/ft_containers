@@ -100,6 +100,7 @@ void	m_modifiers_test(void)
 	m1['b'] = 301;
 	m1['c'] = 302;
 	m1['d'] = 304;
+	m1['f'] = 309;
 	m2['w'] = 304;
 	m2['x'] = 301;
 	m2['y'] = 302;
@@ -111,6 +112,12 @@ void	m_modifiers_test(void)
 	rv = m1.insert(pair<char, int>('e', 308));
 	std::cout << m1 << std::endl;
 	std::cout << rv.first->first << " : " << rv.first->second << " : " << rv.second << std::endl;
+
+	std::cout << m1.erase('d') << std::endl;
+	std::cout << m1.erase('d') << std::endl;
+
+	std::cout << m1 << std::endl;
+	std::cout << "empty: " << m1.empty() << " size: " << m1.size() << std::endl;
 	m1.erase(m1.find('c'));
 	std::cout << m1 << std::endl;
 	std::cout << "empty: " << m1.empty() << " size: " << m1.size() << std::endl;
@@ -138,6 +145,16 @@ void	m_lookup_test(void)
 	m1['c'] = 302;
 	m1['d'] = 303;
 	m1['e'] = 304;
+
+	std::cout << m1.at('a') << std::endl;
+	try
+	{
+		std::cout << m1.at('z') << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cout << e.what() << '\n';
+	}
 
 	std::cout << m1.count('a') << std::endl;
 	std::cout << m1.count('b') << std::endl;

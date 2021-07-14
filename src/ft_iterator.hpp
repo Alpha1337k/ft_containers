@@ -69,7 +69,6 @@ class reverse_iterator
 			return (base()[-n-1]);
 		}
 
-	
 		reverse_iterator& operator++()
 		{
 			--_it;
@@ -102,7 +101,6 @@ class reverse_iterator
 		template< class Iterator1, class Iterator2 >
 		friend bool operator<( const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs ) {return lhs._it < rhs._it;}
 };
-
 
 template< class Iterator1, class Iterator2 >
 bool operator!=( const ft::reverse_iterator<Iterator1>& lhs, const ft::reverse_iterator<Iterator2>& rhs ) {return !(lhs == rhs);}
