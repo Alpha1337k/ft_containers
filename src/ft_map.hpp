@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include <ft_node.hpp>
-#include <ft_queue.hpp>
 #include <ft_bintree.hpp>
 #include <ft_iterator.hpp>
+#include <limits>
 
 namespace ft
 {
@@ -128,6 +128,23 @@ public:
 	{
 		return (_tree.get_add_node(key)->val.second);
 	}
+	T& at( const K& key )
+	{
+		map_node<K, T> *n =	_tree.get_node(key);
+		if (n == 0)
+			throw std::out_of_range("map::at");
+		return (n->val.second);
+	}
+	const T& at( const K& key ) const
+	{
+		map_node<K, T> *n =	_tree.get_node(key);
+		if (n == 0)
+			throw std::out_of_range("map::at");
+		return (n->val.second);
+	}
+
+	size_type max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(map_node<K, T>) * 2 + 1);}
+
 	void swap( map& other )
 	{
 		size_t tmp_size = this->_tree._size;
@@ -141,7 +158,8 @@ public:
 
 	void clear()
 	{
-		erase(begin(), end());
+		if (_tree._size)
+			erase(begin(), end());
 	}
 
 	key_compare key_comp() const {return _cmp;}
@@ -175,17 +193,17 @@ public:
 			it = it->left;
 		return iterator(it, _cmp);
 	}
-	iterator 		rbegin() {
+	reverse_iterator 		rbegin() {
 		map_node<K, T> *it = _tree._nodes;
 		while (it->right)
 			it = it->right;
-		return iterator(it, _cmp);
+		return reverse_iterator(it, _cmp);
 	}
-	const iterator 		rbegin() const {
+	const reverse_iterator 	rbegin() const {
 		map_node<K, T> *it = _tree._nodes;
 		while (it->right)
 			it = it->right;
-		return iterator(it, _cmp);
+		return reverse_iterator(it, _cmp);
 	}
 	iterator 			end() {return iterator(0, _cmp);}
 	const iterator 		end() const {return iterator(0, _cmp);}
