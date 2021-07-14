@@ -178,12 +178,7 @@ void	v_iterator_test()
 		std::cout << *itr << " ";
 	std::cout << std::endl;
 	for (vector<int>::reverse_iterator itr = l.rbegin(); itr != l.rend(); itr++)
-	{
-		std::cout << *++itr << " ";
-		if (itr == l.rend())
-			break;
-		--itr;
-	}
+		std::cout << *itr << " ";
 	std::cout << std::endl;
 	for (vector<int>::const_iterator itr = l2.begin(); itr != l2.end(); itr++)
 		std::cout << *itr << " ";
