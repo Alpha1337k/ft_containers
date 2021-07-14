@@ -23,20 +23,27 @@ public:
 	class iterator
 	{
 	public:
-		typedef T 					value_type;
-		typedef ptrdiff_t 			difference_type;
-		typedef size_t 				size_type;
-		typedef T&					const_reference;
-		typedef T& 					reference;
+		typedef ft::pair<const K, T> 	value_type;
+		typedef ptrdiff_t 				difference_type;
+		typedef size_t 					size_type;
+		typedef ft::pair<const K, T>&	const_reference;
+		typedef ft::pair<const K, T>&	reference;
 		typedef typename std::allocator_traits<Allocator>::pointer	pointer;
 		typedef	T					iterator_category;
 	protected:
-		map_node<K, T> *_pos;
-		map_node<K, T> *_origin;
+		map_node<const K, T> *_pos;
+		map_node<const K, T> *_origin;
 		key_compare		_comp = std::less<K>();
 	public:
-		iterator(map_node<K, T> *pos, key_compare comp): _pos(pos), _origin(pos), _comp(comp) {}
+		iterator(map_node<const K, T> *pos, key_compare comp): _pos(pos), _origin(pos), _comp(comp) {}
 		~iterator() {}
+		iterator &operator=(const iterator &it)
+		{
+			_pos = it._pos;
+			_origin = it._origin;
+			_comp = it._comp;
+			return *this;
+		}
 		iterator &operator++()
 		{
 			if (_pos->right)
@@ -85,8 +92,8 @@ public:
 			operator--();
 			return (*this);
 		}
-		ft::pair<K, T>	*operator->() { return &_pos->val;}
-		ft::pair<K, T>	&operator*()
+		ft::pair<const K, T>	*operator->() { return &_pos->val;}
+		ft::pair<const K, T>	&operator*()
 		{
 			return (_pos->val);
 		}
@@ -130,25 +137,25 @@ public:
 	}
 	T& at( const K& key )
 	{
-		map_node<K, T> *n =	_tree.get_node(key);
+		map_node<const K, T> *n =	_tree.get_node(key);
 		if (n == 0)
 			throw std::out_of_range("map::at");
 		return (n->val.second);
 	}
 	const T& at( const K& key ) const
 	{
-		map_node<K, T> *n =	_tree.get_node(key);
+		map_node<const K, T> *n =	_tree.get_node(key);
 		if (n == 0)
 			throw std::out_of_range("map::at");
 		return (n->val.second);
 	}
 
-	size_type max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(map_node<K, T>) * 2 + 1);}
+	size_type max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(map_node<const K, T>) * 2 + 1);}
 
 	void swap( map& other )
 	{
 		size_t tmp_size = this->_tree._size;
-		map_node<K, T> *tmp_node = this->_tree._nodes;
+		map_node<const K, T> *tmp_node = this->_tree._nodes;
 
 		this->_tree._size = other._tree._size;
 		this->_tree._nodes = other._tree._nodes;
@@ -182,33 +189,33 @@ public:
 	}
 
 	iterator 		begin() {
-		map_node<K, T> *it = _tree._nodes;
+		map_node<const K, T> *it = _tree._nodes;
 		while (it->left)
 			it = it->left;
 		return iterator(it, _cmp);
 	}
 	const iterator 		begin() const {
-		map_node<K, T> *it = _tree._nodes;
+		map_node<const K, T> *it = _tree._nodes;
 		while (it->left)
 			it = it->left;
 		return iterator(it, _cmp);
 	}
 	reverse_iterator 		rbegin() {
-		map_node<K, T> *it = _tree._nodes;
+		map_node<const K, T> *it = _tree._nodes;
 		while (it->right)
 			it = it->right;
-		return reverse_iterator(it, _cmp);
+		return reverse_iterator(iterator(it, _cmp));
 	}
 	const reverse_iterator 	rbegin() const {
-		map_node<K, T> *it = _tree._nodes;
+		map_node<const K, T> *it = _tree._nodes;
 		while (it->right)
 			it = it->right;
-		return reverse_iterator(it, _cmp);
+		return reverse_iterator(iterator(it, _cmp));
 	}
 	iterator 			end() {return iterator(0, _cmp);}
 	const iterator 		end() const {return iterator(0, _cmp);}
-	iterator 			rend() {return iterator(0, _cmp);}
-	const iterator 		rend() const {return iterator(0, _cmp);}
+	reverse_iterator 			rend() {return reverse_iterator(iterator(0, _cmp));}
+	const reverse_iterator 		rend() const {return reverse_iterator(iterator(0, _cmp));}
 
 	bool empty() const {return !!!_tree._size;}
 	size_t size() const {return _tree._size;}
@@ -232,7 +239,7 @@ public:
 	}
 	size_type erase( const key_type& key )
 	{
-		map_node<K, T> *n = _tree.get_node(key);
+		map_node<const K, T> *n = _tree.get_node(key);
 		if (n == 0)
 			return (0);
 		_tree.remove_node(n);
