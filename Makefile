@@ -14,26 +14,38 @@
 # .___________________________________________________________________________.
 
 NAME=ft_containers
+NAME_MAP=map_consitancy_test
+NAME_SCHOOL=school_test
+
 
 CC=clang++
-FLAGS=-Wall -Werror -Wextra
+FLAGS=-Wall -Werror -Wextra -Ofast
 DEBUG_FLAGS=-g
 SRC=main.cpp test/*.cpp
+SRC_SCHOOL=schoolmain.cpp
+SRC_MAP=map_consitancy.cpp
 HEADERS=src/*.hpp
 LIBS=-I src/
 OBJ=
 RM =rm -rf
 
-all: $(NAME)
+all: $(NAME) $(NAME_MAP) $(NAME_SCHOOL)
 
 $(NAME): $(SRC) $(HEADERS)
 	$(CC) $(FLAGS) $(SRC) $(LIBS) -o $(NAME)
+
+$(NAME_MAP): $(SRC_MAP) $(HEADERS)
+	$(CC) $(FLAGS) $(SRC_MAP) $(LIBS) -o $(NAME_MAP)
+
+$(NAME_SCHOOL): $(SRC_SCHOOL) $(HEADERS)
+	$(CC) $(FLAGS) $(SRC_SCHOOL) $(LIBS) -o $(NAME_SCHOOL)
+	$(CC) $(FLAGS) $(SRC_SCHOOL) $(LIBS) -D USE_STL=1 -o $(NAME_SCHOOL)_stl
 
 clean:
 	$(RM) $(OBJ)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) $(NAME_MAP) $(NAME_SCHOOL)
 
 re: fclean all
 
