@@ -26,7 +26,7 @@ struct iterator_traits<Iter *>
 	typedef std::random_access_iterator_tag iterator_category;
 };
 
-template< class Iter >
+template< class Iter >	
 class reverse_iterator
 {
 	private:
@@ -56,7 +56,7 @@ class reverse_iterator
 		reference operator*() const
 		{
 			Iter tmp = _it;
-			return *--tmp;
+			return *tmp; 
 		}
 
 		pointer operator->() const
