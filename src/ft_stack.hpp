@@ -31,26 +31,26 @@ public:
 protected:
 	typedef stack<T, Container> _this_c;
 
-	container_type _c;
+	container_type c;
 public:
-	stack( const container_type& cont = container_type()): _c(cont) {}
-	stack( const _this_c& other ): _c(other._c) {}
+	stack( const container_type& cont = container_type()): c(cont) {}
+	stack( const _this_c& other ): c(other.c) {}
 	~stack() {};
 	_this_c &operator=(const _this_c &s)
 	{
-		this->_c = s._c;
+		this->c = s.c;
 		return (*this);
 	}
 
-	value_type &top() {return (_c.back());}
-	const value_type &top() const {return (_c.back());}
-	bool empty() const {return _c.empty();}
-	size_t size() const {return _c.size();}
-	void push( const T& value ) {_c.push_back(value);}
-	void pop() {_c.pop_back();}
+	value_type &top() {return (c.back());}
+	const value_type &top() const {return (c.back());}
+	bool empty() const {return c.empty();}
+	size_t size() const {return c.size();}
+	void push( const T& value ) {c.push_back(value);}
+	void pop() {c.pop_back();}
 	void swap( stack& other )
 	{
-		this->_c.swap(other._c);
+		this->c.swap(other.c);
 	}
 
 	template <typename T1, typename Container1>
@@ -60,7 +60,7 @@ public:
 };
 
 template <typename T, typename Container>
-bool operator==( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return lhs._c == rhs._c;}
+bool operator==( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return lhs.c == rhs.c;}
 
 template <typename T, typename Container>
 bool operator!=( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return !(lhs == rhs);}
@@ -75,7 +75,7 @@ template <typename T, typename Container>
 bool operator>( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return rhs < lhs;}
 
 template <typename T, typename Container>
-bool operator<( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return lhs._c < rhs._c;}
+bool operator<( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return lhs.c < rhs.c;}
 
 template< typename T, typename Container>
 void	swap(ft::stack<T, Container> &lhs, ft::stack<T, Container> &rhs)
