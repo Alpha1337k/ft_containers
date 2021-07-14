@@ -260,10 +260,10 @@ public:
 	iterator begin() const	{return iterator(_data);}
 	iterator end()	const	{return iterator(_data + _size);}
 
-	reverse_iterator rbegin()		{return reverse_iterator(_data + _size);}
-	reverse_iterator rbegin() const	{return reverse_iterator(_data + _size);}
-	reverse_iterator rend()			{return reverse_iterator(_data);}
-	reverse_iterator rend() const	{return reverse_iterator(_data);}
+	reverse_iterator rbegin()		{return reverse_iterator(_data + _size - 1);}
+	reverse_iterator rbegin() const	{return reverse_iterator(_data + _size - 1);}
+	reverse_iterator rend()			{return reverse_iterator(_data - 1);}
+	reverse_iterator rend() const	{return reverse_iterator(_data - 1);}
 
 	iterator insert( iterator pos, const T& value )
 	{
