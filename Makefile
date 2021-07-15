@@ -21,7 +21,15 @@ NAME_SCHOOL=school_test
 CC=clang++
 FLAGS=-Wall -Werror -Wextra -pedantic -std=c++98
 DEBUG_FLAGS=-g
-SRC=main.cpp test/*.cpp
+SRC=main.cpp \
+	test/ft_is_intergral.cpp \
+	test/ft_iterator.cpp \
+	test/ft_list.cpp \
+	test/ft_map.cpp \
+	test/ft_pair.cpp \
+	test/ft_stack.cpp \
+	test/ft_vector.cpp \
+
 SRC_SCHOOL=schoolmain.cpp
 SRC_MAP=map_consitancy.cpp
 HEADERS=src/*.hpp
@@ -45,7 +53,7 @@ clean:
 	$(RM) $(OBJ)
 
 fclean: clean
-	$(RM) $(NAME) $(NAME_MAP) $(NAME_SCHOOL) $(NAME_SCHOOL)_stl
+	$(RM) $(NAME) $(NAME)_native $(NAME_MAP) $(NAME_SCHOOL) $(NAME_SCHOOL)_stl
 
 re: fclean all
 
