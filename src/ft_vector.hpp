@@ -125,10 +125,9 @@ public:
 	typedef T const&	const_reference;
 	typedef T& 			reference;
 	typedef	iterator 	const_iterator;
-	typedef	Allocator			allocator_type;
-	typedef typename std::allocator_traits<Allocator>::pointer			pointer;
-	typedef typename std::allocator_traits<Allocator>::const_pointer	const_pointer;
-	//typedef	ft::reverse_iterator<const ft::vector::iterator> const_reverse_iterator;
+	typedef	Allocator	allocator_type;
+	typedef typename Allocator::pointer			pointer;
+	typedef typename Allocator::const_pointer	const_pointer;
 	typedef	ft::reverse_iterator<iterator> reverse_iterator;
 private:
 	T *_data;
@@ -200,7 +199,9 @@ public:
 	const_reference back() const {return _data[_size == 0 ? 0 : _size - 1];}
 
 	T	*data() {return _data;}
-	const T	*data() {return _data;}
+	const T	*data() const {return _data;}
+
+	allocator_type get_allocator() const { return _alloc;}
 
 	void push_back( const T& value )
 	{

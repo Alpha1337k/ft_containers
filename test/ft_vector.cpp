@@ -105,6 +105,19 @@ void	v_access_test()
 	std::cout << std::endl;
 	std::cout << v.at(3) << std::endl;
 
+	v.push_back('a');
+	v.push_back('b');
+	v.push_back('c');
+	v.push_back('d');
+
+	char *data = v.data();
+
+	for (size_t i = 0; i < v.size(); i++)
+	{
+		std::cout << data[i] << " ";
+	}
+	std::cout << std::endl;
+
 }
 
 void	v_assign_test()
@@ -273,7 +286,13 @@ void	v_modifiers_test()
 
 	c1.insert(c1.begin(), c.begin() + 2, c.end());
 	std::cout << c1 << std::endl;
-	std::cout << "empty? " << c1.empty() << " size: " << c1.size() << " capacity: " << c1.capacity() << std::endl;	
+	std::cout << "empty? " << c1.empty() << " size: " << c1.size() << " capacity: " << c1.capacity() << std::endl;
+
+	swap(c1, c);
+	std::cout << c << std::endl;
+	std::cout << "empty? " << c.empty() << " size: " << c.size() << " capacity: " << c.capacity() << std::endl;
+	std::cout << c1 << std::endl;
+	std::cout << "empty? " << c1.empty() << " size: " << c1.size() << " capacity: " << c1.capacity() << std::endl;
 
 }
 
