@@ -23,10 +23,10 @@
 	using namespace ft;
 #endif
 
-template <typename K, typename T, class Compare = std::less<K>>
-std::ostream &operator<<(std::ostream &out, map<K, T, Compare> &l)
+template <typename K, typename T, typename Compare, typename Allocator>
+std::ostream &operator<<(std::ostream &out, map<K, T, Compare, Allocator> &l)
 {
-	typedef typename map<K, T, Compare>::iterator iterator;
+	typedef typename map<K, T, Compare, Allocator>::iterator iterator;
 	for (iterator it = l.begin(); it != l.end(); it++)
 		out << it->first << " : " << it->second << " ";
 	return (out);
@@ -42,8 +42,6 @@ struct ModCmp {
 // so cppreference
 void	m_observer_test(void)
 {
-	typedef typename map<int, char, ModCmp>::value_compare value_compare;
-
 	map<int, char, ModCmp> cont;
 	cont[1] = 'a';
 	cont[2] = 'b';
@@ -52,10 +50,10 @@ void	m_observer_test(void)
 	cont[5] = 'e';
 	cont[6] = 'f';
 
-	value_compare val_cmp = cont.value_comp();
+	map<int, char, ModCmp>::value_compare val_cmp = cont.value_comp();
 	ModCmp key_cm = cont.key_comp();
 
-    const pair<int, char> val = { 100, 'a' };
+    const pair<int, char> val(100, 'a');
 
     for (map<int, char, ModCmp>::iterator it = cont.begin(); it != cont.end(); it++) {
         bool before = val_cmp(*it, val);

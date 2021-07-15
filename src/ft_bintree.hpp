@@ -22,7 +22,7 @@
 namespace ft
 {
 
-template <typename K, typename T, class Compare = std::less<K>, class Allocator = std::allocator<map_node<const K, T>> >
+template <typename K, typename T, class Compare = std::less<K>, class Allocator = std::allocator<map_node<const K, T> > >
 class bintree
 {
 private:
@@ -63,7 +63,7 @@ public:
 		if (trav == NULL)
 			return;
 		inorder(trav->left, depth + 1);
-		printf("[%d, %d] ", trav->val.first, depth);
+		std::cout << "[" << trav->val.first << ", " << depth << "] ";
 		inorder(trav->right, depth + 1);
 	}
 

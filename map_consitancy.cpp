@@ -17,8 +17,8 @@
 #include <map>
 #include <ft_map.hpp>
 #include <iostream>
-#include <random>
 #include <queue>
+#include <stdlib.h>
 
 void	run_test(size_t size)
 {

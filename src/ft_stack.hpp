@@ -21,7 +21,7 @@
 namespace ft
 {
 
-template <typename T, typename Container = ft::vector<T>>
+template <typename T, typename Container = ft::vector<T> >
 class stack
 {
 public:

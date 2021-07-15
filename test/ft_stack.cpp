@@ -93,14 +93,14 @@ void container_test()
 	list<int> l1;
 	l1.resize(10, 10);
 
-	stack<int, list<int>> s1(l1);
+	stack<int, list<int> > s1(l1);
 	std::cout << s1.empty() << " | " << s1.size()<< std::endl;
 	std::cout << s1.top() << std::endl;
 	s1.push(42);
 	std::cout << s1.empty() << " | " << s1.size()<< std::endl;
 	std::cout << s1.top() << std::endl;
 
-	stack<int, list<int>> s2(l1);
+	stack<int, list<int> > s2(l1);
 	std::cout << s2.empty() << " | " << s2.size()<< std::endl;
 	std::cout << s2.top() << std::endl;
 	s2.push(42);
@@ -109,7 +109,7 @@ void container_test()
 
 	vector<int> v1;
 	v1.resize(20, 22);
-	stack<int, vector<int>> s3(v1);
+	stack<int, vector<int> > s3(v1);
 
 	std::cout << s3.empty() << " | " << s3.size()<< std::endl;
 	std::cout << s3.top() << std::endl;
@@ -117,7 +117,7 @@ void container_test()
 	std::cout << s3.empty() << " | " << s3.size()<< std::endl;
 	std::cout << s3.top() << std::endl;
 
-	stack<int, vector<int>> s4(v1);
+	stack<int, vector<int> > s4(v1);
 
 	std::cout << s4.empty() << " | " << s4.size()<< std::endl;
 	std::cout << s4.top() << std::endl;
@@ -132,7 +132,7 @@ void container_test()
 	v2.push_back(0.4);
 	v2.push_back(0.5);
 
-	stack<int, std::vector<double>> s5(v2);
+	stack<int, std::vector<double> > s5(v2);
 	std::cout << s5.empty() << " | " << s5.size()<< std::endl;
 	std::cout << s5.top() << std::endl;
 	s5.push(42);

@@ -34,7 +34,7 @@ struct pair
 
 	pair(const T1 &v1, const T2 &v2): first(v1), second(v2) {}
 
-	pair( const pair& p ) = default;
+	pair( const pair& p ): first(p.first), second(p.second) {}
 	pair& operator=( const pair& other ) {
 		first = other.first;
 		second = other.second;

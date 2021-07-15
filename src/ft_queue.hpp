@@ -21,7 +21,7 @@
 namespace ft
 {
 
-template <typename T, typename Container = std::deque<T>>
+template <typename T, typename Container = std::deque<T> >
 class queue
 {
 public:

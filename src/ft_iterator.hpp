@@ -76,7 +76,7 @@ class reverse_iterator
 
 		pointer operator->() const
 		{
-			return (std::addressof(operator*()));
+			return (&(operator*()));
 		}
 
 		reference operator[]( difference_type n ) const
@@ -142,6 +142,6 @@ typename reverse_iterator<Iterator>::difference_type operator-( const reverse_it
 	return (rhs.base() - lhs.base());
 }
 
-};
+}
 
 #endif

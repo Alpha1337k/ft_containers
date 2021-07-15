@@ -214,9 +214,6 @@ void	l_op_test(void)
 	l.remove(101);
 	std::cout << l << std::endl;
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
-	l.remove_if([](int n){return n % 2;});
-	std::cout << l << std::endl;
-	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;
 	std::swap(l, lb);
 	std::cout << l << std::endl;
 	std::cout << "empty? " << l.empty() << " size: " << l.size() << std::endl;

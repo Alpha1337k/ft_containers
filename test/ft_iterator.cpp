@@ -42,18 +42,30 @@ void my_reverse(BidirIt first, BidirIt last)
  
 void i_traits_test()
 {
-    std::vector<int> v{1, 2, 3, 4, 5};
+    std::vector<int> v;
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
+	v.push_back(5);
+
     my_reverse(v.begin(), v.end());
-    for (int n : v) {
-        std::cout << n << ' ';
+    for (size_t i = 0; i < v.size(); i++) {
+        std::cout << v[i] << ' ';
     }
     std::cout << '\n';
  
-    std::list<int> l{1, 2, 3, 4, 5};
+    std::list<int> l;
     my_reverse(l.begin(), l.end());
-    for (auto n : l) {
-        std::cout << n << ' ';
-    }
+	l.push_back(1);
+	l.push_back(2);
+	l.push_back(3);
+	l.push_back(4);
+	l.push_back(5);
+	for(std::list<int>::iterator it = l.begin(); it != l.end(); it++)
+	{
+		std::cout << *it << " " << std::endl;
+	}
     std::cout << '\n';
  
     int a[] = {1, 2, 3, 4, 5};
@@ -66,9 +78,9 @@ void i_traits_test()
 
 void	i_construct_base_test()
 {
-    const int a1[] {666, 1, 2, 3};
+    const int a1[] = {666, 1, 2, 3};
  
-	reverse_iterator<const int *> it1(std::cbegin(a1));
+	reverse_iterator<const int *> it1(&a1[0]);
 	reverse_iterator<const int *> it2(it1);
 	reverse_iterator<const int *> it3 = it1;
 	reverse_iterator<const int *> it4;

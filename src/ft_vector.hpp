@@ -20,7 +20,6 @@
 #include <limits>
 #include <iterator>
 #include <cstddef>
-#include <cstdint>
 #include <iostream>
 #include <numeric>
 #include <ft_enable_if.hpp>
@@ -30,7 +29,7 @@
 namespace ft
 {
 
-template <typename T, class Allocator = std::allocator<T>>
+template <typename T, class Allocator = std::allocator<T> >
 class vector
 {
 public:
@@ -44,8 +43,8 @@ public:
 		typedef value_type const&	const_reference;
 		typedef value_type& 		reference;
 		typedef	Allocator			allocator_type;
-		typedef typename std::allocator_traits<Allocator>::pointer			pointer;
-		typedef typename std::allocator_traits<Allocator>::const_pointer	const_pointer;
+		typedef typename Allocator::pointer			pointer;
+		typedef typename Allocator::const_pointer	const_pointer;
 
 		typedef	T					iterator_category;
 	protected:
@@ -161,7 +160,7 @@ public:
 	}
 
 	template< class InputIt>
-	vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr): 
+	vector( InputIt first, InputIt last, const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = 0): 
 		_data(0), _size(0), _capacity(0), _alloc(alloc)
 	{
 		for (; first != last; first++)
@@ -175,7 +174,7 @@ public:
 	}
 
 	template< class InputIt>
-	void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
+	void assign( InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = 0)
 	{
 		clear();
 		for (; first != last; first++)
@@ -313,7 +312,7 @@ public:
 	}
 
 	template< class InputIt>
-	void insert( iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = nullptr)
+	void insert( iterator pos, InputIt first, InputIt last, typename enable_if<!is_integral<InputIt>::value, InputIt>::type* = 0)
 	{	
 		size_t i_pos = 0;
 		if (_data != 0)
@@ -394,3 +393,4 @@ void swap( ft::vector<T>& lhs, ft::vector<T>& rhs )
 }
 
 #endif
+

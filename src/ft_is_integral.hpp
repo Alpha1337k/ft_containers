@@ -28,22 +28,16 @@ struct integral_test
 template<> struct integral_test<int> { static const bool value = true;};
 template<> struct integral_test<char> { static const bool value = true;};
 template<> struct integral_test<bool> { static const bool value = true;};
-template<> struct integral_test<char16_t> { static const bool value = true;};
-template<> struct integral_test<char32_t> { static const bool value = true;};
 template<> struct integral_test<wchar_t> { static const bool value = true;};
 template<> struct integral_test<short> { static const bool value = true;};
 template<> struct integral_test<long> { static const bool value = true;};
-template<> struct integral_test<long long> { static const bool value = true;};
 
 template<> struct integral_test<const int> { static const bool value = true;};
 template<> struct integral_test<const char> { static const bool value = true;};
 template<> struct integral_test<const bool> { static const bool value = true;};
-template<> struct integral_test<const char16_t> { static const bool value = true;};
-template<> struct integral_test<const char32_t> { static const bool value = true;};
 template<> struct integral_test<const wchar_t> { static const bool value = true;};
 template<> struct integral_test<const short> { static const bool value = true;};
 template<> struct integral_test<const long> { static const bool value = true;};
-template<> struct integral_test<const long long> { static const bool value = true;};
 
 template< class T >
 struct is_integral : public integral_test<T>
@@ -52,6 +46,6 @@ struct is_integral : public integral_test<T>
 	operator bool() const { return value;}
 };
 
-};
+}
 
 #endif

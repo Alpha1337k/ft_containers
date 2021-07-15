@@ -36,7 +36,6 @@ void vector_test();
 void pair_test();
 void iterator_test();
 void intergral_test();
-void enable_if_test();
 
 
 int main(int argc, char **argv)
@@ -50,7 +49,6 @@ int main(int argc, char **argv)
 	test["PAIR"]		=	&pair_test;
 	test["ITERATOR"] 	= 	&iterator_test;
 	test["INTEGRAL"] 	= 	&intergral_test;
-	test["ENABLE_IF"] 	=	&enable_if_test;
 
 	if (argc > 2)
 		return (0);

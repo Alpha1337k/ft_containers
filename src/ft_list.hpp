@@ -20,8 +20,6 @@
 #include <memory>
 #include <iostream>
 #include <algorithm>
-#include <string>
-#include <type_traits>
 #include <ft_enable_if.hpp>
 #include <ft_is_integral.hpp>
 
@@ -496,7 +494,7 @@ public:
 		end->prev = it;
 	}
 	template< typename InputIt >
-	void insert( iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = nullptr)
+	void insert( iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = 0)
 	{
 		for (; first != last; first++)
 			insert(pos, 1, *first);

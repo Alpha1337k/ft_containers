@@ -19,7 +19,7 @@ NAME_SCHOOL=school_test
 
 
 CC=clang++
-FLAGS=-Wall -Werror -Wextra -Ofast
+FLAGS=-Wall -Werror -Wextra -pedantic -std=c++98
 DEBUG_FLAGS=-g
 SRC=main.cpp test/*.cpp
 SRC_SCHOOL=schoolmain.cpp

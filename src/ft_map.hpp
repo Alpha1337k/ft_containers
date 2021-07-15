@@ -45,11 +45,11 @@ public:
 	{
 	public:
 		typedef ft::pair<const K, T> 	value_type;
-		typedef ptrdiff_t 				difference_type;
+		typedef std::ptrdiff_t			difference_type;
 		typedef size_t 					size_type;
 		typedef ft::pair<const K, T>&	const_reference;
 		typedef ft::pair<const K, T>&	reference;
-		typedef typename std::allocator_traits<Allocator>::pointer	pointer;
+		typedef typename Allocator::pointer		pointer;
 		typedef	T					iterator_category;
 	protected:
 		map_node<const K, T> *_pos;
@@ -169,7 +169,7 @@ public:
 
 
 	allocator_type get_allocator() const {return _tree._alloc;}
-	size_type max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(map_node<const K, T>) * 2 + 1);}
+	size_type max_size() const {return (std::numeric_limits<std::ptrdiff_t>::max() / sizeof(map_node<const K, T>) * 2 + 1);}
 
 	void swap( map& other )
 	{
@@ -351,8 +351,8 @@ public:
 
 };
 
-template <typename K, typename T, typename Compare = std::less<K>>
-bool	operator==(const map<K, T> &lhs, const map<K, T> &rhs)
+template <typename K, typename T, typename Compare, typename Allocator>
+bool	operator==(const map<K, T, Compare, Allocator> &lhs, const map<K, T, Compare, Allocator> &rhs)
 {
 	typedef typename ft::map<K, T>::iterator iterator;
 
@@ -366,11 +366,11 @@ bool	operator==(const map<K, T> &lhs, const map<K, T> &rhs)
 	return (true);
 }
 
-template <typename K, typename T, typename Compare = std::less<K>>
-bool	operator!=(const map<K, T> &lhs, const map<K, T> &rhs) {return !(lhs == rhs);}
+template <typename K, typename T, typename Compare, typename Allocator>
+bool	operator!=(const map<K, T, Compare, Allocator> &lhs, const map<K, T, Compare, Allocator> &rhs) {return !(lhs == rhs);}
 
-template <typename K, typename T, typename Compare = std::less<K>>
-bool operator<(const map<K, T> &lhs, const map<K,T> &rhs)
+template <typename K, typename T, typename Compare, typename Allocator>
+bool operator<(const map<K, T, Compare, Allocator> &lhs, const map<K, T, Compare, Allocator> &rhs)
 {
 	typedef typename ft::map<K, T>::iterator iterator;
 
@@ -382,14 +382,14 @@ bool operator<(const map<K, T> &lhs, const map<K,T> &rhs)
 	return (li == le) && (ri != re);
 }
 
-template <typename K, typename T, typename Compare = std::less<K>>
-bool operator>(const map<K, T> &lhs, const map<K,T> &rhs)	{return rhs < lhs;}
-template <typename K, typename T, typename Compare = std::less<K>>
-bool operator>=(const map<K, T> &lhs, const map<K,T> &rhs) {return !(lhs < rhs);}
-template <typename K, typename T, typename Compare = std::less<K>>
-bool operator<=(const map<K, T> &lhs, const map<K,T> &rhs) {return !(lhs > rhs);}
+template <typename K, typename T, typename Compare, typename Allocator>
+bool operator>(const map<K, T, Compare, Allocator> &lhs, const map<K, T, Compare, Allocator> &rhs)	{return rhs < lhs;}
+template <typename K, typename T, typename Compare, typename Allocator>
+bool operator>=(const map<K, T, Compare, Allocator> &lhs, const map<K, T, Compare, Allocator> &rhs) {return !(lhs < rhs);}
+template <typename K, typename T, typename Compare, typename Allocator>
+bool operator<=(const map<K, T, Compare, Allocator> &lhs, const map<K, T, Compare, Allocator> &rhs) {return !(lhs > rhs);}
 
-template <typename K, typename T, class Compare = std::less<K>>
+template <typename K, typename T, class Compare>
 void	swap(ft::map<K, T, Compare> &lhs, ft::map<K, T, Compare> &rhs)
 {
 	lhs.swap(rhs);
@@ -398,3 +398,4 @@ void	swap(ft::map<K, T, Compare> &lhs, ft::map<K, T, Compare> &rhs)
 }
 
 #endif
+

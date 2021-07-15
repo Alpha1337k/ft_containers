@@ -20,8 +20,9 @@
 	#include <map>
 	#include <stack>
 	#include <vector>
-	namespace ft = std;
+	namespace ft = std; 
 #else
+	#define USE_STL 0
 	#include <ft_map.hpp>
 	#include <ft_stack.hpp>
 	#include <ft_vector.hpp>
@@ -82,6 +83,7 @@ int main(int argc, char** argv) {
 	{
 		vector_buffer.push_back(Buffer());
 	}
+	std::cout << "1" << std::endl;
 
 	for (int i = 0; i < COUNT; i++)
 	{
@@ -90,6 +92,7 @@ int main(int argc, char** argv) {
 	}
 	ft::vector<Buffer>().swap(vector_buffer);
 
+	std::cout << "2" << std::endl;
 	try
 	{
 		for (int i = 0; i < COUNT; i++)
@@ -103,11 +106,15 @@ int main(int argc, char** argv) {
 	{
 		//NORMAL ! :P
 	}
-	
+
+	std::cout << "3" << std::endl;
+
 	for (int i = 0; i < COUNT; ++i)
 	{
 		map_int.insert(ft::make_pair(rand(), rand()));
 	}
+
+	std::cout << "4" << std::endl;
 
 	int sum = 0;
 	for (int i = 0; i < 10000; i++)
@@ -117,12 +124,17 @@ int main(int argc, char** argv) {
 	}
 	std::cout << "should be constant with the same seed: " << sum << std::endl;
 
+
+	std::cout << "5 " << map_int.size() << std::endl;
 	{
 		ft::map<int, int> copy = map_int;
 	}
 	MutantStack<char> iterable_stack;
+
+	std::cout << "6" << std::endl;
 	for (char letter = 'a'; letter <= 'z'; letter++)
 		iterable_stack.push(letter);
+	std::cout << "7" << std::endl;
 	for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
 	{
 		std::cout << *it;
