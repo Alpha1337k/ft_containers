@@ -32,9 +32,8 @@ private:
 			return (0);
 		map_node<const K, T> *newnode = _alloc.allocate(1);
 		_alloc.construct(newnode, map_node<const K, T>(0, 0, parent, n->val.first, n->val.second));
-		newnode->left = n->left;
-		newnode->right = n->right;
-
+		newnode->left = clonetree(n->left, newnode);
+		newnode->right = clonetree(n->right, newnode);
 		return (newnode);
 	}
 
@@ -49,6 +48,7 @@ public:
 	bintree &operator=(const bintree &b)
 	{
 		_nodes = clonetree(b._nodes, 0);
+		_size = b._size;
 		return *this;
 	}
 
