@@ -38,10 +38,12 @@ void	pair_test()
 	pair<int, std::string> p2(p1);
 	pair<int, std::string> p3 = p1;
 	pair<int, double> p4;
+	pair<const int, double> p5 = make_pair(1010, 69.69);
 
 	std::cout << p1 << std::endl;
 	std::cout << p2 << std::endl;
 	std::cout << p3 << std::endl;
 	std::cout << p4 << std::endl;
+	std::cout << p5 << std::endl;
 
 }

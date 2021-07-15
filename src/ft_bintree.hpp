@@ -13,10 +13,9 @@
 /* |                                                                       | */
 /* ._______________________________________________________________________. */
 
-#ifndef BINTREE_HPP
-#define BINTREE_HPP
+#ifndef FT_BINTREE_HPP
+#define FT_BINTREE_HPP
 
-#include <iostream>
 #include <ft_node.hpp>
 
 namespace ft
@@ -60,7 +59,7 @@ public:
 
 	void inorder(map_node<const K, T> *trav, int depth = 0)
 	{
-		if (trav == NULL)
+		if (trav == 0)
 			return;
 		inorder(trav->left, depth + 1);
 		std::cout << "[" << trav->val.first << ", " << depth << "] ";
@@ -81,7 +80,6 @@ public:
 	{
 		if (it == 0)
 			return;
-		// std::cout << it->val.first << std::endl;
 		if (it->left == 0 && it->right == 0)
 		{
 			update_back(it, 0);

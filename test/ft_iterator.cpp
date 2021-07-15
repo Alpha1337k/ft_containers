@@ -91,38 +91,10 @@ void	i_construct_base_test()
 	std::cout << (it1.base() == it2.base() && it3.base() == it4.base() && it1.base() == it3.base()) << std::endl;
 }
 
-void	i_access_test()
-{
-    // int a1[] {666, 1, 2};
-	// reverse_iterator<const int *> it(std::cbegin(a1));
-	// for (size_t i = 0; i != 3; i++)
-	// 	std::cout << it[i] << " " << std::endl;
-	// std::cout << std::endl;
-
-    // std::vector<int> v;
-	// v.push_back(10);
-	// v.push_back(11);
-	// v.push_back(12);
-	// v.push_back(13);
-
-	// reverse_iterator<std::vector<int>::iterator> vit(std::rbegin(v));
-	// for (size_t i = 0; i != v.size(); i++)
-	// {
-	// 	vit[i] += 1;
-	// 	std::cout << vit[i] << " " << std::endl;
-	// }
-	// std::cout << std::endl;
-}
-
-void	reverse_iterator_test()
-{
-	i_construct_base_test();
-	i_access_test();
-}
-
 void	iterator_test(void)
 {
+	std::cout << "\t------- Traits " << std::endl;
 	i_traits_test();
-	reverse_iterator_test();
-
+	std::cout << "\t------- Base " << std::endl;
+	i_construct_base_test();
 }

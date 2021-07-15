@@ -16,12 +16,9 @@
 #ifndef FT_VECTOR_HPP
 #define FT_VECTOR_HPP
 
+#include <iostream>
 #include <memory>
 #include <limits>
-#include <iterator>
-#include <cstddef>
-#include <iostream>
-#include <numeric>
 #include <ft_enable_if.hpp>
 #include <ft_is_integral.hpp>
 #include <ft_iterator.hpp>
@@ -38,7 +35,7 @@ public:
 	{
 	public:
 		typedef T 					value_type;
-		typedef ptrdiff_t 			difference_type;
+		typedef std::ptrdiff_t		difference_type;
 		typedef size_t 				size_type;
 		typedef value_type const&	const_reference;
 		typedef value_type& 		reference;
@@ -118,13 +115,13 @@ public:
 			return (_data);
 		}
 	};
-	typedef T 			value_type;
-	typedef ptrdiff_t	difference_type;
-	typedef size_t		size_type;
-	typedef T const&	const_reference;
-	typedef T& 			reference;
-	typedef	iterator 	const_iterator;
-	typedef	Allocator	allocator_type;
+	typedef T 				value_type;
+	typedef std::ptrdiff_t	difference_type;
+	typedef size_t			size_type;
+	typedef T const&		const_reference;
+	typedef T& 				reference;
+	typedef	iterator 		const_iterator;
+	typedef	Allocator		allocator_type;
 	typedef typename Allocator::pointer			pointer;
 	typedef typename Allocator::const_pointer	const_pointer;
 	typedef	ft::reverse_iterator<iterator> reverse_iterator;
@@ -184,7 +181,7 @@ public:
 	bool empty() const {return !!!_size;}
 	size_type size() const {return _size;}
 	size_type capacity() const {return _capacity;}
-	size_type max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(T) * 2 + 1);}
+	size_type max_size() const {return (std::numeric_limits<std::ptrdiff_t>::max() / sizeof(T) * 2 + 1);}
 	void clear() {
 		_alloc.deallocate(_data, _capacity);
 		_size = 0;

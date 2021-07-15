@@ -18,8 +18,6 @@
 
 #include <iostream>
 #include <memory>
-#include <iostream>
-#include <algorithm>
 #include <ft_enable_if.hpp>
 #include <ft_is_integral.hpp>
 
@@ -183,11 +181,6 @@ public:
 		for (; first != last; first++)
 			push_back(*first);
 	}
-	// explicit list( size_t count, T& value = T()): _begin(0), _end(0), _size(0)
-	// {
-	// 	for (size_t i = 0; i < count; i++)
-	// 		push_back(value);
-	// }
 	
 	void assign(size_t count, const T& value )
 	{
