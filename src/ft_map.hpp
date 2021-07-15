@@ -29,11 +29,17 @@ template <typename K, typename T, class Compare = std::less<K>, class Allocator 
 class map
 {
 public:
-	typedef K key_type;
-	typedef T mapped_type;
-	typedef size_t size_type;
-	typedef Compare key_compare;
-	typedef ft::pair<const K, T> value_type;
+	typedef K							key_type;
+	typedef T							mapped_type;
+	typedef ft::pair<const K, T> 		value_type;
+	typedef size_t						size_type;
+	typedef std::ptrdiff_t				difference_type;
+	typedef Compare						key_compare;
+	typedef Allocator					allocator_type;
+	typedef value_type&					reference;
+	typedef value_type const&			const_reference;
+	typedef typename Allocator::pointer			pointer;
+	typedef typename Allocator::const_pointer	const_pointer;
 
 	class iterator
 	{
@@ -48,7 +54,7 @@ public:
 	protected:
 		map_node<const K, T> *_pos;
 		map_node<const K, T> *_origin;
-		key_compare		_comp = std::less<K>();
+		key_compare		_comp;
 	public:
 		iterator(map_node<const K, T> *pos, key_compare comp): _pos(pos), _origin(pos), _comp(comp) {}
 		~iterator() {}
@@ -119,7 +125,7 @@ public:
 		friend bool operator!=(const iterator& lhs, const iterator& rhs){ return !(lhs == rhs); }
 
 	};
-	typedef	iterator const_iterator;
+	typedef	iterator const const_iterator;
 	typedef	ft::reverse_iterator<iterator> reverse_iterator;
 private:
 	bintree<K, T, Compare> _tree;
@@ -161,6 +167,8 @@ public:
 		return (n->val.second);
 	}
 
+
+	allocator_type get_allocator() const {return _tree._alloc;}
 	size_type max_size() const {return (std::numeric_limits<ptrdiff_t>::max() / sizeof(map_node<const K, T>) * 2 + 1);}
 
 	void swap( map& other )
@@ -178,16 +186,22 @@ public:
 	{
 		if (_tree._size)
 			erase(begin(), end());
+		_tree._nodes = 0;
 	}
 
 	key_compare key_comp() const {return _cmp;}
 
 	class value_compare
 	{
+		friend class map<K, T, Compare, Allocator>;
+		public:
+			typedef bool		result_type;
+			typedef value_type	first_argument_type;
+			typedef value_type	second_argument_type;
 		protected:
 			Compare _c;
-		public:
 			value_compare( Compare c ): _c(c) {}
+		public:
 			bool operator()(const value_type& lhs, const value_type& rhs ) const {
 				return (_c(lhs.first, rhs.first));
 			}
@@ -201,35 +215,35 @@ public:
 
 	iterator 		begin() {
 		map_node<const K, T> *it = _tree._nodes;
-		while (it->left)
+		while (it && it->left)
 			it = it->left;
 		return iterator(it, _cmp);
 	}
-	const iterator 		begin() const {
+	const_iterator 		begin() const {
 		map_node<const K, T> *it = _tree._nodes;
-		while (it->left)
+		while (it && it->left)
 			it = it->left;
 		return iterator(it, _cmp);
 	}
 	reverse_iterator 		rbegin() {
 		map_node<const K, T> *it = _tree._nodes;
-		while (it->right)
+		while (it && it->right)
 			it = it->right;
 		return reverse_iterator(iterator(it, _cmp));
 	}
 	const reverse_iterator 	rbegin() const {
 		map_node<const K, T> *it = _tree._nodes;
-		while (it->right)
+		while (it && it->right)
 			it = it->right;
 		return reverse_iterator(iterator(it, _cmp));
 	}
 	iterator 			end() {return iterator(0, _cmp);}
-	const iterator 		end() const {return iterator(0, _cmp);}
+	const_iterator 		end() const {return iterator(0, _cmp);}
 	reverse_iterator 			rend() {return reverse_iterator(iterator(0, _cmp));}
 	const reverse_iterator 		rend() const {return reverse_iterator(iterator(0, _cmp));}
 
 	bool empty() const {return !!!_tree._size;}
-	size_t size() const {return _tree._size;}
+	size_type size() const {return _tree._size;}
 	size_type count( const K& key )
 	{
 		if (find(key) == end())
@@ -248,6 +262,19 @@ public:
 		}
 		return (it);
 	}
+
+	const_iterator find( const K& key ) const
+	{
+		const_iterator it = begin();
+		while (it != end())
+		{
+			if (it->first == key)
+				return (it);
+			it++;
+		}
+		return (it);		
+	}
+
 	size_type erase( const key_type& key )
 	{
 		map_node<const K, T> *n = _tree.get_node(key);
@@ -280,11 +307,18 @@ public:
 		return (pair<iterator, bool>(i, !(old_size == _tree._size)));
 	}
 
+	iterator insert( iterator hint, const value_type& value )
+	{
+		(void)hint;
+		iterator i = iterator(_tree.get_add_node(value.first, value.second), _cmp);
+		return (i);
+	}
+
 	template< class InputIt >
 	void insert( InputIt first, InputIt last )
 	{
 		for(; first != last; first++)
-			get_add_node(first.first, first.second);
+			_tree.get_add_node(first->first, first->second);
 	}
 
 	iterator lower_bound( const K& key )

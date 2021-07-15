@@ -111,6 +111,7 @@ void	m_modifiers_test(void)
 {
 	map<char, int> m1;
 	map<char, int> m2;
+	map<char, int> m3;
 	m1['a'] = 300;
 	m1['b'] = 301;
 	m1['c'] = 302;
@@ -120,6 +121,16 @@ void	m_modifiers_test(void)
 	m2['x'] = 301;
 	m2['y'] = 302;
 	m2['z'] = 300;
+
+	m3 = m1;
+	std::cout << m3 << std::endl;
+	std::cout << "empty: " << m3.empty() << " size: " << m3.size() << std::endl;
+	m3.clear();
+	std::cout << m3 << std::endl;
+	std::cout << "empty: " << m3.empty() << " size: " << m3.size() << std::endl;
+	m3.insert(m1.begin(), m1.end());
+	std::cout << m3 << std::endl;
+	std::cout << "empty: " << m3.empty() << " size: " << m3.size() << std::endl;
 
 	pair<map<char, int>::iterator, bool> rv = m1.insert(pair<char, int>('e', 305));
 	std::cout << m1 << std::endl;
@@ -185,16 +196,65 @@ void	m_lookup_test(void)
 	for (map<char, int>::iterator it = m1.upper_bound('c'); it != m1.end(); it++)
 		std::cout << it->first << " : " << it->second << " ";
 	std::cout << std::endl;
+
+	pair<map<char, int>::iterator,map<char, int>::iterator> bound = m1.equal_range('c');
+	do
+	{
+		std::cout << bound.first->first << " : " << bound.first->second << " ";
+		bound.first++;
+	} while (bound.first != bound.second);
+	
+	std::cout << std::endl;
+}
+
+void	m_compare_test(void)
+{
+	map<int, int> compare_1;
+	map<int, int> compare_2;
+	map<int, int> compare_3;
+	map<int, int> compare_4;
+	map<int, int> compare_5;
+
+	compare_1[3] = 3;
+	compare_1[1] = 1;
+	compare_1[2] = 2;
+	compare_2[1] = 1;
+	compare_2[2] = 2;
+	compare_2[3] = 3;
+	compare_3[3] = 3;
+	compare_3[1] = 1;
+	compare_4[1] = 1;
+	compare_4[2] = 2;
+	compare_4[3] = 3;
+
+	std::cout << compare_1 << compare_2 << compare_3 << compare_4 << std::endl;
+
+	std::cout << (compare_1 == compare_2) << (compare_1 != compare_2) << (compare_1 >= compare_2) << (compare_1 <= compare_2)
+		<< (compare_1 > compare_2) << (compare_1 < compare_2) << std::endl;
+	std::cout << (compare_1 == compare_3) << (compare_1 != compare_3) << (compare_1 >= compare_3) << (compare_1 <= compare_3)
+		<< (compare_1 > compare_3) << (compare_1 < compare_3) << std::endl;
+	std::cout << (compare_1 == compare_4) << (compare_1 != compare_4) << (compare_1 >= compare_4) << (compare_1 <= compare_4)
+		<< (compare_1 > compare_4) << (compare_1 < compare_4) << std::endl;
+	std::cout << (compare_2 == compare_3) << (compare_2 != compare_3) << (compare_2 >= compare_3) << (compare_2 <= compare_3)
+		<< (compare_2 > compare_3) << (compare_2 < compare_3) << std::endl;
+	std::cout << (compare_2 == compare_4) << (compare_2 != compare_4) << (compare_2 >= compare_4) << (compare_2 <= compare_4)
+		<< (compare_2 > compare_4) << (compare_2 < compare_4) << std::endl;
+	std::cout << (compare_3 == compare_4) << (compare_3 != compare_4) << (compare_3 >= compare_4) << (compare_3 <= compare_4)
+		<< (compare_3 > compare_4) << (compare_3 < compare_4) << std::endl;
+	std::cout << (compare_3 == compare_5) << (compare_3 != compare_5) << (compare_3 >= compare_5) << (compare_3 <= compare_5)
+		<< (compare_3 > compare_5) << (compare_3 < compare_5) << std::endl;	
 }
 
 void	map_test()
 {
 	std::cout << "\t------- Create " << std::endl;
 	m_create_test();
+	std::cout << "\t------- Lookup " << std::endl;
+	m_lookup_test();
 	std::cout << "\t------- Modifiers " << std::endl;
 	m_modifiers_test();
 	std::cout << "\t------- Observers" << std::endl;
 	m_observer_test();
-	std::cout << "\t------- Lookup " << std::endl;
-	m_lookup_test();
+	std::cout << "\t------- Compare" << std::endl;
+	m_compare_test();
 }
