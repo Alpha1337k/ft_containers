@@ -50,10 +50,6 @@ public:
 	size_type size() const {return c.size();}
 	void push( const value_type& value ) {c.push_back(value);}
 	void pop() {c.pop_back();}
-	void swap( stack& other )
-	{
-		this->c.swap(other.c);
-	}
 
 	template <typename T1, typename Container1>
 	friend bool operator==( const stack<T1, Container1>& lhs, const stack<T1, Container1>& rhs );
@@ -78,12 +74,6 @@ bool operator>( const stack<T, Container>& lhs, const stack<T, Container>& rhs )
 
 template <typename T, typename Container>
 bool operator<( const stack<T, Container>& lhs, const stack<T, Container>& rhs ) {return lhs.c < rhs.c;}
-
-template< typename T, typename Container>
-void	swap(ft::stack<T, Container> &lhs, ft::stack<T, Container> &rhs)
-{
-	lhs.swap(rhs);
-}
 
 }
 

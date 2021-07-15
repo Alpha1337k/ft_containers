@@ -28,27 +28,6 @@
 	using namespace ft;
 #endif
 
-void swap_test()
-{
-	stack<int> s1;
-	stack<int> s2;
-
-	s1.push(3);
-	s1.push(1);
-	s1.push(2);
-	s2.push(1);
-	s2.push(2);
-	s2.push(3);
-	s2.push(3);
-	s2.push(69420);
-
-	std::cout << s1.empty() << " | " << s1.size() << " | " << s1.top() << std::endl;
-	std::cout << s2.empty() << " | " << s2.size() << " | " << s2.top() << std::endl;
-	s1.swap(s2);
-	std::cout << s1.empty() << " | " << s1.size() << " | " << s1.top() << std::endl;
-	std::cout << s2.empty() << " | " << s2.size() << " | " << s2.top() << std::endl;
-}
-
 void compare_test()
 {
 	stack<int> compare_1;
@@ -114,7 +93,7 @@ void container_test()
 	list<int> l1;
 	l1.resize(10, 10);
 
-	std::stack<int, list<int>> s1(l1);
+	stack<int, list<int>> s1(l1);
 	std::cout << s1.empty() << " | " << s1.size()<< std::endl;
 	std::cout << s1.top() << std::endl;
 	s1.push(42);
@@ -138,7 +117,7 @@ void container_test()
 	std::cout << s3.empty() << " | " << s3.size()<< std::endl;
 	std::cout << s3.top() << std::endl;
 
-	std::stack<int, vector<int>> s4(v1);
+	stack<int, vector<int>> s4(v1);
 
 	std::cout << s4.empty() << " | " << s4.size()<< std::endl;
 	std::cout << s4.top() << std::endl;
@@ -153,16 +132,16 @@ void container_test()
 	v2.push_back(0.4);
 	v2.push_back(0.5);
 
-	std::stack<int, std::vector<double>> s5(v2);
+	stack<int, std::vector<double>> s5(v2);
 	std::cout << s5.empty() << " | " << s5.size()<< std::endl;
 	std::cout << s5.top() << std::endl;
 	s5.push(42);
 	std::cout << s5.empty() << " | " << s5.size()<< std::endl;
 	std::cout << s5.top() << std::endl;
+
 }
 
-
-void operator_test()
+void s_create_test()
 {
 	stack<int> s1;
 
@@ -181,9 +160,12 @@ void operator_test()
 
 void stack_test()
 {
-	operator_test();
+	std::cout << "\t------- Create " << std::endl;
+	s_create_test();
+	std::cout << "\t------- Access " << std::endl;
 	top_test();
-	compare_test();
+	std::cout << "\t------- Containers " << std::endl;
 	container_test();
-	swap_test();
+	std::cout << "\t------- Compare " << std::endl;
+	compare_test();
 }
